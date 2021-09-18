@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "65171424680",
+    "project_id": "tennisappdatabase",
+    "storage_bucket": "tennisappdatabase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65171424680:android:d71bb42c3f600ee23b899d",
+        "android_client_info": {
+          "package_name": "com.example.TennisApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "65171424680-4677d6iq8veknhe9vc02vvc959cusijh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ4p2Wk495Wh4xEv0S4KPLXkThW5V4CEw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "65171424680-4677d6iq8veknhe9vc02vvc959cusijh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
