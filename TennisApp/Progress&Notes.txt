@@ -1,0 +1,20 @@
+Changes Now:
+
+- Loading screen
+
+
+
+
+Long Termo Changes:
+
+
+- Use Kalle Halldens video to design your login page
+
+- Change design of the app
+
+- Email Verification Page to mote beautifull and not as SUS
+
+- Change "Add Player" so you don't need
+
+
+

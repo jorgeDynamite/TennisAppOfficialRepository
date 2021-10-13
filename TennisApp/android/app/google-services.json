@@ -1,0 +1,91 @@
+{
+  "project_info": {
+    "project_number": "65171424680",
+    "firebase_url": "https://tennisappdatabase-default-rtdb.firebaseio.com",
+    "project_id": "tennisappdatabase",
+    "storage_bucket": "tennisappdatabase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65171424680:android:d71bb42c3f600ee23b899d",
+        "android_client_info": {
+          "package_name": "com.example.TennisApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "65171424680-490jhdo8jm94gsasjjoneb2odda0iojr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.TennisApp",
+            "certificate_hash": "2445bea60943bb2d57f87278647f458f83b3ca40"
+          }
+        },
+        {
+          "client_id": "65171424680-4677d6iq8veknhe9vc02vvc959cusijh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ4p2Wk495Wh4xEv0S4KPLXkThW5V4CEw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "65171424680-4677d6iq8veknhe9vc02vvc959cusijh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "65171424680-ft5ameihoagkpakv1139fkk4b3ckq6hq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.TennisApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65171424680:android:9fbb38ea2f2ffd7d3b899d",
+        "android_client_info": {
+          "package_name": "com.tennisapp.agp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "65171424680-4677d6iq8veknhe9vc02vvc959cusijh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ4p2Wk495Wh4xEv0S4KPLXkThW5V4CEw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "65171424680-4677d6iq8veknhe9vc02vvc959cusijh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "65171424680-ft5ameihoagkpakv1139fkk4b3ckq6hq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.TennisApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
