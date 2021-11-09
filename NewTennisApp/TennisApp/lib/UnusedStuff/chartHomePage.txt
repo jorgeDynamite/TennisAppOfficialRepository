@@ -1,0 +1,54 @@
+
+import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+
+class ChartHomePage extends StatefulWidget {
+  @override
+  _ChartHomePageState createState() => _ChartHomePageState();
+  int yourValue;
+  int opponentsValue;
+  
+  ChartHomePage(this.opponentsValue, this.yourValue  );
+}
+
+class _ChartHomePageState extends State<ChartHomePage> {
+  
+  List<charts.Series<ChartData, String>> _seriesPieData;
+  final bluePurple = LinearGradient(colors: [Color(0xFF6302C1), Color(0xFF00FFF5) ],);
+  _generateData() {
+    var pieData [
+   new ChartData("Your Unforced Errors", widget.opponentsValue, Color(0xFF3E3B3B)),
+   new ChartData("Your Unforced Errors", widget.yourValue, Colors.black, gradienColor: bluePurple),
+   ];
+   _seriesPieData.add(
+      charts.Series(
+        domainFn: (ChartData task, _) => "Your Unforced Errors",
+        measureFn: (ChartData task, _) => task.value,
+        colorFn: (ChartData task, _) =>
+            charts.ColorUtil.fromDartColor(task.color),
+        id: 'Air Pollution',
+        data: piedata,
+         labelAccessorFn: (Task row, _) => '${row.taskvalue}',
+      ),
+    );
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _seriesPieData = List<charts.Series<ChartData, String>>();
+   _generateData(); 
+  }
+  @override 
+  Widget build(BuildContext context) {
+    return Container()
+    ;
+  }
+}
+class ChartData {
+  String hoesUnforced;
+  int value;
+  Gradient gradienColor;
+  Color color;
+  ChartData(this.hoesUnforced, this.value, this.color, {this.gradienColor});
+}  

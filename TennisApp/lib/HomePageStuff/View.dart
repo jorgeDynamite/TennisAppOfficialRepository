@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:app/HomePageStuff/FirstPageChartWindows/pieChartViwe.dart';
+import 'package:app/LiveResultsScreens/CheckMatchID.dart';
 import 'package:app/SideBarStuff/sideBar/sideBar.dart';
+import 'package:app/LiveResultsScreens/liveResults.dart';
 import 'package:app/newMatch/newMatchFirstPage.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +33,20 @@ class _HomePageViewState extends State<HomePageView> {
   double paddingSelectedPlayer = 235;
   String activePlayerFirstName = "";
   String activePlayerlastName = "";
+  List<int> lastMatchDataVariable = [21, 28, 49];
+  List<int> lastMatchDataVariableWinners = [17, 14, 31];
+  late String playerReference;
+  late String coachlastName;
+  late String coachfirstName;
+  late String coachemail;
+  late String coachuid;
+  late String playerFirstName;
+  late String playerLastName;
+  List<int> matchRecord = [0, 0];
+  double recordLineWidth = 115 / 2 + 5;
+  String lastGameString = "Exampel Match";
+
+  final databaseReference = FirebaseDatabase.instance.reference();
 
   @override
   void state() {
@@ -63,19 +80,88 @@ class _HomePageViewState extends State<HomePageView> {
       print(activePlayerFirstLetter);
       initials = activePlayerFirstLetter + activePlayerlastLetter;
     });
+    selectedPlayerShow();
   }
 
   void selectedPlayerShow() {
     this.setState(() {
-      playerSelected = "Selected Player - ";
-      paddingSelectedPlayer = 90;
+      y = true;
     });
+  }
 
-    _timer = new Timer(const Duration(milliseconds: 15000), () {
-      this.setState(() {
-        playerSelected = "";
-        paddingSelectedPlayer = 235;
+  void setPlayerReference() async {
+    String url;
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    this.coachlastName = preferences.getString("lastName").toString();
+    this.playerFirstName =
+        preferences.getString("activePlayerFirstName").toString();
+    this.playerLastName =
+        preferences.getString("activePlayerLastName").toString();
+    this.coachfirstName = preferences.getString("firstName").toString();
+    this.coachuid = preferences.getString("accountRandomUID").toString();
+    url = ("CP_Accounts/" +
+        coachfirstName +
+        coachlastName +
+        "-" +
+        coachuid +
+        "/");
+
+    DataSnapshot dataSnapshot = await databaseReference.child(url).once();
+    if (dataSnapshot.value != null) {
+      dataSnapshot.value.forEach((key, value) {
+        List<String> split = key.split("-");
+        print(split);
+
+        if (split[0] == playerFirstName + playerLastName) {
+          playerReference = (url + key + "/");
+          lastMatchData();
+        }
       });
+    }
+  }
+
+  void lastMatchData() async {
+    var x = 0;
+    DataSnapshot dataSnapshot = await databaseReference
+        .child(playerReference + "LastMatchPlayed/")
+        .once();
+    if (dataSnapshot.value != null) {
+      dataSnapshot.value.forEach((key, value) {
+        if (x == 8) {
+          lastMatchDataVariable = [value[10], 0];
+          lastMatchDataVariableWinners = [value[13], 0];
+        }
+        if (x == 14) {
+          setState(() {
+            lastGameString = "Last Match";
+            lastMatchDataVariable[1] = value[10];
+            lastMatchDataVariable
+                .add(lastMatchDataVariable[1] + lastMatchDataVariable[0]);
+            lastMatchDataVariableWinners[1] = value[13];
+            lastMatchDataVariableWinners.add(lastMatchDataVariableWinners[0] +
+                lastMatchDataVariableWinners[1]);
+          });
+
+          ;
+        }
+
+        x++;
+      });
+    }
+    DataSnapshot matchRecordSnapshot =
+        await databaseReference.child(playerReference + "/").once();
+    int y = 1;
+    matchRecordSnapshot.value.forEach((key, value) {
+      if (key == "matchRecord") {
+        value.forEach((key, value) {
+          matchRecord[y] = value;
+          y--;
+        });
+        setState(() {
+          recordLineWidth =
+              (matchRecord[0] / (matchRecord[0] + matchRecord[1])) * 115 + 5;
+        });
+      }
     });
   }
 
@@ -83,8 +169,10 @@ class _HomePageViewState extends State<HomePageView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getActivePlayerData();
     selectedPlayerShow();
+    getActivePlayerData();
+
+    setPlayerReference();
   }
 
   @override
@@ -102,26 +190,32 @@ class _HomePageViewState extends State<HomePageView> {
                   scrollDirection: Axis.horizontal,
                   children: [
                     UnforcedErrorWindowFunction(
-                        context,
-                        widget.opponentsAndYourPoints,
-                        state,
-                        initials,
-                        playerSelected,
-                        paddingSelectedPlayer,
-                        activePlayerFirstName,
-                        activePlayerlastName),
+                      "Unforced Errors",
+                      context,
+                      lastMatchDataVariable,
+                      state,
+                      initials,
+                      playerSelected,
+                      paddingSelectedPlayer,
+                      activePlayerFirstName,
+                      activePlayerlastName,
+                      lastGameString,
+                    ),
                     SizedBox(
                       width: 20,
                     ),
                     UnforcedErrorWindowFunction(
-                        context,
-                        widget.opponentsAndYourPoints,
-                        state,
-                        initials,
-                        playerSelected,
-                        paddingSelectedPlayer,
-                        activePlayerFirstName,
-                        activePlayerlastName),
+                      "Winners",
+                      context,
+                      lastMatchDataVariableWinners,
+                      state,
+                      initials,
+                      playerSelected,
+                      paddingSelectedPlayer,
+                      activePlayerFirstName,
+                      activePlayerlastName,
+                      lastGameString,
+                    ),
                     SizedBox(
                       width: 20,
                     ),
@@ -136,7 +230,12 @@ class _HomePageViewState extends State<HomePageView> {
                         child: MaterialButton(
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => CheckForMatchIDPage()));
+                          },
                           child: Container(
                             height: 190,
                             decoration: BoxDecoration(
@@ -374,7 +473,7 @@ class _HomePageViewState extends State<HomePageView> {
                                         ),
                                         child: Column(
                                           children: [
-                                            Text("Last Tournament",
+                                            Text("Match Record",
                                                 style: TextStyle(
                                                     color: Color(0xFF9B9191),
                                                     fontSize: 11.5,
@@ -387,27 +486,16 @@ class _HomePageViewState extends State<HomePageView> {
                                   ]),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 20, 5, 0),
+                                  padding: EdgeInsets.fromLTRB(0, 20, 5, 17),
                                   child: Text(
-                                    "Semi Final",
+                                    matchRecord[0].toString() +
+                                        " - " +
+                                        matchRecord[1].toString(),
                                     style: TextStyle(
                                         fontFamily: "Helvetica",
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 23,
+                                        fontSize: 30,
                                         color: Colors.white),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(10, 5, 50, 0),
-                                  child: Column(
-                                    children: [
-                                      Text("3-1 in matches",
-                                          style: TextStyle(
-                                              color: Color(0xFF9B9191),
-                                              fontSize: 11.5,
-                                              fontFamily: "Telugu Sangam MN",
-                                              fontWeight: FontWeight.w200)),
-                                    ],
                                   ),
                                 ),
                                 SizedBox(
@@ -415,7 +503,7 @@ class _HomePageViewState extends State<HomePageView> {
                                 ),
                                 Padding(
                                     padding: EdgeInsets.only(
-                                      right: 7,
+                                      right: 0,
                                     ),
                                     child: Stack(children: [
                                       Container(
@@ -439,7 +527,7 @@ class _HomePageViewState extends State<HomePageView> {
                                           ),
                                         ),
                                         height: 6,
-                                        width: 80,
+                                        width: recordLineWidth,
                                       ),
                                     ]))
                               ],

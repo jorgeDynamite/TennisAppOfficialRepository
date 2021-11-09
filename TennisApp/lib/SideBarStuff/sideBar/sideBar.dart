@@ -128,21 +128,25 @@ class _SideBarState extends State<SideBar>
           if (value["mainController"] == null) {
             value.forEach((key, value) {
               print(key);
-              String firstNamePlayer = value["lastName"];
-              String lastNamePlayer = value["firstName"];
-              String emailPlayer = value["email"];
-              String passwordPlayer = value["password"];
-              players.add(
-                Player(
-                  firstName: firstNamePlayer,
-                  lastName: lastNamePlayer,
-                  email: emailPlayer,
-                  password: passwordPlayer,
-                  tournaments: [],
-                ),
-              );
-              print("adding all the players ");
-              print(players.length.toString());
+              if (key != "playerTournaments" &&
+                  key != "LastMatchPlayed" &&
+                  key != "matchRecord") {
+                String firstNamePlayer = value["firstName"];
+                String lastNamePlayer = value["lastName"];
+                String emailPlayer = value["email"];
+                String passwordPlayer = value["password"];
+                players.add(
+                  Player(
+                    firstName: lastNamePlayer,
+                    lastName: firstNamePlayer,
+                    email: emailPlayer,
+                    password: passwordPlayer,
+                    tournaments: [],
+                  ),
+                );
+                print("adding all the players ");
+                print(players.length.toString());
+              }
             });
           }
           playerdataDetected = true;

@@ -37,18 +37,23 @@ late String activePlayerlastLetter;
 
 // ignore: non_constant_identifier_names
 Widget UnforcedErrorWindowFunction(
-    context,
-    opponentsAndYourPoints,
-    void Function()? setState,
-    String initials,
-    String selectedPlayer,
-    double paddingSelectedPlayer,
-    String playerFirstName,
-    String playerLastName) {
+  String text,
+  context,
+  opponentsAndYourPoints,
+  void Function()? setState,
+  String initials,
+  String selectedPlayer,
+  double paddingSelectedPlayer,
+  String playerFirstName,
+  String playerLastName,
+  String lastGameString,
+) {
   final height = MediaQuery.of(context).size.height;
+
   if (activePlayerFirstName == "") {
-    activePlayerFirstName = "Hello";
+    activePlayerFirstName = "Name";
   }
+
   return Column(
     children: [
       Stack(children: [
@@ -92,7 +97,7 @@ Widget UnforcedErrorWindowFunction(
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        'Unforced Errors',
+                                        text,
                                         style: GoogleFonts.rubik(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 20),
@@ -157,7 +162,7 @@ Widget UnforcedErrorWindowFunction(
                     fontWeight: FontWeight.bold,
                   )),
               Padding(
-                  padding: EdgeInsets.fromLTRB(49, 0, 12, 0),
+                  padding: EdgeInsets.fromLTRB(59, 0, 12, 0),
                   child: MaterialButton(
                     elevation: 0,
                     onPressed: () {
@@ -167,14 +172,10 @@ Widget UnforcedErrorWindowFunction(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          size: 17,
-                        ),
                         Align(
                           alignment: Alignment.center,
                           child: Padding(
-                            child: Text('Last Game',
+                            child: Text(lastGameString,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.white,

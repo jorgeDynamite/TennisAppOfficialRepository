@@ -1,6 +1,18 @@
-Changes Now:
+Next Step:
 
-- Loading screen
+1. Make the live score thing work - final check 
+
+2. Fix after match features
+
+3. Fix the homepage exampel: Last match stats 
+
+4. Make a match results page of all matches
+
+
+    Later:
+        Fix "After the Match Page" featuring all stats
+
+
 
 
 
@@ -20,4 +32,8 @@ Long Termo Changes:
 
 
 
+
+AfterMatch Page:
+
+- All results like live stats page 
 
