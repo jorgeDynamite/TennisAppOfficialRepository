@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/Analys/ChartsMain.dart';
 import 'package:app/HomePageStuff/FirstPageChartWindows/pieChartViwe.dart';
 import 'package:app/LiveResultsScreens/CheckMatchID.dart';
 import 'package:app/SideBarStuff/sideBar/sideBar.dart';
@@ -302,7 +303,12 @@ class _HomePageViewState extends State<HomePageView> {
                         child: MaterialButton(
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => AnalysChartsScreen()));
+                          },
                           child: Container(
                             height: 190,
                             decoration: BoxDecoration(

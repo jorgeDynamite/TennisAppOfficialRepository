@@ -1,12 +1,18 @@
+Chart Page diffrent charts:
+
+- Gemför t.ex Unforced Errors med 10 senaste matcher
+- Gemför dina stats med dina motståndare
+- 1sta Serve procent 2andra Serve procent i piechart - kan selecta en match i taget
+- 
+
+
 Next Step:
 
-1. Make the live score thing work - final check 
 
-2. Fix after match features
 
-3. Fix the homepage exampel: Last match stats 
 
-4. Make a match results page of all matches
+
+1. Design the result page
 
 
     Later:
@@ -28,7 +34,7 @@ Long Termo Changes:
 
 - Change "Add Player" so you don't need
 
-
+- Enable profile photo 
 
 
 
