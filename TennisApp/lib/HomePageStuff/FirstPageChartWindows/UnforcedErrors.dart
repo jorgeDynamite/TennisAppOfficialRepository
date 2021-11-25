@@ -49,7 +49,7 @@ Widget UnforcedErrorWindowFunction(
   String lastGameString,
 ) {
   final height = MediaQuery.of(context).size.height;
-
+  print(playerFirstName);
   if (activePlayerFirstName == "") {
     activePlayerFirstName = "Name";
   }

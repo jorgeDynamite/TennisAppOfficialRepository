@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:app/HomePageStuff/PopUpPlayers.dart';
 import 'package:app/HomePageStuff/View.dart';
+import 'package:app/bloc/app_bloc.dart';
 import 'package:crypto/crypto.dart';
 import 'package:app/UnusedStuff/Colors.dart';
 import 'package:app/UnusedStuff/ParentCoachMainPage.dart';
@@ -35,16 +36,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
     getAllAccounts(path, name, password).then((t) => {
           this.setState(() {
-            this.ter = t[0];
+            this.ter = t[0][0];
             if (ter == 1) {
               if (path == "CP_Accounts") {
-                this.setState(() {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              HomePageView([28, 21, 49], true)),
-                      (Route<dynamic> route) => false);
-                });
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) => HomePageView([28, 21, 49], true)),
+                    (Route<dynamic> route) => false);
               } else {
                 this.setState(() {
                   Navigator.of(context).pushAndRemoveUntil(
@@ -56,8 +54,8 @@ class _LoginScreenState extends State<LoginScreen> {
               }
               ;
             }
-            if (t[0] == 0) {
-              if (t[1] == 1) {
+            if (t[0][0] == 0) {
+              if (t[0][1] == 1) {
                 this.setState(() {
                   _build = errorMessage("wrong password");
                 });
@@ -89,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    updateAccount(path);
+    //updateAccount(path);
   }
 
   Widget _build = Row(
@@ -271,9 +269,10 @@ _buildTextField(TextEditingController controller, IconData icon,
 
 // ignore: camel_case_types
 
-Future<List<int>> getAllAccounts(
+Future<List<dynamic>> getAllAccounts(
     String path, String name, String passwords) async {
   bool results = false;
+  String uid = "";
   String firstName = "";
   String lastName = "";
   String coachEmail = name;
@@ -283,16 +282,8 @@ Future<List<int>> getAllAccounts(
   List<int> t = [0, 0];
 
   bool finalBool = false;
-  void setActivePlayer(String coachEmail, String coachFirstname,
-      String coachLastName, String uid) async {
-    print("Starting SetactivePlayerFunction Login Page");
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setBool("loggedIn", true);
-    preferences.setString("accountRandomUID", uid);
-    preferences.setString("email", coachEmail);
-    preferences.setString("lastName", coachLastName);
-    preferences.setString("firstName", coachFirstname);
-  }
+  Future<void> setActivePlayer(bool coach, String email, String firstname,
+      String lastName, String uid) async {}
 
   final databaseReference = FirebaseDatabase.instance.reference();
   print("going");
@@ -301,12 +292,17 @@ Future<List<int>> getAllAccounts(
   DataSnapshot dataSnapshot = await databaseReference.child(path).once();
   List<dynamic> accounts = [];
   bool result = false;
+  int x = 0;
   if (path == "CP_Accounts") {
     if (dataSnapshot.value != null) {
       dataSnapshot.value.forEach((key, value) {
+        x = 0;
         value.forEach((key, value) {
-          dynamic account = value;
-          accounts.add(account);
+          if (x == 0) {
+            dynamic account = value;
+            accounts.add(account);
+          }
+          x++;
         });
 
         print(accounts.length);
@@ -337,12 +333,10 @@ Future<List<int>> getAllAccounts(
             coachFirstName = accounts[i]["firstName"];
             coachlastName = accounts[i]["lastName"];
             print(accounts[i].toString());
-
-            setActivePlayer(coachEmail, coachFirstName, coachlastName,
-                accounts[i]["urlUid"].toString());
-
+            uid = accounts[i]["urlUid"].toString();
             result = true;
-
+            app.initSet(path == "CP_Accounts", uid, coachEmail, coachlastName,
+                coachFirstName);
             break;
           }
         } else {
@@ -359,10 +353,8 @@ Future<List<int>> getAllAccounts(
             coachFirstName = accounts[i]["firstName"];
             coachlastName = accounts[i]["lastName"];
             print(accounts[i].toString());
-            setActivePlayer(coachEmail, coachFirstName, coachlastName,
-                accounts[i]["urlUid"].toString());
-            result = true;
 
+            result = true;
             break;
           }
         } else {
@@ -377,5 +369,12 @@ Future<List<int>> getAllAccounts(
     t[0] = 1;
   }
   print(t);
-  return t;
+  //AppBloc().initSet(
+  //   path == "CP_Accounts", uid, coachEmail, coachlastName, coachFirstName);
+
+  return [
+    t,
+    setActivePlayer(
+        path == "CP_Accounts", coachEmail, coachFirstName, coachlastName, uid)
+  ];
 }

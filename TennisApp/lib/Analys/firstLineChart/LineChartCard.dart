@@ -50,7 +50,7 @@ class LineChartCard extends StatelessWidget {
                                   ),
                                   Align(
                                     alignment: Alignment.center,
-                                    child: Text("Unforced Errors",
+                                    child: Text(parameters[1],
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 15,

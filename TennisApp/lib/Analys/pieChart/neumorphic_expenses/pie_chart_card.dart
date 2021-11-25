@@ -7,21 +7,23 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class PieChartCard extends StatefulWidget {
-  PieChartCard(this.procentages, this.color, this.type);
+  PieChartCard(this.procentages, this.color, this.type, this.title);
   final int type;
   final List<List<double>> procentages;
   final List<Color>? color;
+  final String title;
   @override
   State<StatefulWidget> createState() =>
-      PieChartCardState(procentages, color, type);
+      PieChartCardState(procentages, color, type, title);
 }
 
 class PieChartCardState extends State {
   late int touchedIndex;
-  PieChartCardState(this.procentages, this.color, this.type);
+  PieChartCardState(this.procentages, this.color, this.type, this.title);
   final int type;
   final List<List<double>> procentages;
   final List<Color>? color;
+  final String title;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -67,7 +69,7 @@ class PieChartCardState extends State {
                                       : Container(),
                                   Align(
                                     alignment: Alignment.center,
-                                    child: Text("First & Second Serve",
+                                    child: Text(title,
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 15,
@@ -98,6 +100,7 @@ class PieChartCardState extends State {
                                               procantages: procentages[0],
                                               color: color,
                                               type: type,
+                                              title: title,
                                             )
                                           ],
                                         )),
@@ -128,6 +131,7 @@ class PieChartCardState extends State {
                                               procantages: procentages[1],
                                               color: color,
                                               type: type,
+                                              title: title,
                                             ),
                                           ],
                                         )),
@@ -162,6 +166,7 @@ class PieChartCardState extends State {
                                               procantages: procentages[0],
                                               color: color,
                                               type: type,
+                                              title: title,
                                             ),
                                           ],
                                         )),
@@ -247,7 +252,7 @@ class PieChartCardState extends State {
                 SizedBox(
                   width: 0,
                 ),
-                Text(type == 1 ? "Last 3 games" : "Last game",
+                Text("Last game",
                     style: TextStyle(
                         color: Color(0xFF1BBE8F),
                         fontSize: 15,

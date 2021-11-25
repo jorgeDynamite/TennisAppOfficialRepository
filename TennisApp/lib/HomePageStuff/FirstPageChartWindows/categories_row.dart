@@ -1,3 +1,4 @@
+import 'package:app/HomePageStuff/FirstPageChartWindows/UnforcedErrors.dart';
 import 'package:app/HomePageStuff/FirstPageChartWindows/pie_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -83,7 +84,7 @@ class ExpenseCategory extends StatelessWidget {
             ),
           ),
           SizedBox(width: 20),
-          Text(text.capitalize()),
+          Text(text.capitalize(index, text)),
         ],
       ),
     );
@@ -91,7 +92,7 @@ class ExpenseCategory extends StatelessWidget {
 }
 
 extension StringExtension on String {
-  String capitalize() {
-    return "${this[0].toUpperCase()}${this.substring(1)}";
+  String capitalize(index, String text) {
+    return index == 0 ? text : "Opponent";
   }
 }

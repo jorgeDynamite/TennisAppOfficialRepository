@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui' as ui;
 
 import 'package:app/HomePageStuff/FirstPageChartWindows/UnforcedErrors.dart';
 import 'package:flutter/material.dart';
@@ -35,9 +36,30 @@ class PieChart extends CustomPainter {
       final currentCategory = categories.elementAt(index);
       // Amount of length to paint is a percentage of the perimeter of a circle (2 x pi)
       final sweepRadian = currentCategory.amount / total * 2 * pi;
+
+      if (index == 0) {
+        paint = Paint()
+          ..shader = ui.Gradient.linear(
+            Offset(1, 1),
+            Offset(100, 220),
+            [
+              const Color(0xff00FFF5),
+              const Color(0xff6302C1),
+            ],
+          )
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = width / 2;
+      } else {
+        paint = Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = width / 2;
+        //paint.color = kNeumorphicColors.elementAt(index % categories.length);
+        paint.color = paint.color = cate(amount)
+            .kNeumorphicColors()
+            .elementAt(index % categories.length);
+        ;
+      }
       // Used modulo/remainder to catch use case if there is more than 6 colours
-      paint.color =
-          cate(amount).kNeumorphicColors().elementAt(index % categories.length);
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: radius),
         startRadian,

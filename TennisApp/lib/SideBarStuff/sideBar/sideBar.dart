@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:app/HomePageStuff/View.dart';
 import 'package:app/LoginPage.dart';
 import 'package:app/SideBarStuff/bloc.animation_bloc/navigation.bloc.dart';
+import 'package:app/bloc/app_bloc.dart';
+import 'package:app/bloc/app_state.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import 'package:flutter/material.dart';
@@ -28,6 +30,8 @@ class SideBar extends StatefulWidget {
 
 class _SideBarState extends State<SideBar>
     with SingleTickerProviderStateMixin<SideBar> {
+  final AppState _state = appState;
+  bool? coach;
   bool loggedIN = true;
   bool playerdataDetected = false;
   String lastName = "";
@@ -61,8 +65,8 @@ class _SideBarState extends State<SideBar>
     }
   }
 
-  Widget selectedPlayersHeadLine() {
-    if (widget.ifCoach) {
+  Widget selectedPlayersHeadLine(coach) {
+    if (coach) {
       return Column(
         children: [
           Padding(
@@ -95,46 +99,49 @@ class _SideBarState extends State<SideBar>
   }
 
   Future _getIfUserDetails(context) async {
+    List<dynamic> initAtributes = await app.init();
+    String playerKey = "";
     print("run intisState");
+
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    bool loggedIn = preferences.getBool("loggedIn") ?? false;
-    this.lastName = preferences.getString("lastName").toString();
-    this.email = preferences.getString("email").toString();
-    this.firstName = preferences.getString("firstName").toString();
-    if (widget.ifCoach) {
-      String uid = preferences.getString("accountRandomUID").toString();
+    this.lastName = initAtributes[3];
+    this.email = initAtributes[1];
+    this.firstName = initAtributes[2];
+    this.coach = initAtributes[0];
+    if (coach!) {
+      String uid = initAtributes[4];
       int? activePlayerIndex;
       activePlayerIndex = preferences.getInt("activePlayerIndex");
 
       String selected = "";
-      List<String> namesOfPlayers;
-
-      print("Email" + email);
 
       final databaseReference = FirebaseDatabase.instance.reference();
 
-      DataSnapshot dataSnapshot = await databaseReference
-          .child("CP_Accounts/" + firstName + lastName + "-" + uid + "/")
-          .once();
-      print("Data reference thing = " +
-          "CP_Accounts/" +
-          firstName +
-          lastName +
-          "-" +
-          uid +
-          "/");
+      DataSnapshot dataSnapshot =
+          await databaseReference.child(initAtributes[5]["URLtoCoach"]).once();
+      //print(_state.urlsFromCoach["URLtoCoach"]! + "dsadasdsadasds");
       if (dataSnapshot.value != null) {
         dataSnapshot.value.forEach((key, value) {
-          if (value["mainController"] == null) {
+          playerKey = key;
+          if (playerKey[0] != "-") {
             value.forEach((key, value) {
               print(key);
               if (key != "playerTournaments" &&
                   key != "LastMatchPlayed" &&
-                  key != "matchRecord") {
+                  key != "matchRecord" &&
+                  key != "lastTenGames") {
                 String firstNamePlayer = value["firstName"];
                 String lastNamePlayer = value["lastName"];
                 String emailPlayer = value["email"];
                 String passwordPlayer = value["password"];
+                _state.urlsFromTennisAccounts["URLtoTennisPlayer"] =
+                    "Tennis_Accounts/" + playerKey + "/";
+                _state.urlsFromCoach["URLtoPlayer"] =
+                    _state.urlsFromCoach["URLtoCoach"]! + playerKey + "/";
+
+                print(_state.urlsFromTennisAccounts["URLtoTennisPlayer"]);
+                print(_state.urlsFromCoach["URLtoPlayer"]);
+                print(firstNamePlayer);
                 players.add(
                   Player(
                     firstName: lastNamePlayer,
@@ -144,8 +151,6 @@ class _SideBarState extends State<SideBar>
                     tournaments: [],
                   ),
                 );
-                print("adding all the players ");
-                print(players.length.toString());
               }
             });
           }
@@ -159,7 +164,9 @@ class _SideBarState extends State<SideBar>
       this.setState(() {
         if (this.playerdataDetected) {
           for (var i = 0; i < listLength; i++) {
+            print("in Loop");
             if (activePlayerIndex != null) {
+              print(activePlayerIndex);
               if (i == activePlayerIndex) {
                 color = Color(0xFF0ADE7C);
                 iconColor = color;
@@ -181,6 +188,8 @@ class _SideBarState extends State<SideBar>
                 selected = "";
               }
             }
+            setActivePlayer(players[i].lastName, players[i].firstName, i);
+
             String title =
                 players[i].lastName + " " + players[i].firstName + selected;
 
@@ -257,7 +266,6 @@ class _SideBarState extends State<SideBar>
     preferences.setString("activePlayerFirstName", firstName);
     preferences.setString("activePlayerLastName", lastName);
     preferences.setInt("activePlayerIndex", index);
-
     widget.sendInitials();
     print("Ending the first SetactivePlayerFunction ");
   }
@@ -273,6 +281,7 @@ class _SideBarState extends State<SideBar>
     isSidebarOpenedStream = isSidebarOpenedStreamController.stream;
     isSidebarOpenedSink = isSidebarOpenedStreamController.sink;
     print("need context");
+    //_getIfUserDetails(widgetContext);
 
     _getIfUserDetails(widgetContext);
   }
@@ -364,7 +373,7 @@ class _SideBarState extends State<SideBar>
                         indent: 32,
                         endIndent: 32,
                       ),
-                      selectedPlayersHeadLine(),
+                      selectedPlayersHeadLine(coach ?? false),
                       MenuItem(
                         onTap: () {
                           onIconPressed();
@@ -374,8 +383,10 @@ class _SideBarState extends State<SideBar>
                       ),
                       MenuItem(
                         onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => LoginScreen()));
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen()),
+                              (Route<dynamic> route) => false);
                         },
                         icon: Icons.exit_to_app,
                         title: "Logout",

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/bloc/app_state.dart';
 import 'package:app/newMatch/after_match.dart';
 import 'package:app/newMatch/newMatchLastPage.dart';
 import 'package:app/newMatch/thePoint/Rally.dart';
@@ -44,6 +45,7 @@ class MatchPanel extends StatefulWidget {
 class _MatchPanelState extends State<MatchPanel> {
   TextEditingController controller = TextEditingController();
   late double greenLineWidth = 214;
+  final AppState _state = appState;
   late bool castMatchPressed;
   late Timer timer;
   String onOff = "OFF";
@@ -75,7 +77,8 @@ class _MatchPanelState extends State<MatchPanel> {
   bool surfacenotClickOnTwoButtonsTwice = false;
   bool matchTypenotClickOnTwoButtonsTwice = false;
   bool textFieldChangedBool = false;
-  late String afterMatchURL;
+  late String afterMatchURL = "";
+  late String afterMatchURLTA = "";
   late String tournamentName;
   late Tournament newTournament;
   bool finishedEarly = false;
@@ -96,6 +99,18 @@ class _MatchPanelState extends State<MatchPanel> {
     Colors.transparent,
     Colors.transparent
   ];
+
+  double getTournamnetNumber(DataSnapshot dataSnapshot) {
+    double x = 0;
+    if (dataSnapshot != null) {
+      dataSnapshot.value.forEach((key, value) {
+        x++;
+      });
+      return x + 1;
+    } else {
+      return 0;
+    }
+  }
 
 //Varibles for the match
   void setBasicMatchVariblesNotToNULL() {
@@ -187,8 +202,11 @@ class _MatchPanelState extends State<MatchPanel> {
     print("WhenMatchIsfinished function starting - - - Func");
     SharedPreferences preferences = await SharedPreferences.getInstance();
     late DatabaseReference reference;
+    late DatabaseReference referenceTA;
     late DatabaseReference lastMatchReference;
     late DatabaseReference matchRecordReference;
+    late DatabaseReference lastMatchReferenceTA;
+    late DatabaseReference matchRecordReferenceTA;
     List<int> matchRecord = [0, 0];
 
     double firstServeprocent = 0;
@@ -199,28 +217,25 @@ class _MatchPanelState extends State<MatchPanel> {
     bool threesets = false;
     bool fivesets = false;
     bool timebased = false;
+    String urlTennisPlayer = "";
     Matches yourtournament = widget.yourtournamentDataPackLiveStats.matches[0];
     Matches1 opponenttTournamnet =
         widget.opponentstournamentDataPackLiveStats.matches[0];
-    this.coachlastName = preferences.getString("lastName").toString();
-    this.playerFirstName =
-        preferences.getString("activePlayerFirstName").toString();
-    this.playerLastName =
-        preferences.getString("activePlayerLastName").toString();
-    this.coachfirstName = preferences.getString("firstName").toString();
-    this.coachuid = preferences.getString("accountRandomUID").toString();
+    print(preferences.getBool("coach")!);
+    url = preferences.getBool("coach")!
+        ? _state.urlsFromCoach["URLtoPlayer"]!
+        : _state.urlsFromTennisAccounts["URLtoTennisPlayer"]!;
 
-    url = ("CP_Accounts/" +
-        coachfirstName +
-        coachlastName +
-        "-" +
-        coachuid +
-        "/");
-
+    urlTennisPlayer = _state.urlsFromTennisAccounts["URLtoTennisPlayer"]!;
+    print(url);
+    print(urlTennisPlayer);
     print("Finished setting values on all Shared Preferences varibles");
     databaseReference.child(url).push();
     whoWonTheMatch();
     DataSnapshot dataSnapshot = await databaseReference.child(url).once();
+    DataSnapshot tournamentNumberSnapchot =
+        await databaseReference.child(url + "playerTournaments/").once();
+
     if (yourtournament.servePointsPlayed != 0 ||
         yourtournament.recevingPointsPlayed != 0) {
       firstServeprocent = yourtournament.firstServeProcentage != 1
@@ -260,248 +275,444 @@ class _MatchPanelState extends State<MatchPanel> {
           : 0;
     }
     print("Made all calculations of the serve%");
-    if (dataSnapshot.value != null) {
-      dataSnapshot.value.forEach((key, value) {
-        String playerKey = key;
-        List<String> split = key.split("-");
-        print(split);
 
-        if (split[0] == playerFirstName + playerLastName) {
-          bool x = false;
-          int y = 1;
-          value.forEach((key, value) {
-            if (key == "matchRecord") {
-              x = true;
-              value.forEach((key, value) {
-                matchRecord[y] = value;
-                y--;
-                print("value:     " + value.toString());
-              });
-              Map<String, dynamic> recordData = {
-                "matchesWon":
-                    mainPlayerWonTheMatch ? matchRecord[0] + 1 : matchRecord[0],
-                "matchesLost": !mainPlayerWonTheMatch
-                    ? matchRecord[1] + 1
-                    : matchRecord[1],
-              };
-              matchRecordReference =
-                  databaseReference.child(url + playerKey + "/" + key + "/");
+    bool x = false;
+    bool x2 = false;
+    int length = 0;
 
-              matchRecordReference.push();
-              matchRecordReference.set(recordData);
-            }
-          });
-          if (!x) {
-            Map<String, dynamic> recordData = {
-              "matchesWon": mainPlayerWonTheMatch ? 1 : 0,
-              "matchesLost": !mainPlayerWonTheMatch ? 1 : 0,
-            };
-            matchRecordReference = databaseReference
-                .child(url + playerKey + "/" + "matchRecord" + "/");
-            matchRecordReference.push();
-            matchRecordReference.set(recordData);
-          }
-          // When you know you are on the right player
-          print("We are on the right player");
-          reference = databaseReference.child(url +
-              key +
-              "/" +
-              "playerTournaments" +
-              "/" +
-              widget.tournamentDataPack.tournamentName +
-              "/" +
-              "match" +
-              " " +
-              widget.tournamentDataPack.matches[0].matchNumber.toString() +
-              "/");
-          reference.push();
+    int y = 1;
+    dataSnapshot.value.forEach((key, value) {
+      print(key);
+      if (key == "matchRecord") {
+        x = true;
 
-          lastMatchReference = databaseReference
-              .child(url + key + "/" + "LastMatchPlayed" + "/");
-          lastMatchReference.remove();
-          lastMatchReference.push();
+        value.forEach((key, value) {
+          matchRecord[y] = value;
+          y--;
+          print("value:     " + value.toString());
+        });
+        Map<String, dynamic> recordData = {
+          "matchesWon":
+              mainPlayerWonTheMatch ? matchRecord[0] + 1 : matchRecord[0],
+          "matchesLost":
+              !mainPlayerWonTheMatch ? matchRecord[1] + 1 : matchRecord[1],
+        };
+        if (preferences.getBool("coach")!) {
+          matchRecordReference =
+              databaseReference.child(url + "matchRecord" + "/");
 
-          afterMatchURL = url +
-              key +
-              "/" +
-              "playerTournaments" +
-              "/" +
-              widget.tournamentDataPack.tournamentName +
-              "/" +
-              "match" +
-              " " +
-              widget.tournamentDataPack.matches[0].matchNumber.toString() +
-              "/";
-          print(url +
-              key +
-              "/" +
-              "playerTournaments" +
-              "/" +
-              widget.tournamentDataPack.tournamentName +
-              "/" +
-              "match" +
-              " " +
-              widget.tournamentDataPack.matches[0].matchNumber.toString() +
-              "/");
-          print(
-              "Databasereference is made where the match data will be inserted");
-
-          if (yourtournament.rules!.matchFormatVariable.numberSets != null) {
-            if (yourtournament.rules!.matchFormatVariable.numberSets == 3) {
-              threesets = true;
-            }
-            if (yourtournament.rules!.matchFormatVariable.numberSets == 5) {
-              fivesets = true;
-            }
-
-            if (yourtournament.rules!.matchFormatVariable.numberSets == 1) {
-              oneSet = true;
-            }
-          } else {
-            timebased = true;
-          }
-          print(
-              "- - - Start mapping the match data in the datapack that will be put in the database");
-
-          if (opponenttTournamnet.returnWinner == null) {
-            opponenttTournamnet.returnWinner = 0;
-          }
-          if (opponenttTournamnet.returnErrors == null) {
-            opponenttTournamnet.returnErrors = 0;
-          }
-          print(opponenttTournamnet.aces!.toInt().toString() +
-              " " +
-              opponenttTournamnet.doubleFaults!.toInt().toString() +
-              " " +
-              opponentfirstServeprocent.toString() +
-              " " +
-              opponenttTournamnet.forcedErrors!.toInt().toString() +
-              " " +
-              opponenttTournamnet.pointsLost!.toInt().toString() +
-              " " +
-              opponenttTournamnet.pointsPlayed!.toInt().toString() +
-              " " +
-              opponenttTournamnet.pointsWon!.toInt().toString() +
-              " " +
-              opponenttTournamnet.returnErrors!.toInt().toString() +
-              " " +
-              opponenttTournamnet.returnWinner!.toInt().toString() +
-              " " +
-              opponentsecondServeprocent.toString() +
-              " " +
-              opponenttTournamnet.unforcedErrors!.toInt().toString() +
-              " " +
-              opponenttTournamnet.voleyErrors!.toInt().toString() +
-              " " +
-              opponenttTournamnet.voleyWinner!.toInt().toString() +
-              " " +
-              opponenttTournamnet.winners!.toInt().toString());
-          print(opponenttTournamnet.aces!.toInt().toString() +
-              " " +
-              yourtournament.doubleFaults!.toInt().toString() +
-              " " +
-              firstServeprocent.toString() +
-              " " +
-              yourtournament.forcedErrors!.toInt().toString() +
-              " " +
-              yourtournament.pointsLost!.toInt().toString() +
-              " " +
-              yourtournament.pointsPlayed!.toInt().toString() +
-              " " +
-              yourtournament.pointsWon!.toInt().toString() +
-              " " +
-              yourtournament.returnErrors!.toInt().toString() +
-              " " +
-              yourtournament.returnWinner!.toInt().toString() +
-              " " +
-              secondServeprocent.toString() +
-              " " +
-              yourtournament.unforcedErrors!.toInt().toString() +
-              " " +
-              yourtournament.voleyErrors!.toInt().toString() +
-              " " +
-              yourtournament.voleyWinner!.toInt().toString() +
-              " " +
-              yourtournament.winners!.toInt().toString());
-          int yourwinners = yourtournament.voleyWinner!.toInt() +
-              yourtournament.aces!.toInt() +
-              yourtournament.returnWinner!.toInt() +
-              yourtournament.winners!.toInt() -
-              4;
-          int opponentswinners = opponenttTournamnet.voleyWinner!.toInt() +
-              opponenttTournamnet.aces!.toInt() +
-              opponenttTournamnet.returnWinner!.toInt() +
-              opponenttTournamnet.winners!.toInt() -
-              4;
-          Map<String, dynamic> matchdata = {
-            "opponentName": widget.opponentName,
-            "yourName": widget.yourName,
-            "yourStats": [
-              yourtournament.aces!.toInt(),
-              yourtournament.doubleFaults!.toInt(),
-              firstServeprocent,
-              yourtournament.forcedErrors!.toInt(),
-              yourtournament.pointsLost!.toInt(),
-              yourtournament.pointsPlayed!.toInt(),
-              yourtournament.pointsWon!.toInt(),
-              yourtournament.returnErrors!.toInt(),
-              yourtournament.returnWinner!.toInt(),
-              secondServeprocent,
-              yourtournament.unforcedErrors!.toInt(),
-              yourtournament.voleyErrors!.toInt(),
-              yourtournament.voleyWinner!.toInt(),
-              yourwinners,
-            ], // ABC: Alphabetisk ordning
-
-            "opponentStats": [
-              opponenttTournamnet.aces!.toInt(),
-              opponenttTournamnet.doubleFaults!.toInt(),
-              opponentfirstServeprocent,
-              opponenttTournamnet.forcedErrors!.toInt(),
-              opponenttTournamnet.pointsLost!.toInt(),
-              opponenttTournamnet.pointsPlayed!.toInt(),
-              opponenttTournamnet.pointsWon!.toInt(),
-              opponenttTournamnet.returnErrors!.toInt(),
-              opponenttTournamnet.returnWinner!.toInt(),
-              opponentsecondServeprocent,
-              opponenttTournamnet.unforcedErrors!.toInt(),
-              opponenttTournamnet.voleyErrors!.toInt(),
-              opponenttTournamnet.voleyWinner!.toInt(),
-              opponentswinners,
-            ], // ABC: Alphabetisk ordning
-
-            "trackedStats": [
-              ace,
-              doubleFault,
-              firstServe,
-              forcedErrors,
-              returnError,
-              returnWinner,
-              secondServe,
-              unforcedErrors,
-              voleyError,
-              voleyWinner,
-              winners
-            ],
-            "1setStandings": firstsetStandings,
-            "2setStandings": secondsetStandings,
-            "3setStandings": thirdsetStandings,
-            "4setStandings": fourthsetStandings,
-            "5setStandings": fifthsetStandings,
-            "5sets4min": fivesets,
-            "threeSets": threesets,
-            "oneSet": oneSet,
-            "timeBasedMatch": timebased,
-            "mostgameswinsformat":
-                yourtournament.rules!.matchFormatVariable.mostGamesWinsFormat,
-            "surface": yourtournament.surface!.toString(),
-          };
-          print("sending data to database!");
-          reference.set(matchdata);
-          lastMatchReference.set(matchdata);
+          matchRecordReference.push();
+          matchRecordReference.set(recordData);
         }
-      });
+
+        matchRecordReferenceTA = databaseReference
+            .child(urlTennisPlayer + "/" + "matchRecord" + "/");
+        matchRecordReferenceTA.push();
+        matchRecordReferenceTA.set(recordData);
+      }
+
+      if (key == "lastTenGames") {
+        x2 = true;
+        value[0] = {"": []};
+        print(value);
+
+        for (var i = 0; i < 10; i++) {
+          try {
+            print(value[i]);
+            if (i != 0) {
+              length++;
+              if (preferences.getBool("coach")!) {
+                var c = databaseReference.child(
+                    url + "lastTenGames" + "/" + (i + 1).toString() + "/");
+                c.remove();
+                c.push();
+                if (length != 9) {
+                  if (preferences.getBool("coach")!) {
+                    c.set(value[i]);
+                  }
+                }
+              }
+
+              var t = databaseReference.child(urlTennisPlayer +
+                  "lastTenGames" +
+                  "/" +
+                  (i + 1).toString() +
+                  "/");
+              t.remove();
+              t.push();
+
+              if (length != 9) {
+                t.set(value[i]);
+              }
+              print(urlTennisPlayer +
+                  "lastTenGames" +
+                  "/" +
+                  (i + 1).toString() +
+                  "/");
+              print(url + "lastTenGames" + "/" + (i + 1).toString() + "/");
+            } else {
+              databaseReference
+                  .child(url + "lastTenGames" + "/" + 1.toString() + "/")
+                  .remove();
+              databaseReference
+                  .child(urlTennisPlayer +
+                      "lastTenGames" +
+                      "/" +
+                      1.toString() +
+                      "/")
+                  .remove();
+            }
+          } catch (e) {
+            print("Failed: ____________ " + e.toString());
+          }
+        }
+        /*
+        value.forEach((key, value) {
+          print(key);
+          if (value != []) {
+            length++;
+            if (preferences.getBool("coach")!) {
+              var c = databaseReference.child(url +
+                  "/" +
+                  "lastTenGames" +
+                  "/" +
+                  (length + 1).toString() +
+                  "/");
+              c.remove();
+              c.push();
+              if (length != 9) {
+                if (preferences.getBool("coach")!) {
+                  c.set(value);
+                }
+              }
+            }
+
+            var t = databaseReference.child(urlTennisPlayer +
+                "/" +
+                "lastTenGames" +
+                "/" +
+                (length + 1).toString() +
+                "/");
+            t.remove();
+            t.push();
+
+            if (length != 9) {
+              t.set(value);
+            }
+            print(urlTennisPlayer +
+                "/" +
+                "lastTenGames" +
+                "/" +
+                (length + 1).toString() +
+                "/");
+            print(url +
+                "/" +
+                "lastTenGames" +
+                "/" +
+                (length + 1).toString() +
+                "/");
+          }
+        });
+*/
+        // print(value.lenght);
+
+      }
+      /*
+        print("!2121312312312312312");
+        for (var i = 0; i < 10; i++) {
+          if (preferences.getBool("coach")!) {
+            var c = databaseReference.child(
+                url + "/" + "lastTenGames" + "/" + (i + 1).toString() + "/");
+            c.remove();
+            c.push();
+
+            if (i != 9) {
+              if (preferences.getBool("coach")!) {
+                c.set(value[i]);
+              }
+            }
+            var t = databaseReference.child(urlTennisPlayer +
+                "/" +
+                "lastTenGames" +
+                "/" +
+                (i + 1).toString() +
+                "/");
+            t.remove();
+            t.push();
+
+            if (i != 9) {
+              t.set(value[i]);
+            }
+          }
+        }
+        
+      }
+      */
+    });
+
+    if (!x) {
+      Map<String, dynamic> recordData = {
+        "matchesWon": mainPlayerWonTheMatch ? 1 : 0,
+        "matchesLost": !mainPlayerWonTheMatch ? 1 : 0,
+      };
+      if (preferences.getBool("coach")!) {
+        matchRecordReference =
+            databaseReference.child(url + "matchRecord" + "/");
+        matchRecordReference.push();
+        matchRecordReference.set(recordData);
+      }
+      matchRecordReferenceTA =
+          databaseReference.child(urlTennisPlayer + "matchRecord" + "/");
+      matchRecordReferenceTA.push();
+      matchRecordReferenceTA.set(recordData);
     }
+    String tournamentNumber =
+        getTournamnetNumber(tournamentNumberSnapchot).toInt().toString();
+    print(tournamentNumber);
+    // When you know you are on the right player
+    print("We are on the right player");
+    if (preferences.getBool("coach")!) {
+      reference = databaseReference.child(url +
+          "playerTournaments" +
+          "/" +
+          tournamentNumber +
+          "/" +
+          widget.tournamentDataPack.tournamentName +
+          "/" +
+          "match" +
+          " " +
+          widget.tournamentDataPack.matches[0].matchNumber.toString() +
+          "/");
+      reference.push();
+    }
+
+    referenceTA = databaseReference.child(urlTennisPlayer +
+        "playerTournaments" +
+        "/" +
+        tournamentNumber +
+        "/" +
+        widget.tournamentDataPack.tournamentName +
+        "/" +
+        "match" +
+        " " +
+        widget.tournamentDataPack.matches[0].matchNumber.toString() +
+        "/");
+
+    if (preferences.getBool("coach")!) {
+      lastMatchReference =
+          databaseReference.child(url + "lastTenGames" + "/" + "1").push();
+      lastMatchReference.remove();
+      lastMatchReference.push();
+    }
+
+    referenceTA.push();
+
+    lastMatchReferenceTA = databaseReference
+        .child(urlTennisPlayer + "lastTenGames" + "/" + "1")
+        .push();
+
+    lastMatchReferenceTA.remove();
+    lastMatchReferenceTA.push();
+
+    preferences.getBool("coach")!
+        ? afterMatchURL = url +
+            "playerTournaments" +
+            "/" +
+            tournamentNumber +
+            "/" +
+            widget.tournamentDataPack.tournamentName +
+            "/" +
+            "match" +
+            " " +
+            widget.tournamentDataPack.matches[0].matchNumber.toString() +
+            "/"
+        : "";
+    afterMatchURLTA = urlTennisPlayer +
+        "playerTournaments" +
+        "/" +
+        tournamentNumber +
+        "/" +
+        widget.tournamentDataPack.tournamentName +
+        "/" +
+        "match" +
+        " " +
+        widget.tournamentDataPack.matches[0].matchNumber.toString() +
+        "/";
+    print(afterMatchURLTA);
+    print(afterMatchURL);
+    print(url +
+        "playerTournaments" +
+        "/" +
+        tournamentNumber +
+        "/" +
+        widget.tournamentDataPack.tournamentName +
+        "/" +
+        "match" +
+        " " +
+        widget.tournamentDataPack.matches[0].matchNumber.toString() +
+        "/");
+
+    print("Databasereference is made where the match data will be inserted");
+
+    if (yourtournament.rules!.matchFormatVariable.numberSets != null) {
+      if (yourtournament.rules!.matchFormatVariable.numberSets == 3) {
+        threesets = true;
+      }
+      if (yourtournament.rules!.matchFormatVariable.numberSets == 5) {
+        fivesets = true;
+      }
+
+      if (yourtournament.rules!.matchFormatVariable.numberSets == 1) {
+        oneSet = true;
+      }
+    } else {
+      timebased = true;
+    }
+    print(
+        "- - - Start mapping the match data in the datapack that will be put in the database");
+
+    if (opponenttTournamnet.returnWinner == null) {
+      opponenttTournamnet.returnWinner = 0;
+    }
+    if (opponenttTournamnet.returnErrors == null) {
+      opponenttTournamnet.returnErrors = 0;
+    }
+    print(opponenttTournamnet.aces!.toInt().toString() +
+        " " +
+        opponenttTournamnet.doubleFaults!.toInt().toString() +
+        " " +
+        opponentfirstServeprocent.toString() +
+        " " +
+        opponenttTournamnet.forcedErrors!.toInt().toString() +
+        " " +
+        opponenttTournamnet.pointsLost!.toInt().toString() +
+        " " +
+        opponenttTournamnet.pointsPlayed!.toInt().toString() +
+        " " +
+        opponenttTournamnet.pointsWon!.toInt().toString() +
+        " " +
+        opponenttTournamnet.returnErrors!.toInt().toString() +
+        " " +
+        opponenttTournamnet.returnWinner!.toInt().toString() +
+        " " +
+        opponentsecondServeprocent.toString() +
+        " " +
+        opponenttTournamnet.unforcedErrors!.toInt().toString() +
+        " " +
+        opponenttTournamnet.voleyErrors!.toInt().toString() +
+        " " +
+        opponenttTournamnet.voleyWinner!.toInt().toString() +
+        " " +
+        opponenttTournamnet.winners!.toInt().toString());
+    print(opponenttTournamnet.aces!.toInt().toString() +
+        " " +
+        yourtournament.doubleFaults!.toInt().toString() +
+        " " +
+        firstServeprocent.toString() +
+        " " +
+        yourtournament.forcedErrors!.toInt().toString() +
+        " " +
+        yourtournament.pointsLost!.toInt().toString() +
+        " " +
+        yourtournament.pointsPlayed!.toInt().toString() +
+        " " +
+        yourtournament.pointsWon!.toInt().toString() +
+        " " +
+        yourtournament.returnErrors!.toInt().toString() +
+        " " +
+        yourtournament.returnWinner!.toInt().toString() +
+        " " +
+        secondServeprocent.toString() +
+        " " +
+        yourtournament.unforcedErrors!.toInt().toString() +
+        " " +
+        yourtournament.voleyErrors!.toInt().toString() +
+        " " +
+        yourtournament.voleyWinner!.toInt().toString() +
+        " " +
+        yourtournament.winners!.toInt().toString());
+    int yourwinners = yourtournament.voleyWinner!.toInt() +
+        yourtournament.aces!.toInt() +
+        yourtournament.returnWinner!.toInt() +
+        yourtournament.winners!.toInt() -
+        4;
+    int opponentswinners = opponenttTournamnet.voleyWinner!.toInt() +
+        opponenttTournamnet.aces!.toInt() +
+        opponenttTournamnet.returnWinner!.toInt() +
+        opponenttTournamnet.winners!.toInt() -
+        4;
+    Map<String, dynamic> matchdata = {
+      "opponentName": widget.opponentName,
+      "yourName": widget.yourName,
+      "yourStats": [
+        yourtournament.aces!.toInt(),
+        yourtournament.doubleFaults!.toInt(),
+        firstServeprocent,
+        yourtournament.forcedErrors!.toInt(),
+        yourtournament.pointsLost!.toInt(),
+        yourtournament.pointsPlayed!.toInt(),
+        yourtournament.pointsWon!.toInt(),
+        yourtournament.returnErrors!.toInt(),
+        yourtournament.returnWinner!.toInt(),
+        secondServeprocent,
+        yourtournament.unforcedErrors!.toInt(),
+        yourtournament.voleyErrors!.toInt(),
+        yourtournament.voleyWinner!.toInt(),
+        yourwinners,
+      ], // ABC: Alphabetisk ordning
+
+      "opponentStats": [
+        opponenttTournamnet.aces!.toInt(),
+        opponenttTournamnet.doubleFaults!.toInt(),
+        opponentfirstServeprocent,
+        opponenttTournamnet.forcedErrors!.toInt(),
+        opponenttTournamnet.pointsLost!.toInt(),
+        opponenttTournamnet.pointsPlayed!.toInt(),
+        opponenttTournamnet.pointsWon!.toInt(),
+        opponenttTournamnet.returnErrors!.toInt(),
+        opponenttTournamnet.returnWinner!.toInt(),
+        opponentsecondServeprocent,
+        opponenttTournamnet.unforcedErrors!.toInt(),
+        opponenttTournamnet.voleyErrors!.toInt(),
+        opponenttTournamnet.voleyWinner!.toInt(),
+        opponentswinners,
+      ], // ABC: Alphabetisk ordning
+
+      "trackedStats": [
+        ace,
+        doubleFault,
+        firstServe,
+        forcedErrors,
+        returnError,
+        returnWinner,
+        secondServe,
+        unforcedErrors,
+        voleyError,
+        voleyWinner,
+        winners
+      ],
+      "1setStandings": firstsetStandings,
+      "2setStandings": secondsetStandings,
+      "3setStandings": thirdsetStandings,
+      "4setStandings": fourthsetStandings,
+      "5setStandings": fifthsetStandings,
+      "5sets4min": fivesets,
+      "threeSets": threesets,
+      "oneSet": oneSet,
+      "timeBasedMatch": timebased,
+      "mostgameswinsformat":
+          yourtournament.rules!.matchFormatVariable.mostGamesWinsFormat,
+      "surface": yourtournament.surface!.toString(),
+    };
+    print("sending data to database!");
+    if (preferences.getBool("coach")!) {
+      reference.set(matchdata);
+      lastMatchReference.set(matchdata);
+    }
+
+    referenceTA.set(matchdata);
+
+    lastMatchReferenceTA.set(matchdata);
   }
 
   Future addTolivescore() async {
@@ -587,7 +798,7 @@ class _MatchPanelState extends State<MatchPanel> {
             opponenttTournamnet.secondServeProcentage!.toDouble();
       }
 
-      Map<String, dynamic> accountdata = {
+      Map<String, dynamic> matchdata = {
         "opponentName": widget.opponentName,
         "yourName": widget.yourName,
         "yourStats": [
@@ -644,7 +855,7 @@ class _MatchPanelState extends State<MatchPanel> {
         "5setStandings": fifthsetStandings,
       };
 
-      reference.set(accountdata);
+      reference.set(matchdata);
     }
   }
 
@@ -2802,6 +3013,7 @@ class _MatchPanelState extends State<MatchPanel> {
                                     MaterialPageRoute(
                                         builder: (_) => afterMatchPage(
                                             afterMatchURL,
+                                            afterMatchURLTA,
                                             widget.matchID,
                                             timeString))));
                           },

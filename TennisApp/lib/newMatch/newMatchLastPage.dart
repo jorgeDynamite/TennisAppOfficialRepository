@@ -1,5 +1,6 @@
 import 'package:app/HomePageStuff/View.dart';
 import 'package:app/Players.dart';
+import 'package:app/bloc/app_state.dart';
 import 'package:app/newMatch/matchPanel.dart';
 import 'package:app/newMatch/newMatchFirstPage.dart';
 import 'package:app/newMatch/thePoint/whoStartsToServe.dart';
@@ -22,6 +23,7 @@ class NewMatchLastPage extends StatefulWidget {
 }
 
 class _NewMatchLastPageState extends State<NewMatchLastPage> {
+  AppState _state = appState;
   TextEditingController controller = TextEditingController();
   double greenLineWidth = 214;
   late String url;
@@ -103,38 +105,29 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
         preferences.getString("activePlayerLastName").toString();
     this.coachfirstName = preferences.getString("firstName").toString();
     this.coachuid = preferences.getString("accountRandomUID").toString();
-    url = ("CP_Accounts/" +
-        coachfirstName +
-        coachlastName +
-        "-" +
-        coachuid +
-        "/");
+    url = preferences.getBool("coach")!
+        ? _state.urlsFromCoach["URLtoTennisPlayer"]!
+        : _state.urlsFromTennisAccounts["URLtoTennisPlayer"]!;
+    print(url);
     String playersFullNameWithoutSpaces = playerFirstName + playerLastName;
     databaseReference.child(url).push();
     DataSnapshot dataSnapshot = await databaseReference.child(url).once();
 
     if (dataSnapshot.value != null) {
       dataSnapshot.value.forEach((key, value) {
-        List<String> split = key.split("/");
-        print(split);
-        List<String> split2 = split[split.length - 1].split("-");
-        if (split2[0] == playersFullNameWithoutSpaces) {
-          // When you know you are on the right player
+        // When you know you are on the right player
 
+        if (key == "playerTournamnets") {
           value.forEach((key, value) {
-            if (key == "playerTournamnets") {
-              value.forEach((key, value) {
-                activeTournaments.add(key.toString());
+            activeTournaments.add(key.toString());
 
-                value.forEach((key, value) {
-                  if (matchNumber == null) {
-                    matchNumber = 1;
-                  } else {
-                    matchNumber! + matchNumber! + 1;
-                  }
-                });
-              });
-            }
+            value.forEach((key, value) {
+              if (matchNumber == null) {
+                matchNumber = 1;
+              } else {
+                matchNumber! + matchNumber! + 1;
+              }
+            });
           });
         }
 

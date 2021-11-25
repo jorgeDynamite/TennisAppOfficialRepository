@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:app/HomePageStuff/PopUpPlayers.dart';
 import 'package:app/HomePageStuff/View.dart';
 import 'package:app/UnusedStuff/TennisPlayerHomePage.dart';
+import 'package:app/bloc/app_bloc.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -54,11 +55,9 @@ class _CPHomePageState extends State<EmailHomePage> {
       final databaseReference = FirebaseDatabase.instance.reference();
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
-      sharedPreferences.setBool("loggedIn", true);
-      sharedPreferences.setString("email", email);
-      sharedPreferences.setString("password", password);
-      sharedPreferences.setString("firstName", firstNameController.text);
-      sharedPreferences.setString("lastName", lastNameController.text);
+      app.initSet(mainController, uid.toString(), email,
+          lastNameController.text, firstNameController.text);
+
       SharedPreferences preferences = await SharedPreferences.getInstance();
 
       var id = databaseReference
@@ -85,9 +84,6 @@ class _CPHomePageState extends State<EmailHomePage> {
       if (Cp) {
         id.set(accountdata);
 
-        sharedPreferences.setString("accountKey", id.key);
-        sharedPreferences.setString("accountRandomUID", uid.toString());
-
         print(id.key);
       } else {
         databaseReference
@@ -102,8 +98,6 @@ class _CPHomePageState extends State<EmailHomePage> {
             .push()
             .set(null);
         _id.set(accountdata);
-        sharedPreferences.setString("accountKey", _id.key);
-        sharedPreferences.setString("accountRandomUID", uid.toString());
       }
 
       if (Cp) {

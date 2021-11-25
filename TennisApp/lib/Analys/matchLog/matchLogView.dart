@@ -1,33 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'dart:async';
-import 'dart:math';
-import 'package:app/newMatch/newMatchLastPage.dart';
-import 'package:app/newMatch/thePoint/Rally.dart';
-import 'package:app/newMatch/thePoint/RallyServeWon.dart';
-import 'package:app/newMatch/thePoint/Serve.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import '../../Players.dart';
 
-import 'package:app/HomePageStuff/View.dart';
-import 'package:app/Players.dart';
-import 'package:app/newMatch/newMatchFirstPage.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+class MatchLogView extends StatefulWidget {
+  MatchLogView(this.data);
+  List<dynamic> data;
 
-class afterMatchPage extends StatefulWidget {
   @override
-  _afterMatchPageState createState() => _afterMatchPageState();
-  afterMatchPage(this.url, this.urlTA, this.matchID, this.time);
-  final String url;
-  final String urlTA;
-  // final Timer timer;
-  final String time;
-  final String matchID;
+  _MatchLogViewState createState() => _MatchLogViewState();
 }
 
-class _afterMatchPageState extends State<afterMatchPage> {
+class _MatchLogViewState extends State<MatchLogView> {
   TextEditingController controller = TextEditingController();
   late double greenLineWidth = 214;
   late bool castMatchPressed;
@@ -36,7 +19,6 @@ class _afterMatchPageState extends State<afterMatchPage> {
   String imageURL = "Style/Pictures/antenna-white.png";
 
   late String url;
-  final databaseReference = FirebaseDatabase.instance.reference();
   late String coachlastName;
   late String coachfirstName;
   late String coachemail;
@@ -63,9 +45,14 @@ class _afterMatchPageState extends State<afterMatchPage> {
   late Tournament newTournament;
   late String surface;
   late Matches match;
+  Color mainGreen = Color(0xFF1BBE8F);
+  Color backgroundColor = Color(0xFF151A26);
+  Color cardBlue = Color(0xff202531);
+  Color opponentColor = Color(0xFFFA0A79);
+
   List<bool> trackedStats = [];
   List<Color> setDevidersLines = [
-    Color(0xFF707070),
+    Color(0xFFB3FFFFFF),
     Colors.transparent,
     Colors.transparent,
     Colors.transparent,
@@ -173,131 +160,120 @@ class _afterMatchPageState extends State<afterMatchPage> {
     "Points Played"
   ];
 
-  void getMatchData() async {
+  void getMatchData(List<dynamic> data) async {
     int x = 0;
+    print(data);
+    for (var value in data) {
+      this.setState(() {
+        if (x == 0) {
+          firstsetStandings[0] = value[0];
+          firstsetStandings[1] = value[1];
+        }
+        if (x == 1) {
+          secondsetStandings[0] = value[0];
+          secondsetStandings[1] = value[1];
+          if (secondsetStandings[0] != 0 || secondsetStandings[1] != 0) {
+            setsColor[1] = setsColor[0];
+            setDevidersLines[1] = setDevidersLines[0];
+          }
+        }
+        if (x == 2) {
+          thirdsetStandings[0] = value[0];
+          thirdsetStandings[1] = value[1];
 
-    DataSnapshot dataSnapshot = widget.url == ""
-        ? await databaseReference.child(widget.url).once()
-        : await databaseReference.child(widget.urlTA).once();
-    if (dataSnapshot.value != null) {
-      dataSnapshot.value.forEach((key, value) {
-        print(key);
-        this.setState(() {
-          if (x == 0) {
-            firstsetStandings[0] = value[0];
-            firstsetStandings[1] = value[1];
+          if (thirdsetStandings[0] != 0 || thirdsetStandings[1] != 0) {
+            setsColor[2] = setsColor[0];
+            setDevidersLines[2] = setDevidersLines[0];
           }
-          if (x == 1) {
-            secondsetStandings[0] = value[0];
-            secondsetStandings[1] = value[1];
-            if (secondsetStandings[0] != 0 || secondsetStandings[1] != 0) {
-              setsColor[1] = setsColor[0];
-              setDevidersLines[1] = setDevidersLines[0];
-            }
+        }
+        if (x == 3) {
+          fourthsetStandings[0] = value[0];
+          fourthsetStandings[1] = value[1];
+          if (fourthsetStandings[0] != 0 || fourthsetStandings[1] != 0) {
+            setsColor[3] = setsColor[0];
+            setDevidersLines[3] = setDevidersLines[0];
           }
-          if (x == 2) {
-            thirdsetStandings[0] = value[0];
-            thirdsetStandings[1] = value[1];
+        }
+        if (x == 4) {
+          fifthsetStandings[0] = value[0];
+          fifthsetStandings[1] = value[1];
+          if (fifthsetStandings[0] != 0 || fifthsetStandings[1] != 0) {
+            setsColor[4] = setsColor[0];
+            setDevidersLines[4] = setDevidersLines[0];
+          }
+        }
 
-            if (thirdsetStandings[0] != 0 || thirdsetStandings[1] != 0) {
-              setsColor[2] = setsColor[0];
-              setDevidersLines[2] = setDevidersLines[0];
-            }
-          }
-          if (x == 3) {
-            fourthsetStandings[0] = value[0];
-            fourthsetStandings[1] = value[1];
-            if (fourthsetStandings[0] != 0 || fourthsetStandings[1] != 0) {
-              setsColor[3] = setsColor[0];
-              setDevidersLines[3] = setDevidersLines[0];
-            }
-          }
-          if (x == 4) {
-            fifthsetStandings[0] = value[0];
-            fifthsetStandings[1] = value[1];
-            if (fifthsetStandings[0] != 0 || fifthsetStandings[1] != 0) {
-              setsColor[4] = setsColor[0];
-              setDevidersLines[4] = setDevidersLines[0];
-            }
-          }
-          if (x == 5) {
-            //Do nothing when it's 5 sets 4 min
-
-          }
-          if (x == 6) {
-            //Do nothing
-          }
-          if (x == 7) {
-            opponentName = value;
-          }
-          if (x == 8) {
+        if (x == 5) {
+          opponentName = value.toString();
+        }
+        if (x == 6) {
+          this.setState(() {
             //double n = num.parse(numberToRound.toStringAsFixed(2));
             opponentStats = [];
-            opponentStats.add(value[13].toDouble());
+            opponentStats.add(value[0].toDouble());
+            opponentStats.add(value[1].toDouble());
+            opponentStats.add(value[2].toDouble());
+            opponentStats.add(value[3].toDouble());
+            opponentStats.add(value[4].toDouble());
+            opponentStats.add(value[5].toDouble());
+            opponentStats.add(value[6].toDouble());
+            opponentStats.add(value[7].toDouble());
+            opponentStats.add(value[8].toDouble());
+            opponentStats.add(value[9].toDouble());
             opponentStats.add(value[10].toDouble());
-            opponentStats
-                .add(num.parse(value[2].toStringAsFixed(2)).toDouble());
-            opponentStats
-                .add(num.parse(value[9].toStringAsFixed(2)).toDouble());
-            opponentStats.add(value[0].toDouble() - 1);
-            opponentStats.add(value[1].toDouble() - 1);
-            opponentStats.add(value[8].toDouble() - 1);
-            opponentStats.add(value[7].toDouble() - 1);
-            opponentStats.add(value[12].toDouble() - 1);
-            opponentStats.add(value[11].toDouble() - 1);
-            opponentStats.add(value[3].toDouble() - 1);
+          });
 
-            if (opponentStats[2] == 1) {
-              opponentStats[2] = 0;
-            }
-            if (opponentStats[3] == 1) {
-              opponentStats[3] = 0;
+          for (var i in value) {
+            if (i != 0) {
+              trackedStats.add(true);
+            } else {
+              trackedStats.add(false);
             }
           }
-          if (x == 12) {
-            for (var i = 0; i < 10; i++) {
-              trackedStats.add(value[i]);
+        }
+        /*
+        if (x == 7) {
+          for (var i = 0; i < 10; i++) {
+            trackedStats.add(value[i]);
+          }
+        }
+*/
+        if (x == 8) {
+          yourName = value.toString();
+        }
+        if (x == 9) {
+          yourStats = [];
+          this.setState(() {
+            yourStats.add(value[0].toDouble());
+            yourStats.add(value[1].toDouble());
+            yourStats.add(value[2].toDouble());
+            yourStats.add(value[3].toDouble());
+            yourStats.add(value[4].toDouble());
+            yourStats.add(value[5].toDouble());
+            yourStats.add(value[6].toDouble());
+            yourStats.add(value[7].toDouble());
+            yourStats.add(value[8].toDouble());
+            yourStats.add(value[9].toDouble());
+            yourStats.add(value[10].toDouble());
+            yourStats.add(value[11].toDouble());
+            yourStats.add(value[12].toDouble());
+            opponentStats.add(value[12].toDouble() - value[11].toDouble());
+            opponentStats.add(value[12].toDouble());
+          });
+          var y = 0;
+          for (var i in value) {
+            if (i != 0) {
+              trackedStats[y] = true;
             }
+            y++;
           }
+        }
 
-          if (x == 13) {
-            yourName = value;
-          }
-          if (x == 14) {
-            yourStats = [];
-            this.setState(() {
-              yourStats.add(value[13].toDouble());
-              yourStats.add(value[10].toDouble());
-              yourStats.add(num.parse(value[2].toStringAsFixed(2)).toDouble());
-              yourStats.add(num.parse(value[9].toStringAsFixed(2)).toDouble());
-              yourStats.add(value[0].toDouble() - 1);
-              yourStats.add(value[1].toDouble() - 1);
-              yourStats.add(value[8].toDouble() - 1);
-              yourStats.add(value[7].toDouble() - 1);
-              yourStats.add(value[12].toDouble() - 1);
-              yourStats.add(value[11].toDouble() - 1);
-              yourStats.add(value[3].toDouble() - 1);
-              yourStats.add(value[6].toDouble() - 1);
-              yourStats.add(value[5].toDouble() - 1);
-              opponentStats.add(value[5].toDouble() - value[6].toDouble());
-              opponentStats.add(value[5].toDouble());
-
-              if (yourStats[2] == 1) {
-                yourStats[2] = 0;
-              }
-              if (yourStats[3] == 1) {
-                yourStats[3] = 0;
-              }
-            });
-          }
-
-          print(value);
-          x++;
-        });
+        print(value);
+        x++;
       });
-    } else {
-      print("no live Data Detected");
     }
+
     for (var i = 0; i < statsTrackedBools.length; i++) {}
   }
 
@@ -307,7 +283,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
       child: Container(
         height: 2,
         width: 300,
-        color: Color(0xFF707070),
+        color: Color(0xFFB3FFFFFF),
       ),
     );
   }
@@ -373,7 +349,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
             child: Container(
               height: 2,
               width: 300,
-              color: Color(0xFF707070),
+              color: Color(0xFFB3FFFFFF),
             ),
           ),
         ],
@@ -425,7 +401,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
             child: Container(
               height: 2,
               width: 300,
-              color: Color(0xFF707070),
+              color: Color(0xFFB3FFFFFF),
             ),
           ),
         ],
@@ -463,18 +439,12 @@ class _afterMatchPageState extends State<afterMatchPage> {
     }
   }
 
-  void updateFunction() async {
-    while (true) {
-      getMatchData();
-    }
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    getMatchData();
+    getMatchData(widget.data);
   }
 
   Widget castMatch(bool onOFF) {
@@ -512,7 +482,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: backgroundColor,
         body: Column(children: [
           SizedBox(height: 25),
           Stack(children: [
@@ -522,100 +492,85 @@ class _afterMatchPageState extends State<afterMatchPage> {
           Stack(
             children: [
               Padding(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    color: Color(0xFF272626),
-                  ),
-                  height: 270,
-                  width: 350,
-                  child: Column(
-                    children: [
-                      // ScoreBoard
-                      Padding(
-                        padding: EdgeInsets.only(left: 15, top: 65, right: 3),
-                        child: Container(
-                            height: 55,
-                            width: 300,
-                            color: Color(0xFF3E3B3B),
-                            child: Padding(
-                                padding: EdgeInsets.only(left: 15, right: 45),
-                                child: Row(children: [
-                                  Text(
-                                    nameToLongFunc(yourName, 18),
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
-                                  ),
-                                ]))),
+                child: Card(
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    color: cardBlue,
+                    shadowColor: Colors.black,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        color: cardBlue,
                       ),
-
-                      Padding(
-                        padding: EdgeInsets.only(left: 15, top: 15, right: 3),
-                        child: Container(
-                            height: 55,
-                            width: 300,
-                            color: Color(0xFF3E3B3B),
-                            child: Padding(
-                                padding: EdgeInsets.only(left: 15, right: 45),
-                                child: Row(children: [
-                                  Text(
-                                    nameToLongFunc(opponentName, 18),
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
-                                  ),
-                                ]))),
-                      ),
-                      // Game Stats
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      height: 240,
+                      width: 350,
+                      child: Column(
                         children: [
-                          Container(
-                            height: 35,
-                            width: 80,
-                            decoration: BoxDecoration(
-                              color: Color(0xFF3E3B3B),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                            ),
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    gameStandingsStrings[0].toString(),
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 15),
-                                  ),
-                                  Text(
-                                    " - ",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 15),
-                                  ),
-                                  Text(
-                                    gameStandingsStrings[1].toString(),
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 15),
-                                  )
-                                ]),
-                          )
+                          // ScoreBoard
+                          Padding(
+                              padding:
+                                  EdgeInsets.only(left: 15, top: 65, right: 3),
+                              child: Card(
+                                elevation: 5,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                color: backgroundColor,
+                                shadowColor: Colors.black,
+                                child: Container(
+                                    height: 55,
+                                    width: 300,
+                                    child: Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 15, right: 45),
+                                        child: Row(children: [
+                                          Text(
+                                            nameToLongFunc(yourName, 18),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15),
+                                          ),
+                                        ]))),
+                              )),
+
+                          Padding(
+                              padding:
+                                  EdgeInsets.only(left: 15, top: 15, right: 3),
+                              child: Card(
+                                elevation: 1,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                color: backgroundColor,
+                                shadowColor: Colors.black,
+                                child: Container(
+                                    height: 55,
+                                    width: 300,
+                                    child: Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 15, right: 45),
+                                        child: Row(children: [
+                                          Text(
+                                            nameToLongFunc(opponentName, 18),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15),
+                                          ),
+                                        ]))),
+                              )),
+                          // Game Stats
+                          SizedBox(
+                            height: 20,
+                          ),
+
+                          // Ends
                         ],
-                      )
-                      // Ends
-                    ],
-                  ),
-                ),
+                      ),
+                    )),
                 padding: EdgeInsets.only(
                   left: 13.5,
                   right: 13.5,
@@ -643,7 +598,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
                         left: 140,
                       ),
                       child: Text(
-                        widget.time,
+                        "",
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -657,7 +612,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 65,
+                  top: 76,
                   left: 285,
                 ),
                 child: Row(
@@ -674,7 +629,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 65,
+                  top: 76,
                   left: 315,
                 ),
                 child: Row(
@@ -690,7 +645,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 65,
+                  top: 76,
                   left: 255,
                 ),
                 child: Row(
@@ -707,7 +662,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 65,
+                  top: 76,
                   left: 225,
                 ),
                 child: Row(
@@ -724,7 +679,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 65,
+                  top: 76,
                   left: 195,
                 ),
                 child: Row(
@@ -744,7 +699,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 82,
+                  top: 90,
                   left: 324,
                 ),
                 child: Row(
@@ -762,7 +717,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 152,
+                  top: 170,
                   left: 324,
                 ),
                 child: Row(
@@ -780,7 +735,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 82,
+                  top: 90,
                   left: 294,
                 ),
                 child: Row(
@@ -798,7 +753,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 152,
+                  top: 170,
                   left: 294,
                 ),
                 child: Row(
@@ -816,7 +771,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 82,
+                  top: 90,
                   left: 264,
                 ),
                 child: Row(
@@ -834,7 +789,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 152,
+                  top: 170,
                   left: 264,
                 ),
                 child: Row(
@@ -852,7 +807,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 82,
+                  top: 90,
                   left: 234,
                 ),
                 child: Row(
@@ -870,7 +825,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 152,
+                  top: 170,
                   left: 234,
                 ),
                 child: Row(
@@ -888,7 +843,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 82,
+                  top: 90,
                   left: 204,
                 ),
                 child: Row(
@@ -906,7 +861,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 152,
+                  top: 170,
                   left: 204,
                 ),
                 child: Row(
@@ -928,7 +883,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(20)),
-              color: Color(0xFF272626),
+              color: cardBlue, //Color(0xFF3E3B3B),
             ),
             height: 360,
             width: 350,
@@ -954,7 +909,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
                         Container(
                           height: 20,
                           width: 3,
-                          color: Colors.green,
+                          color: mainGreen,
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(52, 0, 0, 0),
@@ -972,21 +927,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
                   ),
                   statDivider(),
                   //End: Names of players
-                  statCheat([
-                    true,
-                    true,
-                    true,
-                    true,
-                    true,
-                    true,
-                    true,
-                    true,
-                    true,
-                    true,
-                    true,
-                    true,
-                    true,
-                  ])
+                  statCheat(trackedStats)
                 ],
               ),
             ),
@@ -1023,15 +964,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
                       child: Column(children: [
                         MaterialButton(
                           onPressed: () {
-                            print("finish button is pressed");
-                            databaseReference
-                                .child("LiveResults/" + widget.matchID + "/")
-                                .remove();
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        HomePageView([28, 21, 49], true)),
-                                (Route<dynamic> route) => false);
+                            Navigator.of(context).pop();
                           },
                           child: Container(
                             height: 40,
@@ -1039,27 +972,19 @@ class _afterMatchPageState extends State<afterMatchPage> {
                             decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
-                              gradient: LinearGradient(
-                                colors: [Color(0xFF272626), Color(0xFF6E6E6E)],
-                              ),
+                              color: mainGreen,
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Padding(
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        "Finished",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ],
+                                Text(
+                                  "Back",
+                                  style: TextStyle(
+                                    color: backgroundColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w900,
                                   ),
-                                  padding: EdgeInsets.only(top: 12, left: 4),
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -1076,35 +1001,4 @@ class _afterMatchPageState extends State<afterMatchPage> {
           ),
         ]));
   }
-}
-
-_buildTextField(TextEditingController controller, IconData icon,
-    String labelText, bool obscure, bool ifEddited) {
-  return Container(
-    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-        color: Color(0xFF3E3B3B),
-        border: Border.all(color: Colors.transparent)),
-    child: TextField(
-      onChanged: (text) {
-        if (text != "") {
-          ifEddited = true;
-        }
-      },
-      obscureText: obscure,
-      controller: controller,
-      style: TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-          labelText: labelText,
-          labelStyle: TextStyle(color: Colors.white),
-          icon: Icon(
-            icon,
-            color: Colors.white,
-          ),
-          // prefix: Icon(icon),
-          border: InputBorder.none),
-    ),
-  );
 }

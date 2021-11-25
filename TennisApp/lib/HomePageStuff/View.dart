@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:app/Analys/ChartsMain.dart';
+import 'package:app/Analys/no_analys_data.dart';
 import 'package:app/HomePageStuff/FirstPageChartWindows/pieChartViwe.dart';
 import 'package:app/LiveResultsScreens/CheckMatchID.dart';
+import 'package:app/Players.dart';
 import 'package:app/SideBarStuff/sideBar/sideBar.dart';
 import 'package:app/LiveResultsScreens/liveResults.dart';
 import 'package:app/newMatch/newMatchFirstPage.dart';
@@ -43,9 +45,10 @@ class _HomePageViewState extends State<HomePageView> {
   late String coachuid;
   late String playerFirstName;
   late String playerLastName;
+
   List<int> matchRecord = [0, 0];
   double recordLineWidth = 115 / 2 + 5;
-  String lastGameString = "Exampel Match";
+  String lastGameString = "Exampel";
 
   final databaseReference = FirebaseDatabase.instance.reference();
 
@@ -81,6 +84,7 @@ class _HomePageViewState extends State<HomePageView> {
       print(activePlayerFirstLetter);
       initials = activePlayerFirstLetter + activePlayerlastLetter;
     });
+    print(activePlayerFirstName);
     selectedPlayerShow();
   }
 
@@ -124,29 +128,33 @@ class _HomePageViewState extends State<HomePageView> {
   void lastMatchData() async {
     var x = 0;
     DataSnapshot dataSnapshot = await databaseReference
-        .child(playerReference + "LastMatchPlayed/")
+        .child(playerReference + "lastTenGames/1/")
         .once();
     if (dataSnapshot.value != null) {
       dataSnapshot.value.forEach((key, value) {
-        if (x == 8) {
-          lastMatchDataVariable = [value[10], 0];
-          lastMatchDataVariableWinners = [value[13], 0];
-        }
-        if (x == 14) {
-          setState(() {
-            lastGameString = "Last Match";
-            lastMatchDataVariable[1] = value[10];
-            lastMatchDataVariable
-                .add(lastMatchDataVariable[1] + lastMatchDataVariable[0]);
-            lastMatchDataVariableWinners[1] = value[13];
-            lastMatchDataVariableWinners.add(lastMatchDataVariableWinners[0] +
-                lastMatchDataVariableWinners[1]);
-          });
+        print(value);
+        value.forEach((key, value) {
+          print(value);
+          if (x == 13) {
+            lastMatchDataVariable = [value[10], 0];
+            lastMatchDataVariableWinners = [value[13], 0];
+          }
+          if (x == 14) {
+            setState(() {
+              lastGameString = "Last Match";
+              lastMatchDataVariable[1] = value[10];
+              lastMatchDataVariable
+                  .add(lastMatchDataVariable[1] + lastMatchDataVariable[0]);
+              lastMatchDataVariableWinners[1] = value[13];
+              lastMatchDataVariableWinners.add(lastMatchDataVariableWinners[0] +
+                  lastMatchDataVariableWinners[1]);
+            });
 
-          ;
-        }
+            ;
+          }
 
-        x++;
+          x++;
+        });
       });
     }
     DataSnapshot matchRecordSnapshot =
@@ -304,10 +312,17 @@ class _HomePageViewState extends State<HomePageView> {
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => AnalysChartsScreen()));
+                            if (lastGameString == "Last Game") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => AnalysChartsScreen()));
+                            } else {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => NoAnalysData()));
+                            }
                           },
                           child: Container(
                             height: 190,

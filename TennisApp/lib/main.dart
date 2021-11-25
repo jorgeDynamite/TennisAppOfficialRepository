@@ -4,6 +4,7 @@ import 'package:app/LoadingPage.dart';
 import 'package:app/LoginPage.dart';
 import 'package:app/SignUp.dart';
 import 'package:app/UnusedStuff/Radera_data.dart';
+import 'package:app/bloc/app_bloc.dart';
 import 'package:app/emailVerificationPage.dart';
 import 'package:app/newMatch/newMatchFirstPage.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -42,11 +43,14 @@ class _TennisAppHomePageState extends State<TennisAppHomePage> {
     // TODO: implement initState
 
     _getIfUserLogedIn(context).whenComplete(() async {
-      print("done");
       if (loggedIN) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) => HomePageView([28, 21, 49], true)),
+            (Route<dynamic> route) => false);
+      } else {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => LoginScreen()),
             (Route<dynamic> route) => false);
       }
     });
@@ -56,19 +60,12 @@ class _TennisAppHomePageState extends State<TennisAppHomePage> {
   Future _getIfUserLogedIn(context) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     bool loggedIn = preferences.getBool("loggedIn") ?? false;
-    final databaseReference = FirebaseDatabase.instance.reference();
-    String lastName = preferences.getString("lastName").toString();
-    String uid = preferences.getString("accountRandomUID").toString();
-    String firstName = preferences.getString("firstName").toString();
-
-    DataSnapshot dataSnapshot = await databaseReference
-        .child("CP_Accounts/" + firstName + lastName + "-" + uid + "/")
-        .once();
-    setState(() {
-      this.loggedIN = loggedIn;
-    });
-
-    print("object");
+    if (loggedIn) {
+      app.init();
+      setState(() {
+        this.loggedIN = loggedIn;
+      });
+    }
   }
 
   @override

@@ -7,11 +7,13 @@ class PieChartViewSecond extends StatelessWidget {
     required this.procantages,
     required this.color,
     required this.type,
+    required this.title,
   }) : super(key: key);
 
   final List<double> procantages;
   final List<Color>? color;
   final int type;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
