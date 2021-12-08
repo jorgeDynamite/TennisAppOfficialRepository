@@ -176,7 +176,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
   void getMatchData() async {
     int x = 0;
 
-    DataSnapshot dataSnapshot = widget.url == ""
+    DataSnapshot dataSnapshot = widget.url != ""
         ? await databaseReference.child(widget.url).once()
         : await databaseReference.child(widget.urlTA).once();
     if (dataSnapshot.value != null) {
@@ -277,8 +277,8 @@ class _afterMatchPageState extends State<afterMatchPage> {
               yourStats.add(value[12].toDouble() - 1);
               yourStats.add(value[11].toDouble() - 1);
               yourStats.add(value[3].toDouble() - 1);
-              yourStats.add(value[6].toDouble() - 1);
-              yourStats.add(value[5].toDouble() - 1);
+              yourStats.add(value[6].toDouble());
+              yourStats.add(value[5].toDouble());
               opponentStats.add(value[5].toDouble() - value[6].toDouble());
               opponentStats.add(value[5].toDouble());
 

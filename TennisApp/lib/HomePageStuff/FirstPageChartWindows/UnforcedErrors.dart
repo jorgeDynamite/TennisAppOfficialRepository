@@ -23,8 +23,8 @@ List<int> turnAroundlist(List<int> list) {
   nList[0] = itemB;
   nList[1] = itemA;
   nList[2] = itemC;
-  print(nList);
-  print(list);
+  //print(nList);
+  //print(list);
   return nList;
 }
 
@@ -49,7 +49,7 @@ Widget UnforcedErrorWindowFunction(
   String lastGameString,
 ) {
   final height = MediaQuery.of(context).size.height;
-  print(playerFirstName);
+  //print(playerFirstName);
   if (activePlayerFirstName == "") {
     activePlayerFirstName = "Name";
   }
@@ -166,7 +166,7 @@ Widget UnforcedErrorWindowFunction(
                   child: MaterialButton(
                     elevation: 0,
                     onPressed: () {
-                      print("Change Match");
+                      //print("Change Match");
                     },
                     color: Colors.transparent,
                     child: Row(

@@ -18,15 +18,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MatchPanel extends StatefulWidget {
   MatchPanel(
-      this.tournamentDataPack,
-      this.opponentName,
-      this.castLiveResults,
-      this.matchID,
-      this.yourtournamentDataPackLiveStats,
-      this.yourName,
-      this.opponentstournamentDataPackLiveStats,
-      this.gameScorePackage,
-      this.whoServes);
+    this.tournamentDataPack,
+    this.opponentName,
+    this.castLiveResults,
+    this.matchID,
+    this.yourtournamentDataPackLiveStats,
+    this.yourName,
+    this.opponentstournamentDataPackLiveStats,
+    this.gameScorePackage,
+    this.whoServes,
+  );
   final String matchID;
   final Tournament tournamentDataPack;
   final Tournament yourtournamentDataPackLiveStats;
@@ -38,12 +39,17 @@ class MatchPanel extends StatefulWidget {
   final List<List<int>>
       gameScorePackage; //1:st = gameScore,  2:nd = first set score 3:rd = second set score .....
   final int whoServes;
+
   @override
   _MatchPanelState createState() => _MatchPanelState();
 }
 
 class _MatchPanelState extends State<MatchPanel> {
   TextEditingController controller = TextEditingController();
+  double datetime() {
+    return (DateTime.now().millisecondsSinceEpoch / 1000);
+  }
+
   late double greenLineWidth = 214;
   final AppState _state = appState;
   late bool castMatchPressed;
@@ -102,13 +108,13 @@ class _MatchPanelState extends State<MatchPanel> {
 
   double getTournamnetNumber(DataSnapshot dataSnapshot) {
     double x = 0;
-    if (dataSnapshot != null) {
-      dataSnapshot.value.forEach((key, value) {
+    if (dataSnapshot.value != null) {
+      dataSnapshot.value[0].forEach((key, value) {
         x++;
       });
       return x + 1;
     } else {
-      return 0;
+      return 1;
     }
   }
 
@@ -158,14 +164,38 @@ class _MatchPanelState extends State<MatchPanel> {
   late bool returnWinner;
 
   void updateTime() {
+    if (appState.minuts == null) {
+      appState.minuts = 0;
+      appState.hours = 0;
+    }
+
+    if (appState.matchTimeTracker == 0) {
+      appState.matchTimeTracker = datetime();
+      appState.minuts ?? 0;
+      appState.hours ?? 0;
+    }
+    print(datetime() - appState.matchTimeTracker!);
     this.setState(() {
-      minuts++;
-      hours = minuts == 60 ? hours++ : hours = hours;
-      minuts = minuts == 60 ? minuts = 0 : minuts = minuts;
-      timeString = minuts >= 10
-          ? hours.toString() + ":" + minuts.toString()
-          : hours.toString() + ":0" + minuts.toString();
-      print("1 min");
+      if ((datetime() - appState.matchTimeTracker!) >= 60) {
+        double x = (datetime() - appState.matchTimeTracker!) / 60;
+        for (var i = 1; i < 50; i++) {
+          if (x > i) {
+            appState.minuts = appState.minuts! + 1;
+            appState.matchTimeTracker = appState.matchTimeTracker! + 60;
+          } else {
+            break;
+          }
+        }
+      }
+
+      appState.hours =
+          appState.minuts! >= 60 ? appState.hours! + 1 : appState.hours!;
+      appState.minuts =
+          appState.minuts! >= 60 ? appState.minuts! - 60 : appState.minuts!;
+
+      timeString = appState.minuts! >= 10
+          ? appState.hours.toString() + ":" + appState.minuts.toString()
+          : appState.hours.toString() + ":0" + appState.minuts.toString();
     });
   }
 
@@ -195,12 +225,11 @@ class _MatchPanelState extends State<MatchPanel> {
         mainPlayerWonTheMatch = fifthsetStandings[0] > fifthsetStandings[1];
       }
     }
-    print("mainPlayerWon      " + mainPlayerWonTheMatch.toString());
   }
 
   Future whenMatchFinischedFunc() async {
-    print("WhenMatchIsfinished function starting - - - Func");
     SharedPreferences preferences = await SharedPreferences.getInstance();
+    updateTime();
     late DatabaseReference reference;
     late DatabaseReference referenceTA;
     late DatabaseReference lastMatchReference;
@@ -221,20 +250,22 @@ class _MatchPanelState extends State<MatchPanel> {
     Matches yourtournament = widget.yourtournamentDataPackLiveStats.matches[0];
     Matches1 opponenttTournamnet =
         widget.opponentstournamentDataPackLiveStats.matches[0];
-    print(preferences.getBool("coach")!);
+
     url = preferences.getBool("coach")!
         ? _state.urlsFromCoach["URLtoPlayer"]!
-        : _state.urlsFromTennisAccounts["URLtoTennisPlayer"]!;
+        : _state.urlsFromTennisAccounts["URLtoPlayer"]!;
 
-    urlTennisPlayer = _state.urlsFromTennisAccounts["URLtoTennisPlayer"]!;
-    print(url);
-    print(urlTennisPlayer);
-    print("Finished setting values on all Shared Preferences varibles");
+    urlTennisPlayer = _state.urlsFromTennisAccounts["URLtoPlayer"]!;
     databaseReference.child(url).push();
     whoWonTheMatch();
-    DataSnapshot dataSnapshot = await databaseReference.child(url).once();
-    DataSnapshot tournamentNumberSnapchot =
-        await databaseReference.child(url + "playerTournaments/").once();
+    DataSnapshot dataSnapshot =
+        await databaseReference.child(urlTennisPlayer).once();
+
+    DataSnapshot tournamentNumberSnapchot = preferences.getBool("coach")!
+        ? await databaseReference.child(url + "playerTournaments/").once()
+        : await databaseReference
+            .child(urlTennisPlayer + "playerTournaments/")
+            .once();
 
     if (yourtournament.servePointsPlayed != 0 ||
         yourtournament.recevingPointsPlayed != 0) {
@@ -274,182 +305,92 @@ class _MatchPanelState extends State<MatchPanel> {
               100
           : 0;
     }
-    print("Made all calculations of the serve%");
 
     bool x = false;
     bool x2 = false;
     int length = 0;
 
     int y = 1;
-    dataSnapshot.value.forEach((key, value) {
-      print(key);
-      if (key == "matchRecord") {
-        x = true;
 
-        value.forEach((key, value) {
-          matchRecord[y] = value;
-          y--;
-          print("value:     " + value.toString());
-        });
-        Map<String, dynamic> recordData = {
-          "matchesWon":
-              mainPlayerWonTheMatch ? matchRecord[0] + 1 : matchRecord[0],
-          "matchesLost":
-              !mainPlayerWonTheMatch ? matchRecord[1] + 1 : matchRecord[1],
-        };
-        if (preferences.getBool("coach")!) {
-          matchRecordReference =
-              databaseReference.child(url + "matchRecord" + "/");
+    if (dataSnapshot.value != null) {
+      dataSnapshot.value.forEach((key, value) {
+        if (key == "matchRecord") {
+          x = true;
 
-          matchRecordReference.push();
-          matchRecordReference.set(recordData);
+          value.forEach((key, value) {
+            matchRecord[y] = value;
+            y--;
+          });
+          Map<String, dynamic> recordData = {
+            "matchesWon":
+                mainPlayerWonTheMatch ? matchRecord[0] + 1 : matchRecord[0],
+            "matchesLost":
+                !mainPlayerWonTheMatch ? matchRecord[1] + 1 : matchRecord[1],
+          };
+          if (preferences.getBool("coach")!) {
+            matchRecordReference =
+                databaseReference.child(url + "matchRecord" + "/");
+
+            matchRecordReference.push();
+            matchRecordReference.set(recordData);
+          }
+
+          matchRecordReferenceTA = databaseReference
+              .child(urlTennisPlayer + "/" + "matchRecord" + "/");
+          matchRecordReferenceTA.push();
+          matchRecordReferenceTA.set(recordData);
         }
 
-        matchRecordReferenceTA = databaseReference
-            .child(urlTennisPlayer + "/" + "matchRecord" + "/");
-        matchRecordReferenceTA.push();
-        matchRecordReferenceTA.set(recordData);
-      }
+        if (key == "lastTenGames") {
+          x2 = true;
+          value[0] = {"": []};
 
-      if (key == "lastTenGames") {
-        x2 = true;
-        value[0] = {"": []};
-        print(value);
-
-        for (var i = 0; i < 10; i++) {
-          try {
-            print(value[i]);
-            if (i != 0) {
-              length++;
-              if (preferences.getBool("coach")!) {
-                var c = databaseReference.child(
-                    url + "lastTenGames" + "/" + (i + 1).toString() + "/");
-                c.remove();
-                c.push();
-                if (length != 9) {
-                  if (preferences.getBool("coach")!) {
-                    c.set(value[i]);
+          for (var i = 0; i < 10; i++) {
+            try {
+              if (i != 0) {
+                length++;
+                if (preferences.getBool("coach")!) {
+                  var c = databaseReference.child(
+                      url + "lastTenGames" + "/" + (i + 1).toString() + "/");
+                  c.remove();
+                  c.push();
+                  if (length != 9) {
+                    if (preferences.getBool("coach")!) {
+                      c.set(value[i]);
+                    }
                   }
                 }
-              }
 
-              var t = databaseReference.child(urlTennisPlayer +
-                  "lastTenGames" +
-                  "/" +
-                  (i + 1).toString() +
-                  "/");
-              t.remove();
-              t.push();
+                var t = databaseReference.child(urlTennisPlayer +
+                    "lastTenGames" +
+                    "/" +
+                    (i + 1).toString() +
+                    "/");
+                t.remove();
+                t.push();
 
-              if (length != 9) {
-                t.set(value[i]);
-              }
-              print(urlTennisPlayer +
-                  "lastTenGames" +
-                  "/" +
-                  (i + 1).toString() +
-                  "/");
-              print(url + "lastTenGames" + "/" + (i + 1).toString() + "/");
-            } else {
-              databaseReference
-                  .child(url + "lastTenGames" + "/" + 1.toString() + "/")
-                  .remove();
-              databaseReference
-                  .child(urlTennisPlayer +
-                      "lastTenGames" +
-                      "/" +
-                      1.toString() +
-                      "/")
-                  .remove();
-            }
-          } catch (e) {
-            print("Failed: ____________ " + e.toString());
-          }
-        }
-        /*
-        value.forEach((key, value) {
-          print(key);
-          if (value != []) {
-            length++;
-            if (preferences.getBool("coach")!) {
-              var c = databaseReference.child(url +
-                  "/" +
-                  "lastTenGames" +
-                  "/" +
-                  (length + 1).toString() +
-                  "/");
-              c.remove();
-              c.push();
-              if (length != 9) {
-                if (preferences.getBool("coach")!) {
-                  c.set(value);
+                if (length != 9) {
+                  t.set(value[i]);
                 }
+              } else {
+                if (preferences.getBool("coach")!) {
+                  databaseReference
+                      .child(url + "lastTenGames" + "/" + 1.toString() + "/")
+                      .remove();
+                }
+                databaseReference
+                    .child(urlTennisPlayer +
+                        "lastTenGames" +
+                        "/" +
+                        1.toString() +
+                        "/")
+                    .remove();
               }
-            }
-
-            var t = databaseReference.child(urlTennisPlayer +
-                "/" +
-                "lastTenGames" +
-                "/" +
-                (length + 1).toString() +
-                "/");
-            t.remove();
-            t.push();
-
-            if (length != 9) {
-              t.set(value);
-            }
-            print(urlTennisPlayer +
-                "/" +
-                "lastTenGames" +
-                "/" +
-                (length + 1).toString() +
-                "/");
-            print(url +
-                "/" +
-                "lastTenGames" +
-                "/" +
-                (length + 1).toString() +
-                "/");
-          }
-        });
-*/
-        // print(value.lenght);
-
-      }
-      /*
-        print("!2121312312312312312");
-        for (var i = 0; i < 10; i++) {
-          if (preferences.getBool("coach")!) {
-            var c = databaseReference.child(
-                url + "/" + "lastTenGames" + "/" + (i + 1).toString() + "/");
-            c.remove();
-            c.push();
-
-            if (i != 9) {
-              if (preferences.getBool("coach")!) {
-                c.set(value[i]);
-              }
-            }
-            var t = databaseReference.child(urlTennisPlayer +
-                "/" +
-                "lastTenGames" +
-                "/" +
-                (i + 1).toString() +
-                "/");
-            t.remove();
-            t.push();
-
-            if (i != 9) {
-              t.set(value[i]);
-            }
+            } catch (e) {}
           }
         }
-        
-      }
-      */
-    });
-
+      });
+    }
     if (!x) {
       Map<String, dynamic> recordData = {
         "matchesWon": mainPlayerWonTheMatch ? 1 : 0,
@@ -468,11 +409,26 @@ class _MatchPanelState extends State<MatchPanel> {
     }
     String tournamentNumber =
         getTournamnetNumber(tournamentNumberSnapchot).toInt().toString();
-    print(tournamentNumber);
+
     // When you know you are on the right player
-    print("We are on the right player");
-    if (preferences.getBool("coach")!) {
-      reference = databaseReference.child(url +
+
+    if (_state.newTournamnet!) {
+      if (preferences.getBool("coach")!) {
+        reference = databaseReference.child(url +
+            "playerTournaments" +
+            "/" +
+            tournamentNumber +
+            "/" +
+            widget.tournamentDataPack.tournamentName +
+            "/" +
+            "match" +
+            " " +
+            widget.tournamentDataPack.matches[0].matchNumber.toString() +
+            "/");
+        reference.push();
+      }
+
+      referenceTA = databaseReference.child(urlTennisPlayer +
           "playerTournaments" +
           "/" +
           tournamentNumber +
@@ -483,21 +439,94 @@ class _MatchPanelState extends State<MatchPanel> {
           " " +
           widget.tournamentDataPack.matches[0].matchNumber.toString() +
           "/");
-      reference.push();
+      preferences.getBool("coach")!
+          ? afterMatchURL = url +
+              "playerTournaments" +
+              "/" +
+              tournamentNumber +
+              "/" +
+              widget.tournamentDataPack.tournamentName +
+              "/" +
+              "match" +
+              " " +
+              widget.tournamentDataPack.matches[0].matchNumber.toString() +
+              "/"
+          : "";
+      afterMatchURLTA = urlTennisPlayer +
+          "playerTournaments" +
+          "/" +
+          tournamentNumber +
+          "/" +
+          widget.tournamentDataPack.tournamentName +
+          "/" +
+          "match" +
+          " " +
+          widget.tournamentDataPack.matches[0].matchNumber.toString() +
+          "/";
+    } else {
+      for (var i = 0; i < 10; i++) {
+        tournamentNumberSnapchot.value[i].forEach((key, value) {
+          if (widget.tournamentDataPack.tournamentName == key) {
+            var matchNumber = 1;
+            value.forEach((key, value) {
+              matchNumber++;
+            });
+            if (preferences.getBool("coach")!) {
+              reference = databaseReference.child(url +
+                  "playerTournaments" +
+                  "/" +
+                  (i + 1).toString() +
+                  "/" +
+                  widget.tournamentDataPack.tournamentName +
+                  "/" +
+                  "match" +
+                  " " +
+                  matchNumber.toString() +
+                  "/");
+              reference.push();
+            }
+
+            referenceTA = databaseReference.child(urlTennisPlayer +
+                "playerTournaments" +
+                "/" +
+                (i + 1).toString() +
+                "/" +
+                widget.tournamentDataPack.tournamentName +
+                "/" +
+                "match" +
+                " " +
+                matchNumber.toString() +
+                "/");
+            referenceTA.push();
+            preferences.getBool("coach")!
+                ? afterMatchURL = url +
+                    "playerTournaments" +
+                    "/" +
+                    (i + 1).toString() +
+                    "/" +
+                    widget.tournamentDataPack.tournamentName +
+                    "/" +
+                    "match" +
+                    " " +
+                    matchNumber.toString() +
+                    "/"
+                : "";
+            afterMatchURLTA = urlTennisPlayer +
+                "playerTournaments" +
+                "/" +
+                (i + 1).toString() +
+                "/" +
+                widget.tournamentDataPack.tournamentName +
+                "/" +
+                "match" +
+                " " +
+                matchNumber.toString() +
+                "/";
+          }
+        });
+        break;
+      }
     }
-
-    referenceTA = databaseReference.child(urlTennisPlayer +
-        "playerTournaments" +
-        "/" +
-        tournamentNumber +
-        "/" +
-        widget.tournamentDataPack.tournamentName +
-        "/" +
-        "match" +
-        " " +
-        widget.tournamentDataPack.matches[0].matchNumber.toString() +
-        "/");
-
     if (preferences.getBool("coach")!) {
       lastMatchReference =
           databaseReference.child(url + "lastTenGames" + "/" + "1").push();
@@ -505,54 +534,12 @@ class _MatchPanelState extends State<MatchPanel> {
       lastMatchReference.push();
     }
 
-    referenceTA.push();
-
     lastMatchReferenceTA = databaseReference
         .child(urlTennisPlayer + "lastTenGames" + "/" + "1")
         .push();
 
     lastMatchReferenceTA.remove();
     lastMatchReferenceTA.push();
-
-    preferences.getBool("coach")!
-        ? afterMatchURL = url +
-            "playerTournaments" +
-            "/" +
-            tournamentNumber +
-            "/" +
-            widget.tournamentDataPack.tournamentName +
-            "/" +
-            "match" +
-            " " +
-            widget.tournamentDataPack.matches[0].matchNumber.toString() +
-            "/"
-        : "";
-    afterMatchURLTA = urlTennisPlayer +
-        "playerTournaments" +
-        "/" +
-        tournamentNumber +
-        "/" +
-        widget.tournamentDataPack.tournamentName +
-        "/" +
-        "match" +
-        " " +
-        widget.tournamentDataPack.matches[0].matchNumber.toString() +
-        "/";
-    print(afterMatchURLTA);
-    print(afterMatchURL);
-    print(url +
-        "playerTournaments" +
-        "/" +
-        tournamentNumber +
-        "/" +
-        widget.tournamentDataPack.tournamentName +
-        "/" +
-        "match" +
-        " " +
-        widget.tournamentDataPack.matches[0].matchNumber.toString() +
-        "/");
-
-    print("Databasereference is made where the match data will be inserted");
 
     if (yourtournament.rules!.matchFormatVariable.numberSets != null) {
       if (yourtournament.rules!.matchFormatVariable.numberSets == 3) {
@@ -568,8 +555,6 @@ class _MatchPanelState extends State<MatchPanel> {
     } else {
       timebased = true;
     }
-    print(
-        "- - - Start mapping the match data in the datapack that will be put in the database");
 
     if (opponenttTournamnet.returnWinner == null) {
       opponenttTournamnet.returnWinner = 0;
@@ -577,70 +562,32 @@ class _MatchPanelState extends State<MatchPanel> {
     if (opponenttTournamnet.returnErrors == null) {
       opponenttTournamnet.returnErrors = 0;
     }
-    print(opponenttTournamnet.aces!.toInt().toString() +
-        " " +
-        opponenttTournamnet.doubleFaults!.toInt().toString() +
-        " " +
-        opponentfirstServeprocent.toString() +
-        " " +
-        opponenttTournamnet.forcedErrors!.toInt().toString() +
-        " " +
-        opponenttTournamnet.pointsLost!.toInt().toString() +
-        " " +
-        opponenttTournamnet.pointsPlayed!.toInt().toString() +
-        " " +
-        opponenttTournamnet.pointsWon!.toInt().toString() +
-        " " +
-        opponenttTournamnet.returnErrors!.toInt().toString() +
-        " " +
-        opponenttTournamnet.returnWinner!.toInt().toString() +
-        " " +
-        opponentsecondServeprocent.toString() +
-        " " +
-        opponenttTournamnet.unforcedErrors!.toInt().toString() +
-        " " +
-        opponenttTournamnet.voleyErrors!.toInt().toString() +
-        " " +
-        opponenttTournamnet.voleyWinner!.toInt().toString() +
-        " " +
-        opponenttTournamnet.winners!.toInt().toString());
-    print(opponenttTournamnet.aces!.toInt().toString() +
-        " " +
-        yourtournament.doubleFaults!.toInt().toString() +
-        " " +
-        firstServeprocent.toString() +
-        " " +
-        yourtournament.forcedErrors!.toInt().toString() +
-        " " +
-        yourtournament.pointsLost!.toInt().toString() +
-        " " +
-        yourtournament.pointsPlayed!.toInt().toString() +
-        " " +
-        yourtournament.pointsWon!.toInt().toString() +
-        " " +
-        yourtournament.returnErrors!.toInt().toString() +
-        " " +
-        yourtournament.returnWinner!.toInt().toString() +
-        " " +
-        secondServeprocent.toString() +
-        " " +
-        yourtournament.unforcedErrors!.toInt().toString() +
-        " " +
-        yourtournament.voleyErrors!.toInt().toString() +
-        " " +
-        yourtournament.voleyWinner!.toInt().toString() +
-        " " +
-        yourtournament.winners!.toInt().toString());
-    int yourwinners = yourtournament.voleyWinner!.toInt() +
-        yourtournament.aces!.toInt() +
-        yourtournament.returnWinner!.toInt() +
-        yourtournament.winners!.toInt() -
-        4;
-    int opponentswinners = opponenttTournamnet.voleyWinner!.toInt() +
-        opponenttTournamnet.aces!.toInt() +
-        opponenttTournamnet.returnWinner!.toInt() +
-        opponenttTournamnet.winners!.toInt() -
-        4;
+
+    int yourwinners = makeVariable([
+      yourtournament.voleyWinner!,
+      yourtournament.aces!,
+      yourtournament.returnWinner!,
+      yourtournament.winners!
+    ]).toInt();
+    int yourUnforced = makeVariable([
+      yourtournament.voleyErrors!,
+      yourtournament.doubleFaults!,
+      yourtournament.returnErrors!,
+      yourtournament.unforcedErrors!
+    ]).toInt();
+    int opponentUnforced = makeVariable([
+      opponenttTournamnet.voleyErrors!,
+      opponenttTournamnet.doubleFaults!,
+      opponenttTournamnet.returnErrors!,
+      opponenttTournamnet.unforcedErrors!
+    ]).toInt();
+    int opponentswinners = makeVariable([
+      opponenttTournamnet.voleyWinner!,
+      opponenttTournamnet.aces!,
+      opponenttTournamnet.returnWinner!,
+      opponenttTournamnet.winners!
+    ]).toInt();
+
     Map<String, dynamic> matchdata = {
       "opponentName": widget.opponentName,
       "yourName": widget.yourName,
@@ -655,7 +602,7 @@ class _MatchPanelState extends State<MatchPanel> {
         yourtournament.returnErrors!.toInt(),
         yourtournament.returnWinner!.toInt(),
         secondServeprocent,
-        yourtournament.unforcedErrors!.toInt(),
+        yourUnforced,
         yourtournament.voleyErrors!.toInt(),
         yourtournament.voleyWinner!.toInt(),
         yourwinners,
@@ -667,15 +614,17 @@ class _MatchPanelState extends State<MatchPanel> {
         opponentfirstServeprocent,
         opponenttTournamnet.forcedErrors!.toInt(),
         opponenttTournamnet.pointsLost!.toInt(),
-        opponenttTournamnet.pointsPlayed!.toInt(),
+        yourtournament.pointsPlayed!.toInt(),
         opponenttTournamnet.pointsWon!.toInt(),
         opponenttTournamnet.returnErrors!.toInt(),
         opponenttTournamnet.returnWinner!.toInt(),
         opponentsecondServeprocent,
-        opponenttTournamnet.unforcedErrors!.toInt(),
+        opponentUnforced,
         opponenttTournamnet.voleyErrors!.toInt(),
         opponenttTournamnet.voleyWinner!.toInt(),
         opponentswinners,
+        minuts,
+        hours,
       ], // ABC: Alphabetisk ordning
 
       "trackedStats": [
@@ -700,11 +649,10 @@ class _MatchPanelState extends State<MatchPanel> {
       "threeSets": threesets,
       "oneSet": oneSet,
       "timeBasedMatch": timebased,
-      "mostgameswinsformat":
-          yourtournament.rules!.matchFormatVariable.mostGamesWinsFormat,
+
       "surface": yourtournament.surface!.toString(),
     };
-    print("sending data to database!");
+
     if (preferences.getBool("coach")!) {
       reference.set(matchdata);
       lastMatchReference.set(matchdata);
@@ -713,6 +661,20 @@ class _MatchPanelState extends State<MatchPanel> {
     referenceTA.set(matchdata);
 
     lastMatchReferenceTA.set(matchdata);
+  }
+
+  double makeVariable(List<int> stats) {
+    double finalNumber = 0;
+
+    for (var stat in stats) {
+      if (stat != 0) {
+        finalNumber = finalNumber + stat - 1;
+      }
+    }
+
+    //Unforced Errors
+
+    return finalNumber;
   }
 
   Future addTolivescore() async {
@@ -797,7 +759,30 @@ class _MatchPanelState extends State<MatchPanel> {
         opponentsecondServeprocent =
             opponenttTournamnet.secondServeProcentage!.toDouble();
       }
-
+      int yourwinners = makeVariable([
+        yourtournament.voleyWinner!,
+        yourtournament.aces!,
+        yourtournament.returnWinner!,
+        yourtournament.winners!
+      ]).toInt();
+      int yourUnforced = makeVariable([
+        yourtournament.voleyErrors!,
+        yourtournament.doubleFaults!,
+        yourtournament.returnErrors!,
+        yourtournament.unforcedErrors!
+      ]).toInt();
+      int opponentUnforced = makeVariable([
+        opponenttTournamnet.voleyErrors!,
+        opponenttTournamnet.doubleFaults!,
+        opponenttTournamnet.returnErrors!,
+        opponenttTournamnet.unforcedErrors!
+      ]).toInt();
+      int opponentswinners = makeVariable([
+        opponenttTournamnet.voleyWinner!,
+        opponenttTournamnet.aces!,
+        opponenttTournamnet.returnWinner!,
+        opponenttTournamnet.winners!
+      ]).toInt();
       Map<String, dynamic> matchdata = {
         "opponentName": widget.opponentName,
         "yourName": widget.yourName,
@@ -812,11 +797,10 @@ class _MatchPanelState extends State<MatchPanel> {
           yourtournament.returnErrors,
           yourtournament.returnWinner,
           secondServeprocent,
-          yourtournament.unforcedErrors,
+          yourUnforced,
           yourtournament.voleyErrors,
           yourtournament.voleyWinner,
-          yourtournament.winners,
-          0.22
+          yourwinners,
         ], // ABC: Alphabetisk ordning
         "trackedStats": [
           ace,
@@ -842,10 +826,10 @@ class _MatchPanelState extends State<MatchPanel> {
           opponenttTournamnet.returnErrors,
           opponenttTournamnet.returnWinner,
           opponentsecondServeprocent,
-          opponenttTournamnet.unforcedErrors,
+          opponentUnforced,
           opponenttTournamnet.voleyErrors,
           opponenttTournamnet.voleyWinner,
-          opponenttTournamnet.winners,
+          opponentswinners,
         ], // ABC: Alphabetisk ordning
         "gameStandings": gameStandings,
         "1setStandings": firstsetStandings,
@@ -925,7 +909,6 @@ class _MatchPanelState extends State<MatchPanel> {
                   if (whoservesarg == 1) {
                     this.setState(() {
                       whoservesarg = 2;
-                      print(whoservesarg);
                     });
                   } else {
                     this.setState(() {
@@ -957,7 +940,6 @@ class _MatchPanelState extends State<MatchPanel> {
                   if (whoservesarg == 1) {
                     this.setState(() {
                       whoservesarg = 2;
-                      print(whoservesarg);
                     });
                   } else {
                     this.setState(() {
@@ -993,7 +975,6 @@ class _MatchPanelState extends State<MatchPanel> {
                     if (whoservesarg == 1) {
                       this.setState(() {
                         whoservesarg = 2;
-                        print(whoservesarg);
                       });
                     } else {
                       this.setState(() {
@@ -1023,7 +1004,6 @@ class _MatchPanelState extends State<MatchPanel> {
                     if (whoservesarg == 1) {
                       this.setState(() {
                         whoservesarg = 2;
-                        print(whoservesarg);
                       });
                     } else {
                       this.setState(() {
@@ -1085,7 +1065,6 @@ class _MatchPanelState extends State<MatchPanel> {
                         if (whoservesarg == 1) {
                           this.setState(() {
                             whoservesarg = 2;
-                            print(whoservesarg);
                           });
                         } else {
                           this.setState(() {
@@ -1110,7 +1089,6 @@ class _MatchPanelState extends State<MatchPanel> {
                         if (whoservesarg == 1) {
                           this.setState(() {
                             whoservesarg = 2;
-                            print(whoservesarg);
                           });
                         } else {
                           this.setState(() {
@@ -1142,7 +1120,6 @@ class _MatchPanelState extends State<MatchPanel> {
                         if (whoservesarg == 1) {
                           this.setState(() {
                             whoservesarg = 2;
-                            print(whoservesarg);
                           });
                         } else {
                           this.setState(() {
@@ -1199,7 +1176,6 @@ class _MatchPanelState extends State<MatchPanel> {
                         if (whoservesarg == 1) {
                           this.setState(() {
                             whoservesarg = 2;
-                            print(whoservesarg);
                           });
                         } else {
                           this.setState(() {
@@ -1224,7 +1200,6 @@ class _MatchPanelState extends State<MatchPanel> {
                         if (whoservesarg == 1) {
                           this.setState(() {
                             whoservesarg = 2;
-                            print(whoservesarg);
                           });
                         } else {
                           this.setState(() {
@@ -1256,7 +1231,6 @@ class _MatchPanelState extends State<MatchPanel> {
                         if (whoservesarg == 1) {
                           this.setState(() {
                             whoservesarg = 2;
-                            print(whoservesarg);
                           });
                         } else {
                           this.setState(() {
@@ -1281,7 +1255,6 @@ class _MatchPanelState extends State<MatchPanel> {
                         if (whoservesarg == 1) {
                           this.setState(() {
                             whoservesarg = 2;
-                            print(whoservesarg);
                           });
                         } else {
                           this.setState(() {
@@ -1340,8 +1313,14 @@ class _MatchPanelState extends State<MatchPanel> {
                       //IF you won point add to score board and if won set make sure to add that
                       gameStandings[0]++;
                       if (gameStandings[0] == 10 && gameStandings[1] < 9) {
-                        firstsetStandings[0] = gameStandings[0];
-                        firstsetStandings[1] = gameStandings[1];
+                        thirdsetStandings = secondsetStandings;
+                        secondsetStandings = firstsetStandings;
+                        setsColor[2] = setsColor[0];
+                        firstsetStandings = [
+                          gameStandings[0],
+                          gameStandings[1]
+                        ];
+
                         gameStandings[0] = 0;
                         gameStandings[1] = 0;
                       }
@@ -1350,9 +1329,14 @@ class _MatchPanelState extends State<MatchPanel> {
                       gameStandings[1]++;
 
                       if (gameStandings[1] == 10 && gameStandings[0] < 9) {
+                        thirdsetStandings = secondsetStandings;
                         secondsetStandings = firstsetStandings;
-                        firstsetStandings[0] = gameStandings[0];
-                        firstsetStandings[1] = gameStandings[1];
+                        setsColor[2] = setsColor[0];
+                        firstsetStandings = [
+                          gameStandings[0],
+                          gameStandings[1]
+                        ];
+
                         gameStandings[0] = 0;
                         gameStandings[1] = 0;
                       }
@@ -1365,9 +1349,14 @@ class _MatchPanelState extends State<MatchPanel> {
                       if (whoWon == 1) {
                         gameStandings[0]++;
                         if (gameStandings[0] - 2 >= gameStandings[1]) {
+                          thirdsetStandings = secondsetStandings;
                           secondsetStandings = firstsetStandings;
-                          firstsetStandings[0] = gameStandings[0];
-                          firstsetStandings[1] = gameStandings[1];
+                          setsColor[2] = setsColor[0];
+                          firstsetStandings = [
+                            gameStandings[0],
+                            gameStandings[1]
+                          ];
+
                           gameStandings[0] = 0;
                           gameStandings[1] = 0;
                         }
@@ -1375,8 +1364,13 @@ class _MatchPanelState extends State<MatchPanel> {
                         gameStandings[1]++;
                         if (gameStandings[1] - 2 >= gameStandings[0]) {
                           secondsetStandings = firstsetStandings;
-                          firstsetStandings[0] = gameStandings[0];
-                          firstsetStandings[1] = gameStandings[1];
+                          setsColor[2] = setsColor[0];
+                          firstsetStandings = [0, 0];
+                          firstsetStandings = [
+                            gameStandings[0],
+                            gameStandings[1]
+                          ];
+
                           gameStandings[0] = 0;
                           gameStandings[1] = 0;
                         }
@@ -1460,7 +1454,6 @@ class _MatchPanelState extends State<MatchPanel> {
                     if (whoservesarg == 1) {
                       this.setState(() {
                         whoservesarg = 2;
-                        print(whoservesarg);
                       });
                     } else {
                       this.setState(() {
@@ -1485,7 +1478,6 @@ class _MatchPanelState extends State<MatchPanel> {
                     if (whoservesarg == 1) {
                       this.setState(() {
                         whoservesarg = 2;
-                        print(whoservesarg);
                       });
                     } else {
                       this.setState(() {
@@ -1517,7 +1509,6 @@ class _MatchPanelState extends State<MatchPanel> {
                     if (whoservesarg == 1) {
                       this.setState(() {
                         whoservesarg = 2;
-                        print(whoservesarg);
                       });
                     } else {
                       this.setState(() {
@@ -1542,7 +1533,6 @@ class _MatchPanelState extends State<MatchPanel> {
                     if (whoservesarg == 1) {
                       this.setState(() {
                         whoservesarg = 2;
-                        print(whoservesarg);
                       });
                     } else {
                       this.setState(() {
@@ -1597,7 +1587,6 @@ class _MatchPanelState extends State<MatchPanel> {
                     if (whoservesarg == 1) {
                       this.setState(() {
                         whoservesarg = 2;
-                        print(whoservesarg);
                       });
                     } else {
                       this.setState(() {
@@ -1622,7 +1611,6 @@ class _MatchPanelState extends State<MatchPanel> {
                     if (whoservesarg == 1) {
                       this.setState(() {
                         whoservesarg = 2;
-                        print(whoservesarg);
                       });
                     } else {
                       this.setState(() {
@@ -1654,7 +1642,6 @@ class _MatchPanelState extends State<MatchPanel> {
                     if (whoservesarg == 1) {
                       this.setState(() {
                         whoservesarg = 2;
-                        print(whoservesarg);
                       });
                     } else {
                       this.setState(() {
@@ -1679,7 +1666,6 @@ class _MatchPanelState extends State<MatchPanel> {
                     if (whoservesarg == 1) {
                       this.setState(() {
                         whoservesarg = 2;
-                        print(whoservesarg);
                       });
                     } else {
                       this.setState(() {
@@ -1704,7 +1690,7 @@ class _MatchPanelState extends State<MatchPanel> {
         }
       }
     }
-    print(gameStandings);
+
     setState(() {
       // The END: Where you set the gamestats
       if (gameStandings[0] == 50) {
@@ -1731,7 +1717,6 @@ class _MatchPanelState extends State<MatchPanel> {
   }
 
   void witchStatsSchouldTrack() {
-    print("witchStats");
     Matches url = widget.tournamentDataPack.matches[0];
     if (url.firstServeProcentage! >= 1) {
       firstServe = true;
@@ -1798,29 +1783,6 @@ class _MatchPanelState extends State<MatchPanel> {
     } else {
       ace = false;
     }
-
-    print(winners.toString() +
-        " " +
-        doubleFault.toString() +
-        " " +
-        unforcedErrors.toString() +
-        " " +
-        firstServe.toString() +
-        " " +
-        secondServe.toString() +
-        " " +
-        forcedErrors.toString() +
-        " " +
-        ace.toString() +
-        " " +
-        voleyError.toString() +
-        " " +
-        voleyWinner.toString() +
-        " " +
-        returnWinner.toString() +
-        " " +
-        returnError.toString() +
-        " ");
   }
 
 //End
@@ -1846,8 +1808,9 @@ class _MatchPanelState extends State<MatchPanel> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     setBasicMatchVariblesNotToNULL();
-    print(widget.whoServes);
+
     witchStatsSchouldTrack();
     //timer = Timer.periodic(Duration(minutes: 1), (Timer t) => updateTime());
 
@@ -1871,6 +1834,24 @@ class _MatchPanelState extends State<MatchPanel> {
 
     if (widget.tournamentDataPack.matches[0].pointsPlayed != null) {
       addTolivescore();
+    }
+    if (widget.tournamentDataPack.matches[0].pointsPlayed != 0) {
+      timeString = appState.minuts! >= 10
+          ? appState.hours.toString() + ":" + appState.minuts.toString()
+          : appState.hours.toString() + ":0" + appState.minuts.toString();
+    }
+    scorePack = [
+      gameStandings,
+      firstsetStandings,
+      secondsetStandings,
+      thirdsetStandings,
+      fourthsetStandings,
+      fifthsetStandings
+    ];
+
+    if (_state.whoWon!.isNotEmpty) {
+      print("setScore");
+      setScore(_state.whoWon![0], _state.whoWon![1]);
     }
   }
 
@@ -2434,6 +2415,7 @@ class _MatchPanelState extends State<MatchPanel> {
                           highlightColor: Colors.transparent,
                           onPressed: () {
                             this.setState(() {
+                              /*
                               if (whoservesarg != null) {
                                 if (whoservesarg == 1) {
                                   setScore(1, true);
@@ -2447,11 +2429,28 @@ class _MatchPanelState extends State<MatchPanel> {
                                   setScore(1, false);
                                 }
                               }
+                              */
+                              if (_state.whoWon! == []) {
+                                setScore(_state.whoWon![0], _state.whoWon![1]);
+                              }
+                              if (whoservesarg != null) {
+                                if (whoservesarg == 1) {
+                                  _state.whoWon = [1, true];
+                                } else {
+                                  _state.whoWon = [1, false];
+                                }
+                              } else {
+                                if (widget.whoServes == 1) {
+                                  _state.whoWon = [1, true];
+                                } else {
+                                  _state.whoWon = [1, false];
+                                }
+                              }
                             });
                             if (whoservesarg == null) {
                               whoservesarg = widget.whoServes;
                             }
-                            print("whoservearg = " + whoservesarg.toString());
+
                             if (trackStats) {
                               if (whoservesarg == 2) {
                                 widget.yourtournamentDataPackLiveStats
@@ -2475,59 +2474,61 @@ class _MatchPanelState extends State<MatchPanel> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (_) => Serve(
-                                              whoservesarg!,
-                                              doubleFault,
-                                              firstServe,
-                                              secondServe,
-                                              forcedErrors,
-                                              unforcedErrors,
-                                              returnError,
-                                              voleyError,
-                                              returnWinner,
-                                              voleyWinner,
-                                              winners,
-                                              widget.tournamentDataPack,
-                                              widget.opponentName,
-                                              castMatchPressed,
-                                              widget.matchID,
-                                              widget
-                                                  .yourtournamentDataPackLiveStats,
-                                              widget.yourName,
-                                              true,
-                                              ace,
-                                              widget
-                                                  .opponentstournamentDataPackLiveStats,
-                                              true,
-                                              scorePack)));
+                                                whoservesarg!,
+                                                doubleFault,
+                                                firstServe,
+                                                secondServe,
+                                                forcedErrors,
+                                                unforcedErrors,
+                                                returnError,
+                                                voleyError,
+                                                returnWinner,
+                                                voleyWinner,
+                                                winners,
+                                                widget.tournamentDataPack,
+                                                widget.opponentName,
+                                                castMatchPressed,
+                                                widget.matchID,
+                                                widget
+                                                    .yourtournamentDataPackLiveStats,
+                                                widget.yourName,
+                                                true,
+                                                ace,
+                                                widget
+                                                    .opponentstournamentDataPackLiveStats,
+                                                true,
+                                                scorePack,
+                                              )));
                                 } else {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (_) => Serve(
-                                              whoservesarg!,
-                                              doubleFault,
-                                              firstServe,
-                                              secondServe,
-                                              forcedErrors,
-                                              unforcedErrors,
-                                              returnError,
-                                              voleyError,
-                                              returnWinner,
-                                              voleyWinner,
-                                              winners,
-                                              widget.tournamentDataPack,
-                                              widget.opponentName,
-                                              castMatchPressed,
-                                              widget.matchID,
-                                              widget
-                                                  .yourtournamentDataPackLiveStats,
-                                              widget.yourName,
-                                              false,
-                                              ace,
-                                              widget
-                                                  .opponentstournamentDataPackLiveStats,
-                                              true,
-                                              scorePack)));
+                                                whoservesarg!,
+                                                doubleFault,
+                                                firstServe,
+                                                secondServe,
+                                                forcedErrors,
+                                                unforcedErrors,
+                                                returnError,
+                                                voleyError,
+                                                returnWinner,
+                                                voleyWinner,
+                                                winners,
+                                                widget.tournamentDataPack,
+                                                widget.opponentName,
+                                                castMatchPressed,
+                                                widget.matchID,
+                                                widget
+                                                    .yourtournamentDataPackLiveStats,
+                                                widget.yourName,
+                                                false,
+                                                ace,
+                                                widget
+                                                    .opponentstournamentDataPackLiveStats,
+                                                true,
+                                                scorePack,
+                                              )));
                                 }
                               } else {
                                 if (whoservesarg == 1) {
@@ -2562,33 +2563,36 @@ class _MatchPanelState extends State<MatchPanel> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (_) => Rally(
-                                              whoservesarg!,
-                                              doubleFault,
-                                              firstServe,
-                                              secondServe,
-                                              forcedErrors,
-                                              unforcedErrors,
-                                              returnError,
-                                              voleyError,
-                                              returnWinner,
-                                              voleyWinner,
-                                              winners,
-                                              widget.tournamentDataPack,
-                                              widget.opponentName,
-                                              castMatchPressed,
-                                              widget.matchID,
-                                              widget
-                                                  .yourtournamentDataPackLiveStats,
-                                              widget.yourName,
-                                              widget
-                                                  .opponentstournamentDataPackLiveStats,
-                                              scorePack)));
+                                                whoservesarg!,
+                                                doubleFault,
+                                                firstServe,
+                                                secondServe,
+                                                forcedErrors,
+                                                unforcedErrors,
+                                                returnError,
+                                                voleyError,
+                                                returnWinner,
+                                                voleyWinner,
+                                                winners,
+                                                widget.tournamentDataPack,
+                                                widget.opponentName,
+                                                castMatchPressed,
+                                                widget.matchID,
+                                                widget
+                                                    .yourtournamentDataPackLiveStats,
+                                                widget.yourName,
+                                                widget
+                                                    .opponentstournamentDataPackLiveStats,
+                                                scorePack,
+                                              )));
                                 }
                               }
                             }
                             if (!trackStats) {
                               addTolivescore();
+                              setScore(_state.whoWon![0], _state.whoWon![1]);
                             }
+                            updateTime();
                           },
                           child: Container(
                             height: 175,
@@ -2659,7 +2663,7 @@ class _MatchPanelState extends State<MatchPanel> {
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onPressed: () {
-                            if (whoservesarg != null) {
+                            /* if (whoservesarg != null) {
                               if (whoservesarg == 2) {
                                 setScore(2, true);
                               } else {
@@ -2671,12 +2675,34 @@ class _MatchPanelState extends State<MatchPanel> {
                               } else {
                                 setScore(2, false);
                               }
+                            }*/
+                            print(_state.whoWon!);
+                            if (_state.whoWon!.isEmpty) {
+                              if (widget.whoServes == 2) {
+                                setScore(2, true);
+                              } else {
+                                setScore(2, false);
+                              }
+                              print(_state.whoWon!);
+                              print("asdasdasdas");
+                            }
+                            if (whoservesarg != null) {
+                              if (whoservesarg == 2) {
+                                _state.whoWon = [2, true];
+                              } else {
+                                _state.whoWon = [2, false];
+                              }
+                            } else {
+                              if (widget.whoServes == 2) {
+                                _state.whoWon = [2, true];
+                              } else {
+                                _state.whoWon = [2, false];
+                              }
                             }
                             if (whoservesarg == null) {
                               whoservesarg = widget.whoServes;
                             }
 
-                            print("whoservearg = " + whoservesarg.toString());
                             if (trackStats) {
                               if (whoservesarg == 2) {
                                 widget.yourtournamentDataPackLiveStats
@@ -2699,59 +2725,61 @@ class _MatchPanelState extends State<MatchPanel> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (_) => Serve(
-                                              whoservesarg!,
-                                              doubleFault,
-                                              firstServe,
-                                              secondServe,
-                                              forcedErrors,
-                                              unforcedErrors,
-                                              returnError,
-                                              voleyError,
-                                              returnWinner,
-                                              voleyWinner,
-                                              winners,
-                                              widget.tournamentDataPack,
-                                              widget.opponentName,
-                                              castMatchPressed,
-                                              widget.matchID,
-                                              widget
-                                                  .yourtournamentDataPackLiveStats,
-                                              widget.yourName,
-                                              false,
-                                              ace,
-                                              widget
-                                                  .opponentstournamentDataPackLiveStats,
-                                              false,
-                                              scorePack)));
+                                                whoservesarg!,
+                                                doubleFault,
+                                                firstServe,
+                                                secondServe,
+                                                forcedErrors,
+                                                unforcedErrors,
+                                                returnError,
+                                                voleyError,
+                                                returnWinner,
+                                                voleyWinner,
+                                                winners,
+                                                widget.tournamentDataPack,
+                                                widget.opponentName,
+                                                castMatchPressed,
+                                                widget.matchID,
+                                                widget
+                                                    .yourtournamentDataPackLiveStats,
+                                                widget.yourName,
+                                                false,
+                                                ace,
+                                                widget
+                                                    .opponentstournamentDataPackLiveStats,
+                                                false,
+                                                scorePack,
+                                              )));
                                 } else {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (_) => Serve(
-                                              whoservesarg!,
-                                              doubleFault,
-                                              firstServe,
-                                              secondServe,
-                                              forcedErrors,
-                                              unforcedErrors,
-                                              returnError,
-                                              voleyError,
-                                              returnWinner,
-                                              voleyWinner,
-                                              winners,
-                                              widget.tournamentDataPack,
-                                              widget.opponentName,
-                                              castMatchPressed,
-                                              widget.matchID,
-                                              widget
-                                                  .yourtournamentDataPackLiveStats,
-                                              widget.yourName,
-                                              true,
-                                              ace,
-                                              widget
-                                                  .opponentstournamentDataPackLiveStats,
-                                              false,
-                                              scorePack)));
+                                                whoservesarg!,
+                                                doubleFault,
+                                                firstServe,
+                                                secondServe,
+                                                forcedErrors,
+                                                unforcedErrors,
+                                                returnError,
+                                                voleyError,
+                                                returnWinner,
+                                                voleyWinner,
+                                                winners,
+                                                widget.tournamentDataPack,
+                                                widget.opponentName,
+                                                castMatchPressed,
+                                                widget.matchID,
+                                                widget
+                                                    .yourtournamentDataPackLiveStats,
+                                                widget.yourName,
+                                                true,
+                                                ace,
+                                                widget
+                                                    .opponentstournamentDataPackLiveStats,
+                                                false,
+                                                scorePack,
+                                              )));
                                 }
                               } else {
                                 if (whoservesarg == 2) {
@@ -2759,60 +2787,64 @@ class _MatchPanelState extends State<MatchPanel> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (_) => RallyServeerWon(
-                                              whoservesarg!,
-                                              doubleFault,
-                                              firstServe,
-                                              secondServe,
-                                              forcedErrors,
-                                              unforcedErrors,
-                                              returnError,
-                                              voleyError,
-                                              returnWinner,
-                                              voleyWinner,
-                                              winners,
-                                              widget.tournamentDataPack,
-                                              widget.opponentName,
-                                              castMatchPressed,
-                                              widget.matchID,
-                                              widget
-                                                  .yourtournamentDataPackLiveStats,
-                                              widget.yourName,
-                                              widget
-                                                  .opponentstournamentDataPackLiveStats,
-                                              scorePack)));
+                                                whoservesarg!,
+                                                doubleFault,
+                                                firstServe,
+                                                secondServe,
+                                                forcedErrors,
+                                                unforcedErrors,
+                                                returnError,
+                                                voleyError,
+                                                returnWinner,
+                                                voleyWinner,
+                                                winners,
+                                                widget.tournamentDataPack,
+                                                widget.opponentName,
+                                                castMatchPressed,
+                                                widget.matchID,
+                                                widget
+                                                    .yourtournamentDataPackLiveStats,
+                                                widget.yourName,
+                                                widget
+                                                    .opponentstournamentDataPackLiveStats,
+                                                scorePack,
+                                              )));
                                 } else {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (_) => Rally(
-                                              whoservesarg!,
-                                              doubleFault,
-                                              firstServe,
-                                              secondServe,
-                                              forcedErrors,
-                                              unforcedErrors,
-                                              returnError,
-                                              voleyError,
-                                              returnWinner,
-                                              voleyWinner,
-                                              winners,
-                                              widget.tournamentDataPack,
-                                              widget.opponentName,
-                                              castMatchPressed,
-                                              widget.matchID,
-                                              widget
-                                                  .yourtournamentDataPackLiveStats,
-                                              widget.yourName,
-                                              widget
-                                                  .opponentstournamentDataPackLiveStats,
-                                              scorePack)));
+                                                whoservesarg!,
+                                                doubleFault,
+                                                firstServe,
+                                                secondServe,
+                                                forcedErrors,
+                                                unforcedErrors,
+                                                returnError,
+                                                voleyError,
+                                                returnWinner,
+                                                voleyWinner,
+                                                winners,
+                                                widget.tournamentDataPack,
+                                                widget.opponentName,
+                                                castMatchPressed,
+                                                widget.matchID,
+                                                widget
+                                                    .yourtournamentDataPackLiveStats,
+                                                widget.yourName,
+                                                widget
+                                                    .opponentstournamentDataPackLiveStats,
+                                                scorePack,
+                                              )));
                                 }
                               }
                             }
 
                             if (!trackStats) {
                               addTolivescore();
+                              setScore(_state.whoWon![0], _state.whoWon![1]);
                             }
+                            updateTime();
                           },
                           child: Container(
                             height: 175,
@@ -2917,7 +2949,9 @@ class _MatchPanelState extends State<MatchPanel> {
                         MaterialButton(
                           onPressed: () {
                             greenLineWidth = greenLineWidth - 107;
-
+                            databaseReference
+                                .child("LiveResults/" + widget.matchID + "/")
+                                .remove();
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -3006,7 +3040,7 @@ class _MatchPanelState extends State<MatchPanel> {
                         MaterialButton(
                           onPressed: () {
                             //timer.cancel;
-                            print("finish&Save button is pressed");
+                            _state.whoWon = [];
                             whenMatchFinischedFunc().whenComplete(() =>
                                 Navigator.push(
                                     context,

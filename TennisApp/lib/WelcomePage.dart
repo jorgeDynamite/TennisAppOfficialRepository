@@ -1,16 +1,19 @@
 import 'package:app/SignUp.dart';
+import 'package:app/colors.dart';
 import 'package:flutter/material.dart';
 import 'UnusedStuff/Colors.dart';
 
 class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    appColors colors = appColors();
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
-        backgroundColor: primaryBlue,
+        backgroundColor: colors.backgroundColor,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -29,10 +32,13 @@ class WelcomePage extends StatelessWidget {
               style: TextStyle(color: Colors.white, fontSize: 28),
             ),
             SizedBox(height: 20),
-            Text(
-              '  Track all advanceds tennis stats from Unforced Errors  to Winners and get your game to the next level! ',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white, fontSize: 14),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                'Do you want a Coach account where you can manage other players or do you want to make an Tennis Player account just for you?',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white, fontSize: 14),
+              ),
             ),
             SizedBox(
               height: 30,
@@ -51,7 +57,7 @@ class WelcomePage extends StatelessWidget {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (_) => SignUpPC(cp)));
                   },
-                  color: primaryGreen,
+                  color: colors.mainGreen,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -74,7 +80,7 @@ class WelcomePage extends StatelessWidget {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (_) => SignUpPC(cp)));
                   },
-                  color: primaryGreen,
+                  color: colors.mainGreen,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[

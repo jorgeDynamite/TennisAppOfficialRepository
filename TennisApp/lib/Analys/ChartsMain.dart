@@ -3,6 +3,7 @@ import 'package:app/Analys/pieChart/neumorphic_expenses/pie_chart_view.dart';
 import 'package:app/Analys/pieChart/neumorphic_expenses/pie_chart_card.dart';
 import 'package:app/Players.dart';
 import 'package:app/bloc/app_state.dart';
+import 'package:app/colors.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import 'package:flutter/material.dart';
@@ -11,6 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'firstLineChart/LineChartCard.dart';
 
 class AnalysChartsScreen extends StatefulWidget {
+  AnalysChartsScreen();
+
   @override
   _AnalysChartsScreenState createState() => _AnalysChartsScreenState();
 }
@@ -107,17 +110,20 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
   ];
 
   void getData(List<dynamic> chartData) {
-    //print(chartData);
+    print(chartData);
     for (var x = 0; x < 4; x++) {
-      for (var i = 0; i < chartData.length; i++) {
-        // print("Chardata: ");
-        // print(chartData[i]);
-        //  print("Chardata: Done");
-        if (chartData.length != 1) {
+      // print("Chardata: ");
+      // print(chartData);
+      //print("Chardata: Done");
+
+      if (chartData.length != 1) {
+        for (var i = 0; i < chartData.length; i++) {
           if (x == 0) {
             if (i <= 9) {
+              print(i);
               this.setState(() {
                 firstChartValues.add(chartData[i][9][0]);
+
                 firstChartValuesOpponent.add(chartData[i][6][0]);
               });
             } else {
@@ -151,20 +157,42 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
               break;
             }
           }
-        } else {}
+        }
+        firstChartValues = List.from(firstChartValues.reversed);
+
+        secondChartValues = List.from(secondChartValues.reversed);
+        secondChartValuesOpponent =
+            List.from(secondChartValuesOpponent.reversed);
+      } else {
+        if (x == 0) {
+          this.setState(() {
+            firstChartValues.add(chartData[0][9][0]);
+            firstChartValuesOpponent.add(chartData[0][6][0]);
+          });
+        } else if (x == 1) {
+          this.setState(() {
+            secondChartValues.add(chartData[0][9][1]);
+            secondChartValuesOpponent.add(chartData[0][6][1]);
+          });
+        } else if (x == 2) {
+          this.setState(() {
+            thirdChartValues.add(chartData[0][9][2]);
+            thirdChartValues.add(chartData[0][9][3]);
+          });
+        } else if (x == 3) {
+          this.setState(() {
+            fourthChartValues.add(chartData[0][9][4]);
+            fourthChartValuesOpponent.add(chartData[0][6][4]);
+          });
+        }
       }
-      //  print(firstChartValues);
-      //   print(secondChartValues);
-      //  print(thirdChartValues);
-      //  print(fourthChartValues);
     }
   }
 
   Future<List<dynamic>> tournamnetsAndMatchesDataPack() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    String urlTennisPlayer =
-        _state.urlsFromTennisAccounts["URLtoTennisPlayer"]!;
+    String urlTennisPlayer = _state.urlsFromTennisAccounts["URLtoPlayer"]!;
 
     List<dynamic> tournamnets = [];
     List<dynamic> tournament = [];
@@ -197,6 +225,7 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
                 match.add(setMatch(x, value));
               } else {
                 // print("match: " + setMatch(x, value).toString());
+
                 setMatch(x, value);
               }
 
@@ -220,8 +249,7 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
   Future<List<dynamic>> chartsDataPack() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    String urlTennisPlayer =
-        _state.urlsFromTennisAccounts["URLtoTennisPlayer"]!;
+    String urlTennisPlayer = _state.urlsFromTennisAccounts["URLtoPlayer"]!;
 
     List<dynamic> matches = [];
 
@@ -230,6 +258,7 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
         await databaseReference.child(urlTennisPlayer + "lastTenGames").once();
     print(urlTennisPlayer + "lastTenGames");
     if (dataSnapshot.value != null) {
+      // print(dataSnapshot.value);
       for (var i = 0; i < dataSnapshot.value.length; i++) {
         dataSnapshot.value[i].forEach((key, value) {
           x = 0;
@@ -245,7 +274,7 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
         });
       }
     }
-    // print(matches);
+    //print(matches);
     return matches;
   }
 
@@ -332,8 +361,8 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
         yourStats.add(value[12].toDouble() - 1);
         yourStats.add(value[11].toDouble() - 1);
         yourStats.add(value[3].toDouble() - 1);
-        yourStats.add(value[6].toDouble() - 1);
-        yourStats.add(value[5].toDouble() - 1);
+        yourStats.add(value[6].toDouble());
+        yourStats.add(value[5].toDouble());
         opponentStats.add(value[5].toDouble() - value[6].toDouble());
         opponentStats.add(value[5].toDouble());
 
@@ -345,7 +374,7 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
         }
       });
     }
-    print(opponentName);
+
     match = [
       firstsetStandings,
       secondsetStandings,
@@ -371,9 +400,22 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
     super.initState();
 
     WidgetsBinding.instance!.addPostFrameCallback((_) async {
-      tournaments = await tournamnetsAndMatchesDataPack();
-      chartData = await chartsDataPack();
-      getData(chartData);
+      if (appState.chartData!) {
+        tournaments = await tournamnetsAndMatchesDataPack();
+        chartData = await chartsDataPack();
+
+        getData(chartData);
+      } else {
+        firstChartValues = [32, 40, 50, 60, 12, 34];
+
+        secondChartValues = [32, 30, 23, 14, 18, 12];
+        secondChartValuesOpponent = [20, 40, 20, 13, 24, 19];
+        thirdChartValues = [55, 94];
+
+        fourthChartValues = [12];
+        fourthChartValuesOpponent = [10];
+      }
+
       this.setState(() {
         _isUploading = false;
         _isSuccess = tournaments.isNotEmpty;
@@ -386,6 +428,29 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
     // _________________________
     List<Widget> cards = [];
     List<Widget> matchesCards = [];
+
+    popUpChangeStat(
+      BuildContext context,
+    ) {
+      for (var i = 0; i < 1; i++) {}
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              backgroundColor: Colors.white,
+              title: Text("Change Stat"),
+              content: Column(
+                children: [],
+              ),
+              actions: [
+                MaterialButton(
+                  onPressed: () {},
+                  child: Text("Winners"),
+                ),
+              ],
+            );
+          });
+    }
 
     Widget card(
       String name,
@@ -562,7 +627,7 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
                 width: 7,
               ),
               Text(
-                "Othilia",
+                appState.playerFirstName!,
                 style: TextStyle(
                   color: Color(0xff68737d),
                   fontWeight: FontWeight.bold,
@@ -661,21 +726,17 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
                           child: Column(children: [
                             //______________________________
                             firstChartValues.length != 1
-                                ? LineChartCard(
-                                    [true, titles[0]],
-                                    [firstChartValues],
-                                  )
-                                : PieChartCard(
+                                ? LineChartCard([true, titles[0]],
+                                    [firstChartValues], chartData)
+                                : PieChartCard([
                                     [
-                                      [
-                                        firstChartValues[0],
-                                        firstChartValuesOpponent[0]
-                                      ],
+                                      firstChartValues[0],
+                                      firstChartValuesOpponent[0]
                                     ],
-                                    [opponentColor],
-                                    2,
-                                    titles[0],
-                                  ),
+                                  ], [
+                                    opponentColor
+                                  ], 2, titles[0], chartData),
+
                             //______________________________
                             secondChartValues.length != 1
                                 ? LineChartCard([
@@ -684,7 +745,7 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
                                   ], [
                                     secondChartValues,
                                     secondChartValuesOpponent
-                                  ])
+                                  ], chartData)
                                 : PieChartCard([
                                     [
                                       secondChartValues[0],
@@ -692,14 +753,14 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
                                     ],
                                   ], [
                                     opponentColor
-                                  ], 2, titles[1]),
+                                  ], 2, titles[1], chartData),
                             //______________________________
                             PieChartCard([
                               [thirdChartValues[0], 100 - thirdChartValues[0]],
                               [thirdChartValues[1], 100 - thirdChartValues[1]]
                             ], [
                               cardBlue
-                            ], 1, titles[2]),
+                            ], 1, titles[2], chartData),
                             //______________________________
                             PieChartCard([
                               [
@@ -708,7 +769,7 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
                               ],
                             ], [
                               opponentColor
-                            ], 2, titles[3]),
+                            ], 2, titles[3], chartData),
                             //______________________________
                           ]),
                         ),
@@ -753,90 +814,132 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
                       ),
                     ],
                   )
-                : Column(
-                    children: [
-                      SizedBox(
-                        height: 50,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                : appState.chartData!
+                    ? Column(
                         children: [
-                          topIconButton(
-                              Image.asset(
-                                'Style/Pictures/bar-chart.colored.png',
-                              ),
-                              chartOrResults),
                           SizedBox(
-                            width: 100,
+                            height: 50,
                           ),
-                          topIconButton(
-                              Image.asset(
-                                'Style/Pictures/results.icon.colored.png',
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              topIconButton(
+                                  Image.asset(
+                                    'Style/Pictures/bar-chart.colored.png',
+                                  ),
+                                  chartOrResults),
+                              SizedBox(
+                                width: 100,
                               ),
-                              !chartOrResults),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
-                        child: Text(
-                          "Find all data on every match tracked",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
+                              topIconButton(
+                                  Image.asset(
+                                    'Style/Pictures/results.icon.colored.png',
+                                  ),
+                                  !chartOrResults),
+                            ],
                           ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: !loadingTouranmnets ? 350 : 450,
-                        child: SingleChildScrollView(
-                          child: Column(children: cards),
-                        ),
-                      ),
-                      !loadingTouranmnets
-                          ? card("Back to Tournaments", tournaments, 3)
-                          : Container(),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Stack(
-                        children: [
-                          bottomColorIndecator(),
                           Padding(
-                            padding: const EdgeInsets.only(left: 250, top: 10),
-                            child: MaterialButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Container(
-                                height: 40,
-                                width: 90,
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  color: mainGreen,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Finished",
-                                      style: TextStyle(
-                                        color: backgroundColor,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w800,
-                                      ),
+                            padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
+                            child: Text(
+                              loadingTouranmnets
+                                  ? "Find all data on every match tracked"
+                                  : "Matches",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: !loadingTouranmnets ? 350 : 450,
+                            child: SingleChildScrollView(
+                              child: Column(children: cards),
+                            ),
+                          ),
+                          !loadingTouranmnets
+                              ? card("Back to Tournaments", tournaments, 3)
+                              : Container(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Stack(
+                            children: [
+                              bottomColorIndecator(),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 250, top: 10),
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: 90,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                      color: mainGreen,
                                     ),
-                                  ],
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Finished",
+                                          style: TextStyle(
+                                            color: backgroundColor,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          SizedBox(
+                            height: 50,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              topIconButton(
+                                  Image.asset(
+                                    'Style/Pictures/bar-chart.colored.png',
+                                  ),
+                                  chartOrResults),
+                              SizedBox(
+                                width: 100,
+                              ),
+                              topIconButton(
+                                  Image.asset(
+                                    'Style/Pictures/results.icon.colored.png',
+                                  ),
+                                  !chartOrResults),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 70, 20, 10),
+                            child: Text(
+                              "No matches has been played",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 30,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
                           ),
                         ],
-                      ),
-                    ],
-                  )
+                      )
             : uploadingScreen());
   }
 }

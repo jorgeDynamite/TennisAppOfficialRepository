@@ -6,25 +6,26 @@ class Rally extends StatefulWidget {
   @override
   _RallyState createState() => _RallyState();
   Rally(
-      this.whoServes,
-      this.doubleFaults,
-      this.firstServe,
-      this.secondServe,
-      this.forcedErrors,
-      this.unforcedErrors,
-      this.returnError,
-      this.voleyError,
-      this.returnwinner,
-      this.voleywinner,
-      this.winner,
-      this.tournamentData,
-      this.opponentName,
-      this.castLiveResults,
-      this.matchID,
-      this.tournamentLiveData,
-      this.yourName,
-      this.opponentstournamentDataPackLiveStats,
-      this.gameScorePackage);
+    this.whoServes,
+    this.doubleFaults,
+    this.firstServe,
+    this.secondServe,
+    this.forcedErrors,
+    this.unforcedErrors,
+    this.returnError,
+    this.voleyError,
+    this.returnwinner,
+    this.voleywinner,
+    this.winner,
+    this.tournamentData,
+    this.opponentName,
+    this.castLiveResults,
+    this.matchID,
+    this.tournamentLiveData,
+    this.yourName,
+    this.opponentstournamentDataPackLiveStats,
+    this.gameScorePackage,
+  );
   final int whoServes;
   final bool doubleFaults;
   final bool firstServe;
@@ -195,16 +196,17 @@ class _RallyState extends State<Rally> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes)));
+                                          widget.tournamentData,
+                                          widget.opponentName,
+                                          widget.castLiveResults,
+                                          widget.matchID,
+                                          widget.tournamentLiveData,
+                                          widget.yourName,
+                                          widget
+                                              .opponentstournamentDataPackLiveStats,
+                                          widget.gameScorePackage,
+                                          widget.whoServes,
+                                        )));
                           }
 
                           if (statsListLose[0] == "Volley Error") {
@@ -219,16 +221,17 @@ class _RallyState extends State<Rally> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes)));
+                                          widget.tournamentData,
+                                          widget.opponentName,
+                                          widget.castLiveResults,
+                                          widget.matchID,
+                                          widget.tournamentLiveData,
+                                          widget.yourName,
+                                          widget
+                                              .opponentstournamentDataPackLiveStats,
+                                          widget.gameScorePackage,
+                                          widget.whoServes,
+                                        )));
                           }
                         },
                         child: Container(
@@ -275,15 +278,17 @@ class _RallyState extends State<Rally> {
                             context,
                             MaterialPageRoute(
                                 builder: (_) => MatchPanel(
-                                    widget.tournamentData,
-                                    widget.opponentName,
-                                    widget.castLiveResults,
-                                    widget.matchID,
-                                    widget.tournamentLiveData,
-                                    widget.yourName,
-                                    widget.opponentstournamentDataPackLiveStats,
-                                    widget.gameScorePackage,
-                                    widget.whoServes)));
+                                      widget.tournamentData,
+                                      widget.opponentName,
+                                      widget.castLiveResults,
+                                      widget.matchID,
+                                      widget.tournamentLiveData,
+                                      widget.yourName,
+                                      widget
+                                          .opponentstournamentDataPackLiveStats,
+                                      widget.gameScorePackage,
+                                      widget.whoServes,
+                                    )));
                       }
                     },
                     child: Container(
@@ -449,16 +454,17 @@ class _RallyState extends State<Rally> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
 
                             if (statsListWin[0] == "Winner") {
@@ -473,16 +479,17 @@ class _RallyState extends State<Rally> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
                             if (statsListWin[0] == "Volley Winner") {
                               widget.tournamentLiveData.matches[0].voleyWinner =
@@ -497,16 +504,17 @@ class _RallyState extends State<Rally> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
                             if (statsListWin[0] == "Return Winner") {
                               widget.tournamentLiveData.matches[0]
@@ -520,16 +528,17 @@ class _RallyState extends State<Rally> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
                           } else {
                             // IF OPPONENT won than:
@@ -554,16 +563,17 @@ class _RallyState extends State<Rally> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
 
                             if (statsListWin[0] == "Winner") {
@@ -581,16 +591,17 @@ class _RallyState extends State<Rally> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
                             if (statsListWin[0] == "Volley Winner") {
                               widget.opponentstournamentDataPackLiveStats
@@ -607,16 +618,17 @@ class _RallyState extends State<Rally> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                               if (statsListWin[0] == "Return Winner") {
                                 widget.opponentstournamentDataPackLiveStats
                                     .matches[0].returnWinner = widget
@@ -631,16 +643,17 @@ class _RallyState extends State<Rally> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (_) => MatchPanel(
-                                            widget.tournamentData,
-                                            widget.opponentName,
-                                            widget.castLiveResults,
-                                            widget.matchID,
-                                            widget.tournamentLiveData,
-                                            widget.yourName,
-                                            widget
-                                                .opponentstournamentDataPackLiveStats,
-                                            widget.gameScorePackage,
-                                            widget.whoServes)));
+                                              widget.tournamentData,
+                                              widget.opponentName,
+                                              widget.castLiveResults,
+                                              widget.matchID,
+                                              widget.tournamentLiveData,
+                                              widget.yourName,
+                                              widget
+                                                  .opponentstournamentDataPackLiveStats,
+                                              widget.gameScorePackage,
+                                              widget.whoServes,
+                                            )));
                               }
                             }
                           }
@@ -692,16 +705,17 @@ class _RallyState extends State<Rally> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => MatchPanel(
-                                      widget.tournamentData,
-                                      widget.opponentName,
-                                      widget.castLiveResults,
-                                      widget.matchID,
-                                      widget.tournamentLiveData,
-                                      widget.yourName,
-                                      widget
-                                          .opponentstournamentDataPackLiveStats,
-                                      widget.gameScorePackage,
-                                      widget.whoServes)));
+                                        widget.tournamentData,
+                                        widget.opponentName,
+                                        widget.castLiveResults,
+                                        widget.matchID,
+                                        widget.tournamentLiveData,
+                                        widget.yourName,
+                                        widget
+                                            .opponentstournamentDataPackLiveStats,
+                                        widget.gameScorePackage,
+                                        widget.whoServes,
+                                      )));
                         }
 
                         if (statsListWin[1] == "Winner") {
@@ -714,16 +728,17 @@ class _RallyState extends State<Rally> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => MatchPanel(
-                                      widget.tournamentData,
-                                      widget.opponentName,
-                                      widget.castLiveResults,
-                                      widget.matchID,
-                                      widget.tournamentLiveData,
-                                      widget.yourName,
-                                      widget
-                                          .opponentstournamentDataPackLiveStats,
-                                      widget.gameScorePackage,
-                                      widget.whoServes)));
+                                        widget.tournamentData,
+                                        widget.opponentName,
+                                        widget.castLiveResults,
+                                        widget.matchID,
+                                        widget.tournamentLiveData,
+                                        widget.yourName,
+                                        widget
+                                            .opponentstournamentDataPackLiveStats,
+                                        widget.gameScorePackage,
+                                        widget.whoServes,
+                                      )));
                         }
                         if (statsListWin[1] == "Volley Winner") {
                           widget.tournamentLiveData.matches[0].voleyWinner =
@@ -737,16 +752,17 @@ class _RallyState extends State<Rally> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => MatchPanel(
-                                      widget.tournamentData,
-                                      widget.opponentName,
-                                      widget.castLiveResults,
-                                      widget.matchID,
-                                      widget.tournamentLiveData,
-                                      widget.yourName,
-                                      widget
-                                          .opponentstournamentDataPackLiveStats,
-                                      widget.gameScorePackage,
-                                      widget.whoServes)));
+                                        widget.tournamentData,
+                                        widget.opponentName,
+                                        widget.castLiveResults,
+                                        widget.matchID,
+                                        widget.tournamentLiveData,
+                                        widget.yourName,
+                                        widget
+                                            .opponentstournamentDataPackLiveStats,
+                                        widget.gameScorePackage,
+                                        widget.whoServes,
+                                      )));
                         }
                         if (statsListWin[1] == "Return Winner") {
                           widget.tournamentLiveData.matches[0].returnWinner =
@@ -760,16 +776,17 @@ class _RallyState extends State<Rally> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => MatchPanel(
-                                      widget.tournamentData,
-                                      widget.opponentName,
-                                      widget.castLiveResults,
-                                      widget.matchID,
-                                      widget.tournamentLiveData,
-                                      widget.yourName,
-                                      widget
-                                          .opponentstournamentDataPackLiveStats,
-                                      widget.gameScorePackage,
-                                      widget.whoServes)));
+                                        widget.tournamentData,
+                                        widget.opponentName,
+                                        widget.castLiveResults,
+                                        widget.matchID,
+                                        widget.tournamentLiveData,
+                                        widget.yourName,
+                                        widget
+                                            .opponentstournamentDataPackLiveStats,
+                                        widget.gameScorePackage,
+                                        widget.whoServes,
+                                      )));
                         }
                       } else {
                         // IF OPPONENT won than:
@@ -794,16 +811,17 @@ class _RallyState extends State<Rally> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => MatchPanel(
-                                      widget.tournamentData,
-                                      widget.opponentName,
-                                      widget.castLiveResults,
-                                      widget.matchID,
-                                      widget.tournamentLiveData,
-                                      widget.yourName,
-                                      widget
-                                          .opponentstournamentDataPackLiveStats,
-                                      widget.gameScorePackage,
-                                      widget.whoServes)));
+                                        widget.tournamentData,
+                                        widget.opponentName,
+                                        widget.castLiveResults,
+                                        widget.matchID,
+                                        widget.tournamentLiveData,
+                                        widget.yourName,
+                                        widget
+                                            .opponentstournamentDataPackLiveStats,
+                                        widget.gameScorePackage,
+                                        widget.whoServes,
+                                      )));
                         }
 
                         if (statsListWin[1] == "Winner") {
@@ -821,16 +839,17 @@ class _RallyState extends State<Rally> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => MatchPanel(
-                                      widget.tournamentData,
-                                      widget.opponentName,
-                                      widget.castLiveResults,
-                                      widget.matchID,
-                                      widget.tournamentLiveData,
-                                      widget.yourName,
-                                      widget
-                                          .opponentstournamentDataPackLiveStats,
-                                      widget.gameScorePackage,
-                                      widget.whoServes)));
+                                        widget.tournamentData,
+                                        widget.opponentName,
+                                        widget.castLiveResults,
+                                        widget.matchID,
+                                        widget.tournamentLiveData,
+                                        widget.yourName,
+                                        widget
+                                            .opponentstournamentDataPackLiveStats,
+                                        widget.gameScorePackage,
+                                        widget.whoServes,
+                                      )));
                         }
                         if (statsListWin[1] == "Volley Winner") {
                           widget.opponentstournamentDataPackLiveStats.matches[0]
@@ -847,16 +866,17 @@ class _RallyState extends State<Rally> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => MatchPanel(
-                                      widget.tournamentData,
-                                      widget.opponentName,
-                                      widget.castLiveResults,
-                                      widget.matchID,
-                                      widget.tournamentLiveData,
-                                      widget.yourName,
-                                      widget
-                                          .opponentstournamentDataPackLiveStats,
-                                      widget.gameScorePackage,
-                                      widget.whoServes)));
+                                        widget.tournamentData,
+                                        widget.opponentName,
+                                        widget.castLiveResults,
+                                        widget.matchID,
+                                        widget.tournamentLiveData,
+                                        widget.yourName,
+                                        widget
+                                            .opponentstournamentDataPackLiveStats,
+                                        widget.gameScorePackage,
+                                        widget.whoServes,
+                                      )));
                           if (statsListWin[1] == "Return Winner") {
                             widget.opponentstournamentDataPackLiveStats
                                 .matches[0].returnWinner = widget
@@ -871,16 +891,17 @@ class _RallyState extends State<Rally> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes)));
+                                          widget.tournamentData,
+                                          widget.opponentName,
+                                          widget.castLiveResults,
+                                          widget.matchID,
+                                          widget.tournamentLiveData,
+                                          widget.yourName,
+                                          widget
+                                              .opponentstournamentDataPackLiveStats,
+                                          widget.gameScorePackage,
+                                          widget.whoServes,
+                                        )));
                           }
                         }
                       }
@@ -939,16 +960,17 @@ class _RallyState extends State<Rally> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
 
                             if (statsListWin[2] == "Winner") {
@@ -963,16 +985,17 @@ class _RallyState extends State<Rally> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
                             if (statsListWin[2] == "Volley Winner") {
                               widget.tournamentLiveData.matches[0].voleyWinner =
@@ -987,16 +1010,17 @@ class _RallyState extends State<Rally> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
                             if (statsListWin[2] == "Return Winner") {
                               widget.tournamentLiveData.matches[0]
@@ -1010,16 +1034,17 @@ class _RallyState extends State<Rally> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
                           } else {
                             // IF OPPONENT won than:
@@ -1044,16 +1069,17 @@ class _RallyState extends State<Rally> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
 
                             if (statsListWin[2] == "Winner") {
@@ -1071,16 +1097,17 @@ class _RallyState extends State<Rally> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
                             if (statsListWin[2] == "Volley Winner") {
                               widget.opponentstournamentDataPackLiveStats
@@ -1097,16 +1124,17 @@ class _RallyState extends State<Rally> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                               if (statsListWin[2] == "Return Winner") {
                                 widget.opponentstournamentDataPackLiveStats
                                     .matches[0].returnWinner = widget
@@ -1121,16 +1149,17 @@ class _RallyState extends State<Rally> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (_) => MatchPanel(
-                                            widget.tournamentData,
-                                            widget.opponentName,
-                                            widget.castLiveResults,
-                                            widget.matchID,
-                                            widget.tournamentLiveData,
-                                            widget.yourName,
-                                            widget
-                                                .opponentstournamentDataPackLiveStats,
-                                            widget.gameScorePackage,
-                                            widget.whoServes)));
+                                              widget.tournamentData,
+                                              widget.opponentName,
+                                              widget.castLiveResults,
+                                              widget.matchID,
+                                              widget.tournamentLiveData,
+                                              widget.yourName,
+                                              widget
+                                                  .opponentstournamentDataPackLiveStats,
+                                              widget.gameScorePackage,
+                                              widget.whoServes,
+                                            )));
                               }
                             }
                           }
@@ -1182,16 +1211,17 @@ class _RallyState extends State<Rally> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => MatchPanel(
-                                      widget.tournamentData,
-                                      widget.opponentName,
-                                      widget.castLiveResults,
-                                      widget.matchID,
-                                      widget.tournamentLiveData,
-                                      widget.yourName,
-                                      widget
-                                          .opponentstournamentDataPackLiveStats,
-                                      widget.gameScorePackage,
-                                      widget.whoServes)));
+                                        widget.tournamentData,
+                                        widget.opponentName,
+                                        widget.castLiveResults,
+                                        widget.matchID,
+                                        widget.tournamentLiveData,
+                                        widget.yourName,
+                                        widget
+                                            .opponentstournamentDataPackLiveStats,
+                                        widget.gameScorePackage,
+                                        widget.whoServes,
+                                      )));
                         }
 
                         if (statsListWin[3] == "Winner") {
@@ -1204,16 +1234,17 @@ class _RallyState extends State<Rally> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => MatchPanel(
-                                      widget.tournamentData,
-                                      widget.opponentName,
-                                      widget.castLiveResults,
-                                      widget.matchID,
-                                      widget.tournamentLiveData,
-                                      widget.yourName,
-                                      widget
-                                          .opponentstournamentDataPackLiveStats,
-                                      widget.gameScorePackage,
-                                      widget.whoServes)));
+                                        widget.tournamentData,
+                                        widget.opponentName,
+                                        widget.castLiveResults,
+                                        widget.matchID,
+                                        widget.tournamentLiveData,
+                                        widget.yourName,
+                                        widget
+                                            .opponentstournamentDataPackLiveStats,
+                                        widget.gameScorePackage,
+                                        widget.whoServes,
+                                      )));
                         }
                         if (statsListWin[3] == "Volley Winner") {
                           widget.tournamentLiveData.matches[0].voleyWinner =
@@ -1227,16 +1258,17 @@ class _RallyState extends State<Rally> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => MatchPanel(
-                                      widget.tournamentData,
-                                      widget.opponentName,
-                                      widget.castLiveResults,
-                                      widget.matchID,
-                                      widget.tournamentLiveData,
-                                      widget.yourName,
-                                      widget
-                                          .opponentstournamentDataPackLiveStats,
-                                      widget.gameScorePackage,
-                                      widget.whoServes)));
+                                        widget.tournamentData,
+                                        widget.opponentName,
+                                        widget.castLiveResults,
+                                        widget.matchID,
+                                        widget.tournamentLiveData,
+                                        widget.yourName,
+                                        widget
+                                            .opponentstournamentDataPackLiveStats,
+                                        widget.gameScorePackage,
+                                        widget.whoServes,
+                                      )));
                         }
                         if (statsListWin[3] == "Return Winner") {
                           widget.tournamentLiveData.matches[0].returnWinner =
@@ -1250,16 +1282,17 @@ class _RallyState extends State<Rally> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => MatchPanel(
-                                      widget.tournamentData,
-                                      widget.opponentName,
-                                      widget.castLiveResults,
-                                      widget.matchID,
-                                      widget.tournamentLiveData,
-                                      widget.yourName,
-                                      widget
-                                          .opponentstournamentDataPackLiveStats,
-                                      widget.gameScorePackage,
-                                      widget.whoServes)));
+                                        widget.tournamentData,
+                                        widget.opponentName,
+                                        widget.castLiveResults,
+                                        widget.matchID,
+                                        widget.tournamentLiveData,
+                                        widget.yourName,
+                                        widget
+                                            .opponentstournamentDataPackLiveStats,
+                                        widget.gameScorePackage,
+                                        widget.whoServes,
+                                      )));
                         }
                       } else {
                         // IF OPPONENT won than:
@@ -1284,16 +1317,17 @@ class _RallyState extends State<Rally> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => MatchPanel(
-                                      widget.tournamentData,
-                                      widget.opponentName,
-                                      widget.castLiveResults,
-                                      widget.matchID,
-                                      widget.tournamentLiveData,
-                                      widget.yourName,
-                                      widget
-                                          .opponentstournamentDataPackLiveStats,
-                                      widget.gameScorePackage,
-                                      widget.whoServes)));
+                                        widget.tournamentData,
+                                        widget.opponentName,
+                                        widget.castLiveResults,
+                                        widget.matchID,
+                                        widget.tournamentLiveData,
+                                        widget.yourName,
+                                        widget
+                                            .opponentstournamentDataPackLiveStats,
+                                        widget.gameScorePackage,
+                                        widget.whoServes,
+                                      )));
                         }
 
                         if (statsListWin[0] == "Winner") {
@@ -1311,16 +1345,17 @@ class _RallyState extends State<Rally> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => MatchPanel(
-                                      widget.tournamentData,
-                                      widget.opponentName,
-                                      widget.castLiveResults,
-                                      widget.matchID,
-                                      widget.tournamentLiveData,
-                                      widget.yourName,
-                                      widget
-                                          .opponentstournamentDataPackLiveStats,
-                                      widget.gameScorePackage,
-                                      widget.whoServes)));
+                                        widget.tournamentData,
+                                        widget.opponentName,
+                                        widget.castLiveResults,
+                                        widget.matchID,
+                                        widget.tournamentLiveData,
+                                        widget.yourName,
+                                        widget
+                                            .opponentstournamentDataPackLiveStats,
+                                        widget.gameScorePackage,
+                                        widget.whoServes,
+                                      )));
                         }
                         if (statsListWin[0] == "Volley Winner") {
                           widget.opponentstournamentDataPackLiveStats.matches[0]
@@ -1337,16 +1372,17 @@ class _RallyState extends State<Rally> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => MatchPanel(
-                                      widget.tournamentData,
-                                      widget.opponentName,
-                                      widget.castLiveResults,
-                                      widget.matchID,
-                                      widget.tournamentLiveData,
-                                      widget.yourName,
-                                      widget
-                                          .opponentstournamentDataPackLiveStats,
-                                      widget.gameScorePackage,
-                                      widget.whoServes)));
+                                        widget.tournamentData,
+                                        widget.opponentName,
+                                        widget.castLiveResults,
+                                        widget.matchID,
+                                        widget.tournamentLiveData,
+                                        widget.yourName,
+                                        widget
+                                            .opponentstournamentDataPackLiveStats,
+                                        widget.gameScorePackage,
+                                        widget.whoServes,
+                                      )));
                           if (statsListWin[0] == "Return Winner") {
                             widget.opponentstournamentDataPackLiveStats
                                 .matches[0].returnWinner = widget
@@ -1361,16 +1397,17 @@ class _RallyState extends State<Rally> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes)));
+                                          widget.tournamentData,
+                                          widget.opponentName,
+                                          widget.castLiveResults,
+                                          widget.matchID,
+                                          widget.tournamentLiveData,
+                                          widget.yourName,
+                                          widget
+                                              .opponentstournamentDataPackLiveStats,
+                                          widget.gameScorePackage,
+                                          widget.whoServes,
+                                        )));
                           }
                         }
                       }

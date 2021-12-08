@@ -29,8 +29,6 @@ class LineTitles {
               return "Most Recent";
             }
 
-            print("Bottom" + value.toString());
-
             return '';
           },
           margin: 8,

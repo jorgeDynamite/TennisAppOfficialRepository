@@ -1,14 +1,21 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:app/HomePageStuff/PopUpPlayers.dart';
+import 'package:app/HomePageStuff/View.dart';
 import 'package:app/LoginPage.dart';
 import 'package:app/UnusedStuff/ParentCoachMainPage.dart';
+import 'package:app/bloc/app_bloc.dart';
+import 'package:app/bloc/app_state.dart';
+import 'package:app/colors.dart';
 import 'package:app/emailVerificationPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:crypto/crypto.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'UnusedStuff/TennisPlayerHomePage.dart';
 
 final Color primaryColor = Color(0xff18203d);
@@ -40,12 +47,13 @@ class _SignUpPCState extends State<SignUpPC> {
 
   @override
   Widget build(BuildContext context) {
+    appColors colors = appColors();
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
-        backgroundColor: primaryColor,
+        backgroundColor: colors.backgroundColor,
         body: Container(
           alignment: Alignment.topCenter,
           margin: EdgeInsets.symmetric(horizontal: 30),
@@ -65,7 +73,7 @@ class _SignUpPCState extends State<SignUpPC> {
                 ),
                 SizedBox(height: 25),
                 Text(
-                  'Enter your account datails down below to start using the best Tennis Statistics app avalable.',
+                  'Create an account.',
                   textAlign: TextAlign.center,
                   style:
                       GoogleFonts.openSans(color: Colors.white, fontSize: 14),
@@ -83,13 +91,14 @@ class _SignUpPCState extends State<SignUpPC> {
                         child: Padding(
                             padding: EdgeInsets.fromLTRB(6, 0, 0, 0),
                             child: _buildTextFieldName(lastNameController,
-                                Icons.account_circle, 'Last Name')))
+                                Icons.account_box, 'Last Name')))
                   ],
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                _buildTextField(nameController, Icons.email, 'Email'),
+                _buildTextField(
+                    nameController, Icons.account_circle, 'Username / Email'),
                 SizedBox(height: 20),
                 _buildTextFieldPassword(
                     passwordController, Icons.lock, 'Password'),
@@ -99,11 +108,12 @@ class _SignUpPCState extends State<SignUpPC> {
                   minWidth: double.maxFinite,
                   height: 60,
                   onPressed: () {
+                    appState.AddedPlayerToCP = false;
                     addAccount(widget.CP, context);
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0)),
-                  color: logoGreen,
+                  color: colors.mainGreen,
                   child: Text('Register',
                       style: TextStyle(color: Colors.white, fontSize: 17)),
                   textColor: Colors.white,
@@ -146,7 +156,8 @@ class _SignUpPCState extends State<SignUpPC> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-          color: secondaryColor, border: Border.all(color: Colors.blue)),
+          color: appColors().cardBlue,
+          border: Border.all(color: Colors.white, width: 0.8)),
       child: TextField(
         controller: controller,
         style: TextStyle(color: Colors.white),
@@ -170,7 +181,8 @@ _buildTextFieldPassword(
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
     decoration: BoxDecoration(
-        color: secondaryColor, border: Border.all(color: Colors.blue)),
+        color: appColors().cardBlue,
+        border: Border.all(color: Colors.white, width: 0.8)),
     child: TextField(
       controller: controller,
       style: TextStyle(color: Colors.white),
@@ -194,18 +206,16 @@ _buildTextFieldName(
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
     decoration: BoxDecoration(
-        color: secondaryColor, border: Border.all(color: Colors.blue)),
+        color: appColors().cardBlue,
+        border: Border.all(color: Colors.white, width: 0.8)),
     child: TextField(
       controller: controller,
       style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(horizontal: 10),
           labelText: labelText,
-          labelStyle: TextStyle(color: Colors.white, fontSize: 13),
-          icon: Icon(
-            icon,
-            color: Colors.white,
-          ),
+          labelStyle: TextStyle(color: Colors.white, fontSize: 14),
+          icon: SizedBox(width: 0),
           // prefix: Icon(icon),
           border: InputBorder.none),
     ),
@@ -227,20 +237,51 @@ addAccount(bool Cp, context) {
   ) async {
     bool verified = false;
     bool emailAlreadyUsed = false;
-    dynamic user;
+    UserCredential? user;
+    final random = new Random();
+    final uid = random.nextInt(10000);
+    String url = Cp
+        ? 'CP_Accounts/'
+        : 'Tennis_Accounts/' +
+            firstNameController.text.split("")[0] +
+            "/" +
+            firstNameController.text.split("")[1] +
+            "/" +
+            firstNameController.text +
+            lastNameController.text +
+            "-" +
+            uid.toString() +
+            "/";
     print("Start creating Account");
     try {
-      user = await _auth.createUserWithEmailAndPassword(
-          email: email.trim(), password: password);
+      User user;
+      await _auth
+          .createUserWithEmailAndPassword(
+              email: email.trim(), password: password)
+          .then((value) => print(value.user!.email! + "sadasd"));
+/*
+      await user.user!
+          .updateDisplayName("sdsas")
+          .then((value) => print(user.user!.displayName! + "oooooooooo"));*/
       print("creating Account");
     } on Exception catch (_) {
-      emailAlreadyUsed = true;
-      print("already used email");
+      try {
+        user = (await _auth.createUserWithEmailAndPassword(
+            email: email.trim() + "@gmail.com", password: password));
+        await user.user!
+            .updateProfile(displayName: "asdsadasd")
+            .whenComplete(() => {print(1)});
+        print(user.user!);
+        print("creating Account");
+      } on Exception catch (_) {
+        print("not an username");
+      }
     }
 
+    //print(user!.us.displayName);
     Timer _timer;
     dynamic _user;
-
+/*
     if (!emailAlreadyUsed) {
       //final user = await _auth.signInWithEmailAndPassword(email: email.trim(), password: password);
       print("Logining into user");
@@ -252,9 +293,101 @@ addAccount(bool Cp, context) {
               builder: (_) => EmailHomePage(email, password,
                   firstNameController, lastNameController, getUser, Cp)));
     }
-
+*/
+    setAccount(email, password, firstNameController, lastNameController,
+        getUser, Cp, uid, context);
     return emailAlreadyUsed;
   }
 
   getUser(nameController.text, password);
+}
+
+Future<dynamic> setAccount(String email, String password, firstNameController,
+    lastNameController, Function getUser, Cp, int uid, context) async {
+  print("Loging in");
+  print("Checking for verification");
+  bool mainController;
+  if (Cp) {
+    mainController = true;
+  } else {
+    mainController = false;
+  }
+
+  Map<String, dynamic> accountdata = {
+    "firstName": firstNameController.text,
+    "lastName": lastNameController.text,
+    "email": email,
+    "password": password,
+    "mainController": mainController,
+    "urlUid": uid.toString(),
+  };
+  final databaseReference = FirebaseDatabase.instance.reference();
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  app.initSet(mainController, uid.toString(), email, lastNameController.text,
+      firstNameController.text);
+
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  var userNameSpecificator =
+      email.split("")[0] + "/" + email.split("")[1] + "/";
+  var id = databaseReference
+      .child(
+        'CP_Accounts/' +
+            firstNameController.text +
+            lastNameController.text +
+            "-" +
+            uid.toString() +
+            "/",
+      )
+      .push();
+  var _id = databaseReference
+      .child(
+        'Tennis_Accounts/' +
+            firstNameController.text +
+            lastNameController.text +
+            "-" +
+            uid.toString() +
+            "/",
+      )
+      .push();
+  Key keys;
+  if (Cp) {
+    id.set(accountdata);
+
+    print(id.key);
+  } else {
+    databaseReference
+        .child('Tennis_Accounts/' +
+            firstNameController.text +
+            lastNameController.text +
+            "-" +
+            uid.toString() +
+            "/" +
+            "playerTournaments" +
+            "/")
+        .push()
+        .set(null);
+    _id.set(accountdata);
+  }
+
+  if (Cp) {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => popUpPLayers()),
+        (Route<dynamic> route) => false);
+  } else {
+    appState.newActivePlayer = true;
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+            builder: (context) => HomePageView([28, 21, 49], false)),
+        (Route<dynamic> route) => false);
+  }
+
+/*
+getUser(email, password).then((value) => {
+
+
+
+
+
+
+*/
 }

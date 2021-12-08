@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:app/HomePageStuff/PopUpPlayers.dart';
 import 'package:app/HomePageStuff/View.dart';
 import 'package:app/bloc/app_bloc.dart';
+import 'package:app/bloc/app_state.dart';
+import 'package:app/colors.dart';
 import 'package:crypto/crypto.dart';
 import 'package:app/UnusedStuff/Colors.dart';
 import 'package:app/UnusedStuff/ParentCoachMainPage.dart';
@@ -28,6 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
   int ter = 0;
   bool loading = false;
   String path = "";
+  appColors colors = appColors();
+  Color borderColor = Colors.white;
 
   void updateAccount(path) {
     String name = nameCController.text;
@@ -39,12 +43,14 @@ class _LoginScreenState extends State<LoginScreen> {
             this.ter = t[0][0];
             if (ter == 1) {
               if (path == "CP_Accounts") {
+                appState.newActivePlayer = true;
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                         builder: (context) => HomePageView([28, 21, 49], true)),
                     (Route<dynamic> route) => false);
               } else {
                 this.setState(() {
+                  appState.newActivePlayer = true;
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (context) =>
@@ -55,6 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ;
             }
             if (t[0][0] == 0) {
+              /*
               if (t[0][1] == 1) {
                 this.setState(() {
                   _build = errorMessage("wrong password");
@@ -70,6 +77,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 this.setState(() {
                   _build =
                       errorMessage("No such email is connected to an account");
+                });
+                _timer = new Timer(const Duration(milliseconds: 3000), () {
+                  this.setState(() {
+                    _build = Row(children: [
+                      Text(""),
+                    ]);
+                  });
+                });
+              }*/
+              if (path != "CP_Accounts") {
+                this.setState(() {
+                  borderColor = Colors.red;
+
+                  _build = errorMessage("Wrong info");
                 });
                 _timer = new Timer(const Duration(milliseconds: 3000), () {
                   this.setState(() {
@@ -120,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
-        backgroundColor: primaryBlue,
+        backgroundColor: colors.backgroundColor,
         body: Container(
           alignment: Alignment.topCenter,
           margin: EdgeInsets.symmetric(horizontal: 30),
@@ -130,45 +151,51 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'Sign in to AGP and continue',
+                  'Sign in to AGP',
                   textAlign: TextAlign.center,
                   style:
                       GoogleFonts.openSans(color: Colors.white, fontSize: 28),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 50),
                 Text(
-                  'Enter your email and password below if you have an account. Otherwise click on "Register here"!',
+                  'Enter your email and password below if you have an account. Otherwise click on "Sign Up"!',
                   textAlign: TextAlign.center,
                   style:
                       GoogleFonts.openSans(color: Colors.white, fontSize: 14),
                 ),
                 SizedBox(
-                  height: 50,
+                  height: 90,
                 ),
-                _buildTextField(
-                    nameCController, Icons.account_circle, 'Email', false),
+                _buildTextField(nameCController, Icons.account_circle,
+                    'Username / Email', false, borderColor),
                 SizedBox(height: 20),
-                _buildTextField(
-                    passwordController, Icons.lock, 'Password', true),
-                SizedBox(height: 40),
+                _buildTextField(passwordController, Icons.lock, 'Password',
+                    true, borderColor),
+                SizedBox(height: 30),
                 MaterialButton(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0)),
                   elevation: 0,
                   minWidth: double.maxFinite,
-                  height: 55,
+                  height: 60,
                   onPressed: () {
+                    this.setState(() {
+                      path = "CP_Accounts";
+                    });
+                    updateAccount("CP_Accounts");
+
                     this.setState(() {
                       path = "Tennis_Accounts";
                     });
                     updateAccount("Tennis_Accounts");
                   },
-                  color: primaryGreen,
-                  child: Text('Login as Tennis Player',
-                      style: TextStyle(color: Colors.white, fontSize: 17)),
+                  color: colors.mainGreen,
+                  child: Text('Login',
+                      style: TextStyle(color: Colors.white, fontSize: 19)),
                   textColor: Colors.white,
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 50),
+                /*
                 MaterialButton(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0)),
@@ -191,10 +218,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                   textColor: Colors.white,
-                ),
+                ),*/
                 SizedBox(height: 15),
                 _build,
-                SizedBox(height: 65),
+                SizedBox(height: 45),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: _buildFooterLogo(),
@@ -210,11 +237,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (_) => WelcomePage()));
                   },
-                  child: Text("Register here",
+                  child: Text("Sign Up",
                       style: GoogleFonts.openSans(
                           color: Colors.blue,
                           decoration: TextDecoration.underline,
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold)),
                 ),
               ],
@@ -244,11 +271,13 @@ _buildFooterLogo() {
 }
 
 _buildTextField(TextEditingController controller, IconData icon,
-    String labelText, bool obscure) {
+    String labelText, bool obscure, Color borderColor) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
     decoration: BoxDecoration(
-        color: secondaryBlue, border: Border.all(color: Colors.blue)),
+        color: appColors().cardBlue,
+        border: Border.all(
+            color: borderColor, width: borderColor == Colors.red ? 2 : 0.7)),
     child: TextField(
       obscureText: obscure,
       controller: controller,
@@ -293,38 +322,30 @@ Future<List<dynamic>> getAllAccounts(
   List<dynamic> accounts = [];
   bool result = false;
   int x = 0;
-  if (path == "CP_Accounts") {
-    if (dataSnapshot.value != null) {
-      dataSnapshot.value.forEach((key, value) {
-        x = 0;
-        value.forEach((key, value) {
-          if (x == 0) {
-            dynamic account = value;
-            accounts.add(account);
-          }
-          x++;
-        });
 
-        print(accounts.length);
-      });
-    }
-  } else {
-    if (dataSnapshot.value != null) {
-      dataSnapshot.value.forEach((key, value) {
-        value.forEach((key, value) {
+  if (dataSnapshot.value != null) {
+    dataSnapshot.value.forEach((key, value) {
+      x = 0;
+
+      value.forEach((key, value) {
+        print(value);
+        if (key.toString().split("M")[0] == "-") {
           dynamic account = value;
+
           accounts.add(account);
-        });
-        print(accounts.length);
+        }
+        x++;
       });
-    }
+
+      //print(accounts.length);
+    });
   }
 
   for (var i = 0; i < accounts.length; i++) {
-    print(i);
-    print("going 1");
+    //print(i);
+    // print("going 1");
 
-    print(accounts[i]["email"]);
+    //print(accounts[i]["email"]);
     print(name);
     if (path == "CP_Accounts") {
       if (accounts[i]["email"] == name) {
@@ -353,7 +374,9 @@ Future<List<dynamic>> getAllAccounts(
             coachFirstName = accounts[i]["firstName"];
             coachlastName = accounts[i]["lastName"];
             print(accounts[i].toString());
-
+            uid = accounts[i]["urlUid"].toString();
+            app.initSet(path == "CP_Accounts", uid, coachEmail, coachlastName,
+                coachFirstName);
             result = true;
             break;
           }

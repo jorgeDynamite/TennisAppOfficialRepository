@@ -1,3 +1,4 @@
+import 'package:app/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../Players.dart';
@@ -6,9 +7,16 @@ class MenuItem extends StatelessWidget {
   final IconData icon;
   final String title;
   final void Function() onTap;
+  final double? fontSize;
+  final double? iconSize;
 
   const MenuItem(
-      {Key? key, required this.icon, required this.title, required this.onTap})
+      {Key? key,
+      required this.icon,
+      required this.title,
+      required this.onTap,
+      this.fontSize,
+      this.iconSize})
       : super(key: key);
 
   @override
@@ -21,8 +29,8 @@ class MenuItem extends StatelessWidget {
           children: <Widget>[
             Icon(
               icon,
-              color: Colors.cyan,
-              size: 30,
+              color: Colors.white,
+              size: iconSize == null ? 30 : iconSize,
             ),
             SizedBox(
               width: 20,
@@ -31,7 +39,7 @@ class MenuItem extends StatelessWidget {
               title,
               style: TextStyle(
                   fontWeight: FontWeight.w300,
-                  fontSize: 26,
+                  fontSize: fontSize == null ? 26 : fontSize,
                   color: Colors.white),
             )
           ],

@@ -7,25 +7,26 @@ class RallyServeerWon extends StatefulWidget {
   @override
   _RallyServeerWonState createState() => _RallyServeerWonState();
   RallyServeerWon(
-      this.whoServes,
-      this.doubleFaults,
-      this.firstServe,
-      this.secondServe,
-      this.forcedErrors,
-      this.unforcedErrors,
-      this.returnError,
-      this.voleyError,
-      this.returnwinner,
-      this.voleywinner,
-      this.winner,
-      this.tournamentData,
-      this.opponentName,
-      this.castLiveResults,
-      this.matchID,
-      this.tournamentLiveData,
-      this.yourName,
-      this.opponentstournamentDataPackLiveStats,
-      this.gameScorePackage);
+    this.whoServes,
+    this.doubleFaults,
+    this.firstServe,
+    this.secondServe,
+    this.forcedErrors,
+    this.unforcedErrors,
+    this.returnError,
+    this.voleyError,
+    this.returnwinner,
+    this.voleywinner,
+    this.winner,
+    this.tournamentData,
+    this.opponentName,
+    this.castLiveResults,
+    this.matchID,
+    this.tournamentLiveData,
+    this.yourName,
+    this.opponentstournamentDataPackLiveStats,
+    this.gameScorePackage,
+  );
   final int whoServes;
   final bool doubleFaults;
   final bool firstServe;
@@ -197,16 +198,17 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
 
                             if (statsListLose[0] == "Volley Error") {
@@ -222,16 +224,17 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
 
                             if (statsListLose[0] == "Return Error") {
@@ -247,16 +250,17 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
                           } else {
                             // IF OPPONENT won than:
@@ -281,16 +285,17 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
 
                             if (statsListLose[0] == "Volley Error") {
@@ -308,16 +313,17 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
                             if (statsListLose[0] == "Return Error") {
                               widget.opponentstournamentDataPackLiveStats
@@ -334,16 +340,17 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
                           }
                         },
@@ -403,16 +410,17 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
 
                             if (statsListLose[1] == "Volley Error") {
@@ -428,16 +436,17 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
                             if (statsListLose[1] == "Return Error") {
                               widget.tournamentLiveData.matches[0]
@@ -452,16 +461,17 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
                           } else {
                             // IF OPPONENT won than:
@@ -486,16 +496,17 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes)));
+                                            widget.tournamentData,
+                                            widget.opponentName,
+                                            widget.castLiveResults,
+                                            widget.matchID,
+                                            widget.tournamentLiveData,
+                                            widget.yourName,
+                                            widget
+                                                .opponentstournamentDataPackLiveStats,
+                                            widget.gameScorePackage,
+                                            widget.whoServes,
+                                          )));
                             }
 
                             if (statsListLose[1] == "Volley Error") {

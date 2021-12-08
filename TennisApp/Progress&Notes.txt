@@ -1,22 +1,14 @@
-Chart Page diffrent charts:
-
-- Gemför t.ex Unforced Errors med 10 senaste matcher
-- Gemför dina stats med dina motståndare
-- 1sta Serve procent 2andra Serve procent i piechart - kan selecta en match i taget
-- 
 
 
 Next Step:
 
+AD as default;
+
+Change inlogging system - started at signup 
 
 
 
 
-1. Design the result page
-
-
-    Later:
-        Fix "After the Match Page" featuring all stats
 
 
 
@@ -26,20 +18,20 @@ Next Step:
 Long Termo Changes:
 
 
-- Use Kalle Halldens video to design your login page
+- Make an restriction on how long name on tournamnet and opponeant can be
 
 - Change design of the app
 
-- Email Verification Page to mote beautifull and not as SUS
+- Shop page?
 
-- Change "Add Player" so you don't need
+- Check if liveResults work 
+
+- Payment matches
 
 - Enable profile photo 
 
 
 
 
-AfterMatch Page:
 
-- All results like live stats page 
 

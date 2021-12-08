@@ -3,14 +3,17 @@ class Player {
   String lastName;
   String email;
   String password;
+  String key;
 
   List<Tournament> tournaments;
-  Player(
-      {required this.firstName,
-      required this.lastName,
-      required this.email,
-      required this.password,
-      required this.tournaments});
+  Player({
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+    required this.password,
+    required this.tournaments,
+    required this.key,
+  });
 }
 
 class Tournament {

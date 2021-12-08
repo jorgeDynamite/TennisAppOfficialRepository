@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:app/HomePageStuff/PlayersAddPage.dart';
+import 'package:app/HomePageStuff/PopUpPlayers.dart';
 import 'package:app/HomePageStuff/View.dart';
 import 'package:app/LoginPage.dart';
 import 'package:app/SideBarStuff/bloc.animation_bloc/navigation.bloc.dart';
 import 'package:app/bloc/app_bloc.dart';
 import 'package:app/bloc/app_state.dart';
+import 'package:app/colors.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import 'package:flutter/material.dart';
@@ -19,11 +22,13 @@ import 'menu_item.dart';
 
 class SideBar extends StatefulWidget {
   @override
-  SideBar(this.y, this.sendInitials, this.selectedPlayerFunction, this.ifCoach);
+  SideBar(this.y, this.sendInitials, this.selectedPlayerFunction, this.ifCoach,
+      this.setPlayerReference);
   bool y;
   Function sendInitials;
   Function selectedPlayerFunction;
   bool ifCoach;
+  Function setPlayerReference;
 
   _SideBarState createState() => _SideBarState();
 }
@@ -31,6 +36,7 @@ class SideBar extends StatefulWidget {
 class _SideBarState extends State<SideBar>
     with SingleTickerProviderStateMixin<SideBar> {
   final AppState _state = appState;
+  appColors colors = appColors();
   bool? coach;
   bool loggedIN = true;
   bool playerdataDetected = false;
@@ -74,7 +80,7 @@ class _SideBarState extends State<SideBar>
             child: Row(
               children: [
                 Text(
-                  "Select Player ",
+                  "Tennis Players",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 23,
@@ -83,13 +89,29 @@ class _SideBarState extends State<SideBar>
               ],
             ),
           ),
-          Column(children: playersWidgets),
+          SizedBox(
+              child: SingleChildScrollView(
+                child: Column(children: playersWidgets),
+              ),
+              height: 250),
           Divider(
-            height: 64,
+            height: 24,
             thickness: 0.5,
             color: Colors.white.withOpacity(0.3),
             indent: 32,
             endIndent: 32,
+          ),
+          SizedBox(height: 40),
+          MenuItem(
+            onTap: () {
+              _state.AddedPlayerToCP = true;
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => popUpPLayers()));
+            },
+            icon: Icons.person,
+            title: "Add Player",
+            fontSize: 24,
+            iconSize: 34,
           ),
         ],
       );
@@ -101,6 +123,7 @@ class _SideBarState extends State<SideBar>
   Future _getIfUserDetails(context) async {
     List<dynamic> initAtributes = await app.init();
     String playerKey = "";
+    List<String> playerKeys = [];
     print("run intisState");
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -111,8 +134,12 @@ class _SideBarState extends State<SideBar>
     if (coach!) {
       String uid = initAtributes[4];
       int? activePlayerIndex;
-      activePlayerIndex = preferences.getInt("activePlayerIndex");
-
+      if (_state.newActivePlayer == false) {
+        print("asdassadasdasdd");
+        activePlayerIndex = preferences.getInt("activePlayerIndex");
+      } else {
+        appState.newActivePlayer = false;
+      }
       String selected = "";
 
       final databaseReference = FirebaseDatabase.instance.reference();
@@ -123,6 +150,7 @@ class _SideBarState extends State<SideBar>
       if (dataSnapshot.value != null) {
         dataSnapshot.value.forEach((key, value) {
           playerKey = key;
+          playerKeys.add(key);
           if (playerKey[0] != "-") {
             value.forEach((key, value) {
               print(key);
@@ -134,12 +162,12 @@ class _SideBarState extends State<SideBar>
                 String lastNamePlayer = value["lastName"];
                 String emailPlayer = value["email"];
                 String passwordPlayer = value["password"];
-                _state.urlsFromTennisAccounts["URLtoTennisPlayer"] =
+                _state.urlsFromTennisAccounts["URLtoPlayer"] =
                     "Tennis_Accounts/" + playerKey + "/";
                 _state.urlsFromCoach["URLtoPlayer"] =
                     _state.urlsFromCoach["URLtoCoach"]! + playerKey + "/";
 
-                print(_state.urlsFromTennisAccounts["URLtoTennisPlayer"]);
+                print(_state.urlsFromTennisAccounts["URLtoPlayer"]);
                 print(_state.urlsFromCoach["URLtoPlayer"]);
                 print(firstNamePlayer);
                 players.add(
@@ -149,6 +177,7 @@ class _SideBarState extends State<SideBar>
                     email: emailPlayer,
                     password: passwordPlayer,
                     tournaments: [],
+                    key: playerKey,
                   ),
                 );
               }
@@ -166,29 +195,41 @@ class _SideBarState extends State<SideBar>
           for (var i = 0; i < listLength; i++) {
             print("in Loop");
             if (activePlayerIndex != null) {
-              print(activePlayerIndex);
               if (i == activePlayerIndex) {
+                setActivePlayer(
+                  players[i].lastName,
+                  players[i].firstName,
+                  i,
+                  players[i].key,
+                );
+
                 color = Color(0xFF0ADE7C);
                 iconColor = color;
                 selected = " -";
               } else {
                 color = Colors.white;
-                iconColor = Colors.cyan;
+                iconColor = Colors.white;
                 selected = "";
               }
             } else {
               if (i == 0) {
-                setActivePlayer(players[i].lastName, players[i].firstName, i);
+                setActivePlayer(
+                  players[i].lastName,
+                  players[i].firstName,
+                  i,
+                  players[i].key,
+                );
                 color = Color(0xFF0ADE7C);
                 iconColor = color;
                 selected = " -";
               } else {
                 color = Colors.white;
-                iconColor = Colors.cyan;
+                iconColor = Colors.white;
                 selected = "";
               }
             }
-            setActivePlayer(players[i].lastName, players[i].firstName, i);
+            // setActivePlayer(
+            //     players[i].lastName, players[i].firstName, i, playerKey);
 
             String title =
                 players[i].lastName + " " + players[i].firstName + selected;
@@ -202,7 +243,10 @@ class _SideBarState extends State<SideBar>
                   onTap: () {
                     print("Pressed");
 
-                    _playerOnPressed(i);
+                    _playerOnPressed(
+                      i,
+                      players[i].key,
+                    );
                   },
                   icon: Icons.person,
                   title: nameToLongFunc(title, 18),
@@ -218,13 +262,14 @@ class _SideBarState extends State<SideBar>
       });
 
       print("object");
+    } else {
+      widget.selectedPlayerFunction;
     }
   }
 
-  _playerOnPressed(
-    index,
-  ) {
-    setActivePlayer(players[index].lastName, players[index].firstName, index);
+  _playerOnPressed(index, playerKey) {
+    setActivePlayer(
+        players[index].lastName, players[index].firstName, index, playerKey);
     List<Widget> playerWidgets = [];
     String selected = "";
 
@@ -236,7 +281,7 @@ class _SideBarState extends State<SideBar>
         selected = " -";
       } else {
         color = Colors.white;
-        iconColor = Colors.cyan;
+        iconColor = Colors.white;
         selected = "";
       }
 
@@ -247,7 +292,7 @@ class _SideBarState extends State<SideBar>
         players: players,
         playersWidgets: playersWidgets,
         onTap: () {
-          _playerOnPressed(i);
+          _playerOnPressed(i, players[i].key);
         },
         icon: Icons.person,
         title: nameToLongFunc(
@@ -260,13 +305,24 @@ class _SideBarState extends State<SideBar>
     });
   }
 
-  void setActivePlayer(String firstName, String lastName, int index) async {
+  void setActivePlayer(
+      String firstName, String lastName, int index, String playerKey) async {
     print("Starting th first SetactivePlayerFunction a");
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setString("activePlayerFirstName", firstName);
     preferences.setString("activePlayerLastName", lastName);
     preferences.setInt("activePlayerIndex", index);
     widget.sendInitials();
+    appState.urlsFromTennisAccounts["URLtoPlayer"] =
+        "Tennis_Accounts/" + playerKey + "/";
+    _state.urlsFromTennisAccounts["URLtoPlayer"] =
+        "Tennis_Accounts/" + playerKey + "/";
+    if (preferences.getBool("coach")!) {
+      _state.urlsFromCoach["URLtoPlayer"] =
+          _state.urlsFromCoach["URLtoCoach"]! + playerKey + "/";
+    }
+    print(_state.urlsFromTennisAccounts["URLtoPlayer"]);
+    widget.setPlayerReference();
     print("Ending the first SetactivePlayerFunction ");
   }
 
@@ -337,7 +393,7 @@ class _SideBarState extends State<SideBar>
               Expanded(
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  color: const Color(0xFF262AAA),
+                  color: colors.backgroundColor, //const Color(0xFF262AAA),
                   child: Column(
                     children: <Widget>[
                       SizedBox(
@@ -354,11 +410,12 @@ class _SideBarState extends State<SideBar>
                         subtitle: Text(
                           email,
                           style: TextStyle(
-                            color: Color(0xFF1BB5FD),
+                            color: colors.mainGreen, //Color(0xFF1BB5FD),
                             fontSize: 18,
                           ),
                         ),
                         leading: CircleAvatar(
+                          backgroundColor: colors.cardBlue,
                           child: Icon(
                             Icons.perm_identity,
                             color: Colors.white,
@@ -374,12 +431,8 @@ class _SideBarState extends State<SideBar>
                         endIndent: 32,
                       ),
                       selectedPlayersHeadLine(coach ?? false),
-                      MenuItem(
-                        onTap: () {
-                          onIconPressed();
-                        },
-                        icon: Icons.settings,
-                        title: "Settings",
+                      SizedBox(
+                        height: coach! ? 0 : 450,
                       ),
                       MenuItem(
                         onTap: () {
@@ -406,12 +459,12 @@ class _SideBarState extends State<SideBar>
                     child: Container(
                       width: 35,
                       height: 110,
-                      color: Color(0xFF262AAA),
+                      color: colors.backgroundColor, // Color(0xFF262AAA),
                       alignment: Alignment.centerLeft,
                       child: AnimatedIcon(
                         progress: _animationController.view,
                         icon: AnimatedIcons.menu_close,
-                        color: Color(0xFF1BB5FD),
+                        color: colors.lightblue, // Color(0xFF1BB5FD),
                         size: 25,
                       ),
                     ),

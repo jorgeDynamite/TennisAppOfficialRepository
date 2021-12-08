@@ -2,30 +2,133 @@ import 'package:app/Analys/pieChart/neumorphic_expenses/pie_chart_view.dart';
 import 'package:app/Analys/pieChart/neumorphic_expenses/pie_chart_sections.dart';
 import 'package:app/Analys/pieChart/neumorphic_expenses/pie_indecators.dart';
 import 'package:app/HomePageStuff/FirstPageChartWindows/pieChartViwe.dart';
+import 'package:app/bloc/app_state.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 import 'package:flutter/material.dart';
 
+import '../../../colors.dart';
+
 class PieChartCard extends StatefulWidget {
-  PieChartCard(this.procentages, this.color, this.type, this.title);
+  PieChartCard(
+      this.procentages, this.color, this.type, this.title, this.restOfData);
   final int type;
   final List<List<double>> procentages;
   final List<Color>? color;
   final String title;
+  final List<dynamic> restOfData;
   @override
   State<StatefulWidget> createState() =>
-      PieChartCardState(procentages, color, type, title);
+      PieChartCardState(procentages, color, type, title, restOfData);
 }
 
 class PieChartCardState extends State {
   late int touchedIndex;
-  PieChartCardState(this.procentages, this.color, this.type, this.title);
+  PieChartCardState(
+      this.procentages, this.color, this.type, this.title, this.restOfData);
   final int type;
-  final List<List<double>> procentages;
+  List<List<double>> procentages;
   final List<Color>? color;
-  final String title;
+  String title;
+  final List<dynamic> restOfData;
+
+  List<String> statsInOrder = [
+    "Winners",
+    "Unforced Errors",
+    "First Serve %",
+    "Second Serve %",
+    "Ace",
+    "Double Faults",
+    "Return Winners",
+    "Return Errors",
+    "Volley Winners",
+    "Volley Errors",
+    "Forced Errors",
+    "Points Won",
+    "Points Played"
+  ];
   @override
   Widget build(BuildContext context) {
+    popUpChangeStat(
+      BuildContext context,
+    ) {
+      List<Widget> buttons = [];
+
+      for (var stat in statsInOrder) {
+        buttons.add(Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: MaterialButton(
+            onPressed: () {
+              Navigator.pop(context);
+
+              var x = 0;
+              for (var i in statsInOrder) {
+                if (i == stat) {
+                  break;
+                }
+                x++;
+              }
+
+              setState(() {
+                procentages = appState.chartData!
+                    ? [
+                        [restOfData[0][9][x], restOfData[0][6][x]]
+                      ]
+                    : procentages;
+
+                title = stat;
+              });
+            },
+            child: Card(
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              color: appColors().backgroundColor,
+              shadowColor: Colors.black,
+              child: Container(
+                  height: 55,
+                  width: 200,
+                  child: Padding(
+                      padding: EdgeInsets.only(left: 15, right: 45),
+                      child: Row(children: [
+                        Text(
+                          stat,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15),
+                        ),
+                      ]))),
+            ),
+          ),
+        ));
+      }
+      return showDialog(
+          context: context,
+          barrierColor: Colors.black38,
+          builder: (context) {
+            return AlertDialog(
+              elevation: 5,
+              backgroundColor: appColors().cardBlue,
+              title: Text("Change Stat",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      //fontFamily: "Telugu Sangam MN",
+                      fontWeight: FontWeight.w600)),
+              content: SizedBox(
+                height: 300,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: buttons,
+                  ),
+                ),
+              ),
+            );
+          });
+    }
+
     return Container(
       height: 250,
       child: Stack(children: [
@@ -51,6 +154,9 @@ class PieChartCardState extends State {
                               elevation: 0,
                               onPressed: () {
                                 print("Change Match");
+                                if (type != 1) {
+                                  popUpChangeStat(context);
+                                }
                               },
                               color: Colors.transparent,
                               child: Row(
@@ -69,7 +175,10 @@ class PieChartCardState extends State {
                                       : Container(),
                                   Align(
                                     alignment: Alignment.center,
-                                    child: Text(title,
+                                    child: Text(
+                                        appState.chartData!
+                                            ? title
+                                            : title + " Exampel",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 15,

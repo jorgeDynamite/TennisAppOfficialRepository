@@ -5,6 +5,8 @@ import 'dart:math';
 import 'package:app/HomePageStuff/PopUpPlayers.dart';
 import 'package:app/LoginPage.dart';
 import 'package:app/UnusedStuff/ParentCoachMainPage.dart';
+import 'package:app/bloc/app_state.dart';
+import 'package:app/colors.dart';
 import 'package:app/emailVerificationPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -34,6 +36,7 @@ class playersAddPlayers extends StatefulWidget {
 
 class _playersAddPlayersState extends State<playersAddPlayers> {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  appColors colors = appColors();
   Widget _build = Row(
     children: [Text("")],
   );
@@ -60,7 +63,7 @@ class _playersAddPlayersState extends State<playersAddPlayers> {
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: colors.backgroundColor,
         body: Container(
           alignment: Alignment.topCenter,
           margin: EdgeInsets.symmetric(horizontal: 30),
@@ -104,7 +107,8 @@ class _playersAddPlayersState extends State<playersAddPlayers> {
                 SizedBox(
                   height: 20,
                 ),
-                _buildTextField(nameController, Icons.email, 'Email'),
+                _buildTextField(
+                    nameController, Icons.email, 'Username / Email'),
                 SizedBox(height: 20),
                 _buildTextFieldPassword(
                     passwordController, Icons.lock, 'Password'),
@@ -114,34 +118,35 @@ class _playersAddPlayersState extends State<playersAddPlayers> {
                   minWidth: double.maxFinite,
                   height: 60,
                   onPressed: () {
-                    addAccount(widget.CP, context, callback);
-                    this.setState(() {
-                      _build = Row(
-                        children: [
-                          Text(
-                            "No such email is connected to an account",
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 14,
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.center,
-                      );
-                      _timer =
-                          new Timer(const Duration(milliseconds: 3000), () {
-                        this.setState(() {
-                          _build = Row(children: [
-                            Text(""),
-                          ]);
+                    addAccount(widget.CP, context, callback, () {
+                      this.setState(() {
+                        _build = Row(
+                          children: [
+                            Text(
+                              "Userename / Email is already used",
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 14,
+                              ),
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.center,
+                        );
+                        _timer =
+                            new Timer(const Duration(milliseconds: 3000), () {
+                          this.setState(() {
+                            _build = Row(children: [
+                              Text(""),
+                            ]);
+                          });
                         });
                       });
                     });
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0)),
-                  color: Color(0xFF0ADE7C),
+                  color: colors.mainGreen,
                   child: Text('Create',
                       style: TextStyle(color: Colors.white, fontSize: 17)),
                   textColor: Colors.white,
@@ -182,11 +187,12 @@ class _playersAddPlayersState extends State<playersAddPlayers> {
 
   _buildTextField(
       TextEditingController controller, IconData icon, String labelText) {
+    appColors colors = appColors();
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-          color: Color(0xFF272626),
-          border: Border.all(color: Color(0xFF3E3B3B))),
+          color: colors.cardBlue,
+          border: Border.all(color: Colors.white, width: 0.7)),
       child: TextField(
         controller: controller,
         style: TextStyle(color: Colors.white),
@@ -207,10 +213,12 @@ class _playersAddPlayersState extends State<playersAddPlayers> {
 
 _buildTextFieldPassword(
     TextEditingController controller, IconData icon, String labelText) {
+  appColors colors = appColors();
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
     decoration: BoxDecoration(
-        color: Color(0xFF272626), border: Border.all(color: Color(0xFF3E3B3B))),
+        color: colors.cardBlue,
+        border: Border.all(color: Colors.white, width: 0.7)),
     child: TextField(
       controller: controller,
       style: TextStyle(color: Colors.white),
@@ -231,10 +239,12 @@ _buildTextFieldPassword(
 
 _buildTextFieldName(
     TextEditingController controller, IconData icon, String labelText) {
+  appColors colors = appColors();
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
     decoration: BoxDecoration(
-        color: Color(0xFF272626), border: Border.all(color: Color(0xFF3E3B3B))),
+        color: colors.cardBlue,
+        border: Border.all(color: Colors.white, width: 0.7)),
     child: TextField(
       controller: controller,
       style: TextStyle(color: Colors.white),
@@ -253,23 +263,7 @@ _buildTextFieldName(
 }
 
 // ignore: non_constant_identifier_names
-addAccount(bool Cp, context, setState) {
-  Widget errorMessage(String text) {
-    return Row(
-      children: [
-        Text(
-          text,
-          style: TextStyle(
-            color: Colors.red,
-            fontSize: 14,
-          ),
-          textAlign: TextAlign.center,
-        )
-      ],
-      mainAxisAlignment: MainAxisAlignment.center,
-    );
-  }
-
+addAccount(bool Cp, context, Function setState, Function error) {
   final databaseReference = FirebaseDatabase.instance.reference();
   var password =
       sha256.convert(utf8.encode(passwordController.text)).toString();
@@ -294,19 +288,29 @@ addAccount(bool Cp, context, setState) {
     final random = new Random();
     final playerNewUid = random.nextInt(10000);
 
-    print("Start creating Account");
     try {
       user = await _auth.createUserWithEmailAndPassword(
           email: email.trim(), password: password);
+    } on Exception catch (_) {
+      try {
+        user = await _auth.createUserWithEmailAndPassword(
+            email: email.trim() + "@gmail.com", password: password);
+      } on Exception catch (_) {
+        emailAlreadyUsed = true;
 
+        error();
+      }
+    }
+    if (!emailAlreadyUsed) {
       Map<String, dynamic> accountdata = {
         "firstName": firstNameController.text,
         "lastName": lastNameController.text,
         "email": nameController.text,
         "password": password,
         "mainController": false,
+        "urlUid": playerNewUid,
       };
-      SharedPreferences preferences = await SharedPreferences.getInstance();
+
       final databaseReference = FirebaseDatabase.instance.reference();
       var _id = databaseReference
           .child('Tennis_Accounts/' +
@@ -360,13 +364,10 @@ addAccount(bool Cp, context, setState) {
 
       id.set(accountdata);
       print("creating Account");
+      appState.AddedPlayerToCP = true;
       Navigator.push(
           context, MaterialPageRoute(builder: (_) => popUpPLayers()));
-    } on Exception catch (_) {
-      emailAlreadyUsed = true;
-      print("username is already taken");
     }
-
     Timer _timer;
     dynamic _user;
 

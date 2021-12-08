@@ -105,10 +105,8 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
         preferences.getString("activePlayerLastName").toString();
     this.coachfirstName = preferences.getString("firstName").toString();
     this.coachuid = preferences.getString("accountRandomUID").toString();
-    url = preferences.getBool("coach")!
-        ? _state.urlsFromCoach["URLtoTennisPlayer"]!
-        : _state.urlsFromTennisAccounts["URLtoTennisPlayer"]!;
-    print(url);
+    url = _state.urlsFromTennisAccounts["URLtoPlayer"]!;
+
     String playersFullNameWithoutSpaces = playerFirstName + playerLastName;
     databaseReference.child(url).push();
     DataSnapshot dataSnapshot = await databaseReference.child(url).once();
@@ -117,21 +115,21 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
       dataSnapshot.value.forEach((key, value) {
         // When you know you are on the right player
 
-        if (key == "playerTournamnets") {
-          value.forEach((key, value) {
-            activeTournaments.add(key.toString());
+        if (key == "playerTournaments") {
+          for (var i = 0; i < value.length - 1; i++) {
+            value[i + 1].forEach((key, value) {
+              activeTournaments.add(key.toString());
+              var x = 0;
+              value.forEach((key, value) {
+                if (matchNumber == null) {
+                  matchNumber = 1;
+                }
 
-            value.forEach((key, value) {
-              if (matchNumber == null) {
-                matchNumber = 1;
-              } else {
                 matchNumber! + matchNumber! + 1;
-              }
+              });
             });
-          });
+          }
         }
-
-        print(key);
       });
     } else {
       print("no tournament data was detected");
@@ -143,6 +141,7 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _state.whoWon = [];
     getActiveTournaments();
   }
 
@@ -201,10 +200,17 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
         rules: Rules1(ad: widget.ad, matchFormatVariable: widget.matchFormat1),
         surface: surface,
         opponent: widget.opponentName);
-
+    _state.newTournamnet = iconPressedBool;
     if (!iconPressedBool) {
-      //Ad match in existing tournament
+      newTournament = new Tournament(
+          matches: [match], surface: [surface], tournamentName: tournamentName);
+      otherTournamnet = new Tournament(
+          matches: [match], surface: [surface], tournamentName: tournamentName);
 
+      opponentsStats = new Tournament1(
+          matches: [match1],
+          surface: [surface],
+          tournamentName: tournamentName);
     } else {
       newTournament = new Tournament(
           matches: [match], surface: [surface], tournamentName: tournamentName);
@@ -494,17 +500,13 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
       }
     });
 
-    if (borderColor == null) {
-      print("color null");
-    }
+    if (borderColor == null) {}
     return Expanded(
         child: Container(
       height: 68,
       width: 68,
       child: MaterialButton(
           onPressed: () {
-            print(firststatButtonsOnPressedBool[buttonIndex]);
-
             if (firststatButtonsOnPressedBool[buttonIndex]) {
               this.setState(() {
                 firststatButtonsOnPressedBool[buttonIndex] =
@@ -678,8 +680,10 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
       color: Color(0xFF3E3B3B),
       height: 450,
       width: 270,
-      child: Column(
-        children: torunamentsWidget,
+      child: SingleChildScrollView(
+        child: Column(
+          children: torunamentsWidget,
+        ),
       ),
     );
   }
@@ -739,7 +743,17 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
           matchDataPack();
 
           Navigator.push(
-              context, MaterialPageRoute(builder: (_) => NewMatchFirstPage()));
+              context,
+              MaterialPageRoute(
+                  builder: (_) => WhoStartsToserve(
+                      newTournament,
+                      widget.opponentName,
+                      widget.castLiveResults,
+                      widget.matchID,
+                      otherTournamnet,
+                      widget.yourName,
+                      opponentsStats,
+                      false)));
         } else {
           setState(() {
             errorMessageArg = errorMessage();
@@ -770,6 +784,7 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
             if (greenLineWidth != 321) {
               greenLineWidth = greenLineWidth + 107;
             }
+            appState.matchTimeTracker = 0;
             checkForErrorFunction();
           });
         },

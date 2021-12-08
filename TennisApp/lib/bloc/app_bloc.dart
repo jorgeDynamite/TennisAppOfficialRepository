@@ -22,15 +22,21 @@ class AppBloc {
     preferences.setString("lastName", lastName);
     preferences.setString("firstName", firstname);
     if (coach) {
+      _state.coach = preferences.getBool("coach");
       preferences.setString("URLtoCoach",
           "CP_Accounts/" + firstname + lastName + "-" + uid + "/");
+      _state.urlsFromCoach["URLtoCoach"] =
+          _state.coach == true ? preferences.getString("URLtoCoach") : "";
     } else {
+      preferences.setString("activePlayerFirstName", firstname);
+
+      preferences.setString("activePlayerLastName", lastName);
+
+      _state.coach = preferences.getBool("coach");
       preferences.setString("URLtoPlayer",
           "Tennis_Accounts/" + firstname + lastName + "-" + uid + "/");
       preferences.setString("URLtoCoach", "");
-      _state.coach = preferences.getBool("coach");
-      _state.urlsFromCoach["URLtoCoach"] =
-          _state.coach == true ? preferences.getString("URLtoCoach") : "";
+
       _state.email = preferences.getString("email");
       _state.fistName = preferences.getString("firstName");
       _state.lastName = preferences.getString("lastName");
@@ -40,6 +46,8 @@ class AppBloc {
               preferences.getString("URLtoPlayer")
           : "";
       _state.randomUID = preferences.getString("accountRandomUID");
+      _state.urlsFromCoach["URLtoPlayer"] =
+          _state.urlsFromTennisAccounts["URLtoPlayer"];
     }
     return init();
   }
@@ -64,6 +72,7 @@ class AppBloc {
     print(_state.urlsFromCoach["URLtoCoach"]);
     print(_state.urlsFromCoach["URLtoPlayer"]);
     print(_state.urlsFromTennisAccounts["URLtoPlayer"]);
+
     print(_state.fistName);
     print(_state.lastName);
     print(_state.email);

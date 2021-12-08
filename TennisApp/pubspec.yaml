@@ -39,7 +39,7 @@ dependencies:
   firebase_storage: ^10.0.1
   firebase_database: 
   provider: ^6.0.1
-  firebase_auth: ^3.0.2
+  firebase_auth: 
   firebase_core: ^1.4.0
   transparent_image: ^2.0.0
   math_expressions: ^2.0.0

@@ -39,13 +39,12 @@ class LineChartWidget extends StatelessWidget {
         minX: 0,
         maxX: maxX,
         minY: 0,
-        maxY: biggestIndex + 10,
+        maxY: biggestIndex + biggestIndex / 4,
         titlesData: LineTitles.getTitleData(parameters, data),
         gridData: FlGridData(
           show: true,
           horizontalInterval: 6,
           getDrawingHorizontalLine: (value) {
-            print("Horizontal lines" + value.toString());
             return FlLine(
               color: const Color(0xff37434d),
               strokeWidth: 1,

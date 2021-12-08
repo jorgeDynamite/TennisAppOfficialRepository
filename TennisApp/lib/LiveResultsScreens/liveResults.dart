@@ -235,8 +235,8 @@ class _liveResultsPageState extends State<liveResultsPage> {
           }
           if (x == 7) {
             opponentStats = [];
-            opponentStats.add(value[13].toDouble() - 1);
-            opponentStats.add(value[10].toDouble() - 1);
+            opponentStats.add(value[13].toDouble());
+            opponentStats.add(value[10].toDouble());
             opponentStats.add(value[2].toDouble());
             opponentStats.add(value[9].toDouble());
             opponentStats.add(value[0].toDouble() - 1);
@@ -268,22 +268,8 @@ class _liveResultsPageState extends State<liveResultsPage> {
           if (x == 11) {
             yourStats = [];
             this.setState(() {
-              yourStats.add(value[13].toDouble() -
-                  1 +
-                  value[0].toDouble() -
-                  1 +
-                  value[8].toDouble() -
-                  1 +
-                  value[12].toDouble() -
-                  1);
-              yourStats.add(value[10].toDouble() -
-                  1 +
-                  value[1].toDouble() -
-                  1 +
-                  value[7].toDouble() -
-                  1 +
-                  value[11].toDouble() -
-                  1);
+              yourStats.add(value[13].toDouble());
+              yourStats.add(value[10].toDouble());
               yourStats.add(value[2].toDouble());
               yourStats.add(value[9].toDouble());
               yourStats.add(value[0].toDouble() - 1);

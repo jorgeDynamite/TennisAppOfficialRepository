@@ -5,8 +5,10 @@ import 'package:app/Analys/no_analys_data.dart';
 import 'package:app/HomePageStuff/FirstPageChartWindows/pieChartViwe.dart';
 import 'package:app/LiveResultsScreens/CheckMatchID.dart';
 import 'package:app/Players.dart';
+import 'package:app/Shop/soon.dart';
 import 'package:app/SideBarStuff/sideBar/sideBar.dart';
 import 'package:app/LiveResultsScreens/liveResults.dart';
+import 'package:app/bloc/app_state.dart';
 import 'package:app/newMatch/newMatchFirstPage.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -60,7 +62,7 @@ class _HomePageViewState extends State<HomePageView> {
   }
 
   void getActivePlayerData() async {
-    print("Getting the data at homepage");
+    //print("Getting the data at homepage");
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     List<String> activePlayerFirstNameLetters = [];
@@ -76,15 +78,15 @@ class _HomePageViewState extends State<HomePageView> {
       activePlayerlastNameLetters =
           preferences.getString("activePlayerLastName").toString().split("");
       activePlayerlastLetter = activePlayerlastNameLetters[0];
-      print(activePlayerlastLetter);
+      //print(activePlayerlastLetter);
       activePlayerFirstNameLetters =
           preferences.getString("activePlayerFirstName").toString().split("");
 
       activePlayerFirstLetter = activePlayerFirstNameLetters[0];
-      print(activePlayerFirstLetter);
+      //print(activePlayerFirstLetter);
       initials = activePlayerFirstLetter + activePlayerlastLetter;
     });
-    print(activePlayerFirstName);
+    // print(activePlayerFirstName);
     selectedPlayerShow();
   }
 
@@ -110,19 +112,9 @@ class _HomePageViewState extends State<HomePageView> {
         "-" +
         coachuid +
         "/");
-
-    DataSnapshot dataSnapshot = await databaseReference.child(url).once();
-    if (dataSnapshot.value != null) {
-      dataSnapshot.value.forEach((key, value) {
-        List<String> split = key.split("-");
-        print(split);
-
-        if (split[0] == playerFirstName + playerLastName) {
-          playerReference = (url + key + "/");
-          lastMatchData();
-        }
-      });
-    }
+    print("asdasdad" + appState.urlsFromTennisAccounts["URLtoPlayer"]!);
+    playerReference = (appState.urlsFromTennisAccounts["URLtoPlayer"]!);
+    lastMatchData();
   }
 
   void lastMatchData() async {
@@ -132,9 +124,9 @@ class _HomePageViewState extends State<HomePageView> {
         .once();
     if (dataSnapshot.value != null) {
       dataSnapshot.value.forEach((key, value) {
-        print(value);
+        //print(value);
         value.forEach((key, value) {
-          print(value);
+          //print(value);
           if (x == 13) {
             lastMatchDataVariable = [value[10], 0];
             lastMatchDataVariableWinners = [value[13], 0];
@@ -156,15 +148,22 @@ class _HomePageViewState extends State<HomePageView> {
           x++;
         });
       });
+    } else {
+      setState(() {
+        lastGameString = "Exampel";
+        y = false;
+        lastMatchDataVariable = [21, 28, 49];
+        lastMatchDataVariableWinners = [17, 14, 31];
+      });
     }
     DataSnapshot matchRecordSnapshot =
-        await databaseReference.child(playerReference + "/").once();
-    int y = 1;
+        await databaseReference.child(playerReference).once();
+    int f = 1;
     matchRecordSnapshot.value.forEach((key, value) {
       if (key == "matchRecord") {
         value.forEach((key, value) {
-          matchRecord[y] = value;
-          y--;
+          matchRecord[f] = value;
+          f--;
         });
         setState(() {
           recordLineWidth =
@@ -182,6 +181,7 @@ class _HomePageViewState extends State<HomePageView> {
     getActivePlayerData();
 
     setPlayerReference();
+    appState.chartData = lastGameString == "Last Match";
   }
 
   @override
@@ -312,17 +312,12 @@ class _HomePageViewState extends State<HomePageView> {
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onPressed: () {
-                            if (lastGameString == "Last Game") {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => AnalysChartsScreen()));
-                            } else {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => NoAnalysData()));
-                            }
+                            appState.chartData = lastGameString == "Last Match";
+                            appState.playerFirstName = playerFirstName;
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => AnalysChartsScreen()));
                           },
                           child: Container(
                             height: 190,
@@ -394,6 +389,7 @@ class _HomePageViewState extends State<HomePageView> {
                 // Here Starts Second part
                 Row(
                   children: [
+                    /*
                     Expanded(
                       child: Padding(
                         child: MaterialButton(
@@ -465,6 +461,74 @@ class _HomePageViewState extends State<HomePageView> {
                         ),
                         padding: EdgeInsets.fromLTRB(16, 16, 8, 27),
                       ),
+                    ),*/
+                    Expanded(
+                      child: Padding(
+                        child: MaterialButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onPressed: () {},
+                          child: Container(
+                            height: 145,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                              color: Color(0xFF272626),
+                            ),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(20, 19, 0, 0),
+                                  child: Row(children: [
+                                    Image.asset(
+                                      "Style/Pictures/chartwhite.png",
+                                      height: 24,
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                          left: 10,
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Text("Match Packages",
+                                                style: TextStyle(
+                                                    color: Color(0xFF9B9191),
+                                                    fontSize: 12.5,
+                                                    fontFamily:
+                                                        "Telugu Sangam MN",
+                                                    fontWeight:
+                                                        FontWeight.w300)),
+                                          ],
+                                        ))
+                                  ]),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 20, 5, 17),
+                                  child: Text(
+                                    "5 left",
+                                    style: TextStyle(
+                                        fontFamily: "Helvetica",
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 24,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 0,
+                                ),
+                                Text("Click to buy more.",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12.5,
+                                        fontFamily: "Telugu Sangam MN",
+                                        fontWeight: FontWeight.w800)),
+                              ],
+                            ),
+                          ),
+                          padding: EdgeInsets.all(0),
+                        ),
+                        padding: EdgeInsets.fromLTRB(16, 16, 8, 27),
+                      ),
                     ),
                     Expanded(
                       child: Padding(
@@ -497,7 +561,7 @@ class _HomePageViewState extends State<HomePageView> {
                                             Text("Match Record",
                                                 style: TextStyle(
                                                     color: Color(0xFF9B9191),
-                                                    fontSize: 11.5,
+                                                    fontSize: 12.5,
                                                     fontFamily:
                                                         "Telugu Sangam MN",
                                                     fontWeight:
@@ -653,7 +717,12 @@ class _HomePageViewState extends State<HomePageView> {
                             children: [
                               Padding(
                                 child: IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => Soon()));
+                                  },
                                   icon: Image.asset(
                                     "Style/Pictures/shopping-bag.png",
                                     height: 22,
@@ -683,7 +752,8 @@ class _HomePageViewState extends State<HomePageView> {
               ],
             ),
           ]),
-          SideBar(y, getActivePlayerData, selectedPlayerShow, widget.ifCoach),
+          SideBar(y, getActivePlayerData, selectedPlayerShow, widget.ifCoach,
+              setPlayerReference),
         ]));
   }
 }

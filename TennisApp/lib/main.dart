@@ -5,6 +5,7 @@ import 'package:app/LoginPage.dart';
 import 'package:app/SignUp.dart';
 import 'package:app/UnusedStuff/Radera_data.dart';
 import 'package:app/bloc/app_bloc.dart';
+import 'package:app/bloc/app_state.dart';
 import 'package:app/emailVerificationPage.dart';
 import 'package:app/newMatch/newMatchFirstPage.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -43,6 +44,7 @@ class _TennisAppHomePageState extends State<TennisAppHomePage> {
     // TODO: implement initState
 
     _getIfUserLogedIn(context).whenComplete(() async {
+      appState.newActivePlayer = true;
       if (loggedIN) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(

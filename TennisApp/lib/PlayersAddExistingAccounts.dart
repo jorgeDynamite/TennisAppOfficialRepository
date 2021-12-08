@@ -3,6 +3,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:app/HomePageStuff/PopUpPlayers.dart';
+import 'package:app/bloc/app_state.dart';
+import 'package:app/colors.dart';
 import 'package:crypto/crypto.dart';
 import 'package:app/UnusedStuff/Colors.dart';
 import 'package:app/UnusedStuff/ParentCoachMainPage.dart';
@@ -27,6 +29,8 @@ class _AddExistingState extends State<AddExisting> {
   int ter = 0;
   bool loading = false;
   String path = "";
+  appColors colors = appColors();
+  Color borderColor = Colors.white;
 
   void updateAccount(path) {
     String name = nameCController.text;
@@ -48,6 +52,7 @@ class _AddExistingState extends State<AddExisting> {
             if (ter == 1) {
               if (path == "asdads") {
                 this.setState(() {
+                  appState.AddedPlayerToCP = true;
                   Navigator.push(
                       context, MaterialPageRoute(builder: (_) => CPHomePage()));
                 });
@@ -80,7 +85,7 @@ class _AddExistingState extends State<AddExisting> {
                       .push();
                   id.set(accountdata);
                   print("creating Account");
-
+                  appState.AddedPlayerToCP = true;
                   Navigator.push(context,
                       MaterialPageRoute(builder: (_) => popUpPLayers()));
                 });
@@ -88,21 +93,11 @@ class _AddExistingState extends State<AddExisting> {
               ;
             }
             if (t[0] == 0) {
-              if (t[1] == 1) {
+              if (path != "CP_Accounts") {
                 this.setState(() {
-                  _build = errorMessage("wrong password");
-                });
-                _timer = new Timer(const Duration(milliseconds: 3000), () {
-                  this.setState(() {
-                    _build = Row(
-                      children: [Text("")],
-                    );
-                  });
-                });
-              } else {
-                this.setState(() {
-                  _build =
-                      errorMessage("No such email is connected to an account");
+                  borderColor = Colors.red;
+
+                  _build = errorMessage("Wrong info");
                 });
                 _timer = new Timer(const Duration(milliseconds: 3000), () {
                   this.setState(() {
@@ -120,7 +115,7 @@ class _AddExistingState extends State<AddExisting> {
   @override
   void initState() {
     super.initState();
-    updateAccount(path);
+    // updateAccount(path);
   }
 
   Widget _build = Row(
@@ -153,7 +148,7 @@ class _AddExistingState extends State<AddExisting> {
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: colors.backgroundColor,
         body: Container(
           alignment: Alignment.topCenter,
           margin: EdgeInsets.symmetric(horizontal: 30),
@@ -162,27 +157,28 @@ class _AddExistingState extends State<AddExisting> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
+                SizedBox(height: 20),
                 Text(
-                  'Choose existing player to account',
+                  'Add existing player',
                   textAlign: TextAlign.center,
                   style:
                       GoogleFonts.openSans(color: Colors.white, fontSize: 28),
                 ),
                 SizedBox(height: 20),
                 Text(
-                  'Fill in all the inlogging details for the account you want to manage throu your account',
+                  'Fill in the inlogging details for the account you want to be able to manage throu your account. Do this if for exampel your children already have an account.',
                   textAlign: TextAlign.center,
                   style:
-                      GoogleFonts.openSans(color: Colors.white, fontSize: 14),
+                      GoogleFonts.openSans(color: Colors.white, fontSize: 15),
                 ),
                 SizedBox(
                   height: 50,
                 ),
-                _buildTextField(
-                    nameCController, Icons.account_circle, 'Email', false),
+                _buildTextField(nameCController, Icons.account_circle,
+                    'Username / Email', false, borderColor),
                 SizedBox(height: 20),
-                _buildTextField(
-                    passwordController, Icons.lock, 'Password', true),
+                _buildTextField(passwordController, Icons.lock, 'Password',
+                    true, borderColor),
                 SizedBox(height: 40),
                 MaterialButton(
                   shape: RoundedRectangleBorder(
@@ -196,7 +192,7 @@ class _AddExistingState extends State<AddExisting> {
                     });
                     updateAccount("Tennis_Accounts");
                   },
-                  color: Color(0xFF0ADE7C),
+                  color: colors.mainGreen,
                   child: Text('Add Tennis Player',
                       style: TextStyle(color: Colors.white, fontSize: 17)),
                   textColor: Colors.white,
@@ -242,11 +238,12 @@ _buildFooterLogo() {
 }
 
 _buildTextField(TextEditingController controller, IconData icon,
-    String labelText, bool obscure) {
+    String labelText, bool obscure, Color borderColor) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
     decoration: BoxDecoration(
-        color: Color(0xFF272626), border: Border.all(color: Color(0xFF3E3B3B))),
+        color: appColors().cardBlue,
+        border: Border.all(color: borderColor, width: 0.7)),
     child: TextField(
       obscureText: obscure,
       controller: controller,
@@ -270,7 +267,8 @@ _buildTextFieldName(
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
     decoration: BoxDecoration(
-        color: Color(0xFF272626), border: Border.all(color: Color(0xFF3E3B3B))),
+        color: appColors().cardBlue,
+        border: Border.all(color: Colors.white, width: 0.7)),
     child: TextField(
       controller: controller,
       style: TextStyle(color: Colors.white),
