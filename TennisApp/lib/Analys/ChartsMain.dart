@@ -4,6 +4,7 @@ import 'package:app/Analys/pieChart/neumorphic_expenses/pie_chart_card.dart';
 import 'package:app/Players.dart';
 import 'package:app/bloc/app_state.dart';
 import 'package:app/colors.dart';
+
 import 'package:firebase_database/firebase_database.dart';
 
 import 'package:flutter/material.dart';
@@ -200,14 +201,15 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
     List<dynamic> matches = [];
 
     int x = 0;
-    DataSnapshot dataSnapshot = await databaseReference
+    DatabaseEvent dataSnapshot = await databaseReference
         .child(urlTennisPlayer + "playerTournaments")
         .once();
     print(urlTennisPlayer + "playerTournaments");
-    if (dataSnapshot.value != null) {
-      for (var i = 0; i < dataSnapshot.value.length; i++) {
-        // print(dataSnapshot.value);
-        dataSnapshot.value[i].forEach((key, value) {
+    if (dataSnapshot.snapshot.value != null) {
+      dynamic valuesDataSnapshot = dataSnapshot.snapshot.value!;
+      for (var i = 1; i < valuesDataSnapshot.length; i++) {
+        print("Test Nu 1:  " + valuesDataSnapshot[i].toString());
+        valuesDataSnapshot[i].forEach((key, value) {
           // print("key: " + key.toString());
           tournament.add(key);
           //tournamnets
@@ -254,13 +256,15 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
     List<dynamic> matches = [];
 
     int x = 0;
-    DataSnapshot dataSnapshot =
+    DatabaseEvent dataSnapshot =
         await databaseReference.child(urlTennisPlayer + "lastTenGames").once();
     print(urlTennisPlayer + "lastTenGames");
-    if (dataSnapshot.value != null) {
-      // print(dataSnapshot.value);
-      for (var i = 0; i < dataSnapshot.value.length; i++) {
-        dataSnapshot.value[i].forEach((key, value) {
+    if (dataSnapshot.snapshot.value != null) {
+      dynamic valuesDataSnapshot = dataSnapshot.snapshot.value!;
+
+      print(valuesDataSnapshot);
+      for (var i = 1; i < valuesDataSnapshot.length; i++) {
+        valuesDataSnapshot[i].forEach((key, value) {
           x = 0;
           value.forEach((key, value) {
             if (x == 14) {

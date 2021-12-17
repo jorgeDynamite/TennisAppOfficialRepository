@@ -22,9 +22,21 @@ class AppBloc {
     preferences.setString("lastName", lastName);
     preferences.setString("firstName", firstname);
     if (coach) {
+      preferences.setString("URLtoPlayer", "");
       _state.coach = preferences.getBool("coach");
-      preferences.setString("URLtoCoach",
-          "CP_Accounts/" + firstname + lastName + "-" + uid + "/");
+      preferences.setString(
+          "URLtoCoach",
+          "CP_Accounts/" +
+              firstname.split("")[0] +
+              "/" +
+              firstname.split("")[1] +
+              "/" +
+              firstname +
+              "-" +
+              lastName +
+              "-" +
+              uid +
+              "/");
       _state.urlsFromCoach["URLtoCoach"] =
           _state.coach == true ? preferences.getString("URLtoCoach") : "";
     } else {
@@ -33,8 +45,19 @@ class AppBloc {
       preferences.setString("activePlayerLastName", lastName);
 
       _state.coach = preferences.getBool("coach");
-      preferences.setString("URLtoPlayer",
-          "Tennis_Accounts/" + firstname + lastName + "-" + uid + "/");
+      preferences.setString(
+          "URLtoPlayer",
+          "Tennis_Accounts/" +
+              firstname.split("")[0] +
+              "/" +
+              firstname.split("")[1] +
+              "/" +
+              firstname +
+              "-" +
+              lastName +
+              "-" +
+              uid +
+              "/");
       preferences.setString("URLtoCoach", "");
 
       _state.email = preferences.getString("email");

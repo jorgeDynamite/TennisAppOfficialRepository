@@ -6,6 +6,7 @@ import 'package:app/newMatch/newMatchLastPage.dart';
 import 'package:app/newMatch/thePoint/Rally.dart';
 import 'package:app/newMatch/thePoint/RallyServeWon.dart';
 import 'package:app/newMatch/thePoint/Serve.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -106,10 +107,11 @@ class _MatchPanelState extends State<MatchPanel> {
     Colors.transparent
   ];
 
-  double getTournamnetNumber(DataSnapshot dataSnapshot) {
+  double getTournamnetNumber(DatabaseEvent dataSnapshot) {
     double x = 0;
-    if (dataSnapshot.value != null) {
-      dataSnapshot.value[0].forEach((key, value) {
+    if (dataSnapshot.snapshot.value != null) {
+      dynamic values = dataSnapshot.snapshot.value!;
+      values[0].forEach((key, value) {
         x++;
       });
       return x + 1;
@@ -258,15 +260,16 @@ class _MatchPanelState extends State<MatchPanel> {
     urlTennisPlayer = _state.urlsFromTennisAccounts["URLtoPlayer"]!;
     databaseReference.child(url).push();
     whoWonTheMatch();
-    DataSnapshot dataSnapshot =
+    DatabaseEvent dataSnapshot =
         await databaseReference.child(urlTennisPlayer).once();
 
-    DataSnapshot tournamentNumberSnapchot = preferences.getBool("coach")!
+    DatabaseEvent tournamentNumberSnapchot = preferences.getBool("coach")!
         ? await databaseReference.child(url + "playerTournaments/").once()
         : await databaseReference
             .child(urlTennisPlayer + "playerTournaments/")
             .once();
 
+    dynamic valuestournamentNumberSnapchot = dataSnapshot.snapshot.value!;
     if (yourtournament.servePointsPlayed != 0 ||
         yourtournament.recevingPointsPlayed != 0) {
       firstServeprocent = yourtournament.firstServeProcentage != 1
@@ -312,8 +315,9 @@ class _MatchPanelState extends State<MatchPanel> {
 
     int y = 1;
 
-    if (dataSnapshot.value != null) {
-      dataSnapshot.value.forEach((key, value) {
+    if (dataSnapshot.snapshot.value != null) {
+      dynamic valuesDataSnapshot = dataSnapshot.snapshot.value!;
+      valuesDataSnapshot.forEach((key, value) {
         if (key == "matchRecord") {
           x = true;
 
@@ -465,7 +469,7 @@ class _MatchPanelState extends State<MatchPanel> {
           "/";
     } else {
       for (var i = 0; i < 10; i++) {
-        tournamentNumberSnapchot.value[i].forEach((key, value) {
+        valuestournamentNumberSnapchot[i].forEach((key, value) {
           if (widget.tournamentDataPack.tournamentName == key) {
             var matchNumber = 1;
             value.forEach((key, value) {

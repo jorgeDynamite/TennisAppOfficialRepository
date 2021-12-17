@@ -9,7 +9,9 @@ import 'package:app/Shop/soon.dart';
 import 'package:app/SideBarStuff/sideBar/sideBar.dart';
 import 'package:app/LiveResultsScreens/liveResults.dart';
 import 'package:app/bloc/app_state.dart';
+import 'package:app/colors.dart';
 import 'package:app/newMatch/newMatchFirstPage.dart';
+
 import 'package:firebase_database/firebase_database.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -106,12 +108,7 @@ class _HomePageViewState extends State<HomePageView> {
         preferences.getString("activePlayerLastName").toString();
     this.coachfirstName = preferences.getString("firstName").toString();
     this.coachuid = preferences.getString("accountRandomUID").toString();
-    url = ("CP_Accounts/" +
-        coachfirstName +
-        coachlastName +
-        "-" +
-        coachuid +
-        "/");
+
     print("asdasdad" + appState.urlsFromTennisAccounts["URLtoPlayer"]!);
     playerReference = (appState.urlsFromTennisAccounts["URLtoPlayer"]!);
     lastMatchData();
@@ -119,11 +116,13 @@ class _HomePageViewState extends State<HomePageView> {
 
   void lastMatchData() async {
     var x = 0;
-    DataSnapshot dataSnapshot = await databaseReference
+    DatabaseEvent dataSnapshot = await databaseReference
         .child(playerReference + "lastTenGames/1/")
         .once();
-    if (dataSnapshot.value != null) {
-      dataSnapshot.value.forEach((key, value) {
+
+    if (dataSnapshot.snapshot.value != null) {
+      dynamic valuesDataSnapshot = dataSnapshot.snapshot.value!;
+      valuesDataSnapshot.forEach((key, value) {
         //print(value);
         value.forEach((key, value) {
           //print(value);
@@ -156,10 +155,11 @@ class _HomePageViewState extends State<HomePageView> {
         lastMatchDataVariableWinners = [17, 14, 31];
       });
     }
-    DataSnapshot matchRecordSnapshot =
+    DatabaseEvent matchRecordSnapshot =
         await databaseReference.child(playerReference).once();
+    dynamic valuesDataSnapshot = matchRecordSnapshot.snapshot.value!;
     int f = 1;
-    matchRecordSnapshot.value.forEach((key, value) {
+    valuesDataSnapshot.forEach((key, value) {
       if (key == "matchRecord") {
         value.forEach((key, value) {
           matchRecord[f] = value;
@@ -180,14 +180,14 @@ class _HomePageViewState extends State<HomePageView> {
     selectedPlayerShow();
     getActivePlayerData();
 
-    setPlayerReference();
+    //setPlayerReference();
     appState.chartData = lastGameString == "Last Match";
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: appColors().backgroundColor,
         body: Stack(children: [
           Column(children: [
             SizedBox(height: 20),

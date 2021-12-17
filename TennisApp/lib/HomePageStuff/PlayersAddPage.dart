@@ -287,14 +287,38 @@ addAccount(bool Cp, context, Function setState, Function error) {
     mainUserUID = preferences.getString("accountRandomUID").toString();
     final random = new Random();
     final playerNewUid = random.nextInt(10000);
-
+    String url = Cp
+        ? 'CP_Accounts/' +
+            firstNameController.text.split("")[0] +
+            "/" +
+            firstNameController.text.split("")[1] +
+            "/" +
+            firstNameController.text +
+            "-" +
+            lastNameController.text +
+            "-" +
+            playerNewUid.toString() +
+            "/"
+        : 'Tennis_Accounts/' +
+            firstNameController.text.split("")[0] +
+            "/" +
+            firstNameController.text.split("")[1] +
+            "/" +
+            firstNameController.text +
+            "-" +
+            lastNameController.text +
+            "-" +
+            playerNewUid.toString() +
+            "/";
     try {
       user = await _auth.createUserWithEmailAndPassword(
           email: email.trim(), password: password);
+      await user.user!.updateDisplayName(url);
     } on Exception catch (_) {
       try {
         user = await _auth.createUserWithEmailAndPassword(
             email: email.trim() + "@gmail.com", password: password);
+        await user.user!.updateDisplayName(url);
       } on Exception catch (_) {
         emailAlreadyUsed = true;
 
@@ -313,54 +337,19 @@ addAccount(bool Cp, context, Function setState, Function error) {
 
       final databaseReference = FirebaseDatabase.instance.reference();
       var _id = databaseReference
-          .child('Tennis_Accounts/' +
-              firstNameController.text +
-              lastNameController.text +
-              "-" +
-              playerNewUid.toString())
-          .push();
-      databaseReference
-          .child('Tennis_Accounts/' +
-              firstNameController.text +
-              lastNameController.text +
-              "-" +
-              playerNewUid.toString() +
-              "/" +
-              "playerTournaments" +
-              "/")
-          .push()
-          .set(null);
-      _id.set(accountdata);
-      var id = databaseReference
           .child(
-            "CP_Accounts/" +
-                mainUserName +
-                mainUserlastName +
-                "-" +
-                mainUserUID +
-                "/" +
+            appState.urlsFromCoach["URLtoCoach"]! +
                 firstNameController.text +
+                "-" +
                 lastNameController.text +
                 "-" +
-                playerNewUid.toString(),
+                playerNewUid.toString() +
+                "/",
           )
           .push();
-      databaseReference
-          .child('CP_Accounts/' +
-              mainUserName +
-              mainUserlastName +
-              "-" +
-              mainUserUID +
-              "/" +
-              firstNameController.text +
-              lastNameController.text +
-              "-" +
-              playerNewUid.toString() +
-              "/" +
-              "playerTournaments" +
-              "/")
-          .push()
-          .set(null);
+
+      _id.set(accountdata);
+      var id = databaseReference.child(url).push();
 
       id.set(accountdata);
       print("creating Account");

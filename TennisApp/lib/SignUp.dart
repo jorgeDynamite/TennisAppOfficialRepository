@@ -241,38 +241,42 @@ addAccount(bool Cp, context) {
     final random = new Random();
     final uid = random.nextInt(10000);
     String url = Cp
-        ? 'CP_Accounts/'
+        ? 'CP_Accounts/' +
+            firstNameController.text.split("")[0] +
+            "/" +
+            firstNameController.text.split("")[1] +
+            "/" +
+            firstNameController.text +
+            "-" +
+            lastNameController.text +
+            "-" +
+            uid.toString() +
+            "/"
         : 'Tennis_Accounts/' +
             firstNameController.text.split("")[0] +
             "/" +
             firstNameController.text.split("")[1] +
             "/" +
             firstNameController.text +
+            "-" +
             lastNameController.text +
             "-" +
             uid.toString() +
             "/";
     print("Start creating Account");
     try {
-      User user;
-      await _auth
-          .createUserWithEmailAndPassword(
-              email: email.trim(), password: password)
-          .then((value) => print(value.user!.email! + "sadasd"));
-/*
-      await user.user!
-          .updateDisplayName("sdsas")
-          .then((value) => print(user.user!.displayName! + "oooooooooo"));*/
-      print("creating Account");
+      user = (await _auth.createUserWithEmailAndPassword(
+          email: email.trim(), password: password));
+
+      await user.user!.updateDisplayName(url);
+      print("created Account");
     } on Exception catch (_) {
       try {
         user = (await _auth.createUserWithEmailAndPassword(
             email: email.trim() + "@gmail.com", password: password));
-        await user.user!
-            .updateProfile(displayName: "asdsadasd")
-            .whenComplete(() => {print(1)});
-        print(user.user!);
-        print("creating Account");
+        await user.user!.updateDisplayName(url);
+
+        print("created Account");
       } on Exception catch (_) {
         print("not an username");
       }
@@ -295,15 +299,26 @@ addAccount(bool Cp, context) {
     }
 */
     setAccount(email, password, firstNameController, lastNameController,
-        getUser, Cp, uid, context);
+        getUser, Cp, uid, context, url);
     return emailAlreadyUsed;
   }
 
-  getUser(nameController.text, password);
+  getUser(
+    nameController.text,
+    password,
+  );
 }
 
-Future<dynamic> setAccount(String email, String password, firstNameController,
-    lastNameController, Function getUser, Cp, int uid, context) async {
+Future<dynamic> setAccount(
+    String email,
+    String password,
+    firstNameController,
+    lastNameController,
+    Function getUser,
+    Cp,
+    int uid,
+    context,
+    String url) async {
   print("Loging in");
   print("Checking for verification");
   bool mainController;
@@ -327,47 +342,12 @@ Future<dynamic> setAccount(String email, String password, firstNameController,
       firstNameController.text);
 
   SharedPreferences preferences = await SharedPreferences.getInstance();
-  var userNameSpecificator =
-      email.split("")[0] + "/" + email.split("")[1] + "/";
-  var id = databaseReference
-      .child(
-        'CP_Accounts/' +
-            firstNameController.text +
-            lastNameController.text +
-            "-" +
-            uid.toString() +
-            "/",
-      )
-      .push();
-  var _id = databaseReference
-      .child(
-        'Tennis_Accounts/' +
-            firstNameController.text +
-            lastNameController.text +
-            "-" +
-            uid.toString() +
-            "/",
-      )
-      .push();
-  Key keys;
-  if (Cp) {
-    id.set(accountdata);
 
-    print(id.key);
-  } else {
-    databaseReference
-        .child('Tennis_Accounts/' +
-            firstNameController.text +
-            lastNameController.text +
-            "-" +
-            uid.toString() +
-            "/" +
-            "playerTournaments" +
-            "/")
-        .push()
-        .set(null);
-    _id.set(accountdata);
-  }
+  var id = databaseReference.child(url).push();
+
+  Key keys;
+
+  id.set(accountdata);
 
   if (Cp) {
     Navigator.of(context).pushAndRemoveUntil(

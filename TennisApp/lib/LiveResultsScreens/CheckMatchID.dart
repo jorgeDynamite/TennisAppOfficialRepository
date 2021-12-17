@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:app/HomePageStuff/View.dart';
 import 'package:app/Players.dart';
 import 'package:app/newMatch/newMatchSecondPage.dart';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -167,10 +168,11 @@ class _CheckForMatchIDPageState extends State<CheckForMatchIDPage> {
           MaterialButton(
               onPressed: () async {
                 String url = "LiveResults/";
-                DataSnapshot dataSnapshot =
+                DatabaseEvent dataSnapshot =
                     await databaseReference.child(url).once();
-                if (dataSnapshot.value != null) {
-                  dataSnapshot.value.forEach((key, value) {
+                if (dataSnapshot.snapshot.value != null) {
+                  dynamic valuesDataSnapshot = dataSnapshot.snapshot.value!;
+                  valuesDataSnapshot.forEach((key, value) {
                     print(key);
                     if (key == controller.text) {
                       Navigator.push(

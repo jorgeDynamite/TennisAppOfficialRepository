@@ -4,6 +4,7 @@ import 'package:app/bloc/app_state.dart';
 import 'package:app/newMatch/matchPanel.dart';
 import 'package:app/newMatch/newMatchFirstPage.dart';
 import 'package:app/newMatch/thePoint/whoStartsToServe.dart';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -109,12 +110,11 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
 
     String playersFullNameWithoutSpaces = playerFirstName + playerLastName;
     databaseReference.child(url).push();
-    DataSnapshot dataSnapshot = await databaseReference.child(url).once();
+    DatabaseEvent? dataSnapshot = await databaseReference.child(url).once();
 
-    if (dataSnapshot.value != null) {
-      dataSnapshot.value.forEach((key, value) {
-        // When you know you are on the right player
-
+    if (dataSnapshot.snapshot.value != null) {
+      dynamic values = dataSnapshot.snapshot.value!;
+      values.forEach((key, value) {
         if (key == "playerTournaments") {
           for (var i = 0; i < value.length - 1; i++) {
             value[i + 1].forEach((key, value) {

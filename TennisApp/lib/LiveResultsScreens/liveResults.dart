@@ -173,9 +173,10 @@ class _liveResultsPageState extends State<liveResultsPage> {
     int x = 0;
     String url = "";
     url = "LiveResults/" + widget.matchID + "/";
-    DataSnapshot dataSnapshot = await databaseReference.child(url).once();
-    if (dataSnapshot.value != null) {
-      dataSnapshot.value.forEach((key, value) {
+    DatabaseEvent dataSnapshot = await databaseReference.child(url).once();
+    if (dataSnapshot.snapshot.value != null) {
+      dynamic valuesDataSnapshot = dataSnapshot.snapshot.value!;
+      valuesDataSnapshot.forEach((key, value) {
         this.setState(() {
           if (x == 0) {
             firstsetStandings[0] = value[0];

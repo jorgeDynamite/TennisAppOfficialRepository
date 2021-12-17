@@ -176,11 +176,12 @@ class _afterMatchPageState extends State<afterMatchPage> {
   void getMatchData() async {
     int x = 0;
 
-    DataSnapshot dataSnapshot = widget.url != ""
+    DatabaseEvent dataSnapshot = widget.url != ""
         ? await databaseReference.child(widget.url).once()
         : await databaseReference.child(widget.urlTA).once();
-    if (dataSnapshot.value != null) {
-      dataSnapshot.value.forEach((key, value) {
+    if (dataSnapshot.snapshot.value != null) {
+      dynamic valuesDataSnapshot = dataSnapshot.snapshot.value!;
+      valuesDataSnapshot.forEach((key, value) {
         print(key);
         this.setState(() {
           if (x == 0) {

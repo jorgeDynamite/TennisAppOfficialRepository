@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:app/HomePageStuff/PopUpPlayers.dart';
 import 'package:app/bloc/app_state.dart';
 import 'package:app/colors.dart';
+
 import 'package:crypto/crypto.dart';
 import 'package:app/UnusedStuff/Colors.dart';
 import 'package:app/UnusedStuff/ParentCoachMainPage.dart';
@@ -16,6 +17,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'bloc/app_bloc.dart';
 
 final TextEditingController nameCController = TextEditingController();
 final TextEditingController passwordController = TextEditingController();
@@ -45,54 +48,40 @@ class _AddExistingState extends State<AddExisting> {
     List<dynamic> accounts = [];
     bool result = false;
 
-    getAllAccounts(path, name, password).then((value) => {
-          t = value[0],
+    newAccountChecker(path, name, password).then((value) => {
           this.setState(() {
-            this.ter = t[0];
-            if (ter == 1) {
-              if (path == "asdads") {
-                this.setState(() {
-                  appState.AddedPlayerToCP = true;
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => CPHomePage()));
-                });
-              } else {
-                this.setState(() {
-                  Map<String, dynamic> accountdata = {
-                    "firstName": value[1],
-                    "lastName": value[2],
-                    "email": name,
-                    "password":
-                        sha256.convert(utf8.encode(password)).toString(),
-                    "mainController": false,
-                  };
+            t[0];
+            if (t[0] == true) {
+              this.setState(() {
+                Map<String, dynamic> accountdata = {
+                  "firstName": value[1],
+                  "lastName": value[2],
+                  "email": name,
+                  "password": sha256.convert(utf8.encode(password)).toString(),
+                  "mainController": false,
+                  "urlUid": value[3],
+                };
 
-                  final databaseReference =
-                      FirebaseDatabase.instance.reference();
-                  var id = databaseReference
-                      .child(
-                        "CP_Accounts/" +
-                            value[3] +
-                            value[4] +
-                            "-" +
-                            value[5] +
-                            "/" +
-                            value[1] +
-                            value[2] +
-                            "-" +
-                            value[5],
-                      )
-                      .push();
-                  id.set(accountdata);
-                  print("creating Account");
-                  appState.AddedPlayerToCP = true;
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => popUpPLayers()));
-                });
-              }
-              ;
+                final databaseReference = FirebaseDatabase.instance.reference();
+
+                var id = databaseReference
+                    .child(appState.urlsFromCoach["URLtoCoach"]! +
+                        value[1] +
+                        "-" +
+                        value[2] +
+                        "-" +
+                        value[3] +
+                        "/")
+                    .push();
+                id.set(accountdata);
+
+                print("creating Account");
+                appState.AddedPlayerToCP = true;
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => popUpPLayers()));
+              });
             }
-            if (t[0] == 0) {
+            if (t[0] == false) {
               if (path != "CP_Accounts") {
                 this.setState(() {
                   borderColor = Colors.red;
@@ -287,6 +276,51 @@ _buildTextFieldName(
 // ignore: camel_case_types
 }
 
+Future<List> newAccountChecker(
+    String path, String email, String passwords) async {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  UserCredential? user;
+  String? firstname;
+  List<String> split;
+  String? lastname;
+  String? uid;
+  bool coach;
+
+  bool x = true;
+  try {
+    user = (await _auth.signInWithEmailAndPassword(
+        email: email.trim(), password: email));
+  } on Exception catch (_) {
+    try {
+      user = (await _auth.createUserWithEmailAndPassword(
+          email: email.trim() + "@gmail.com", password: passwords));
+    } on Exception catch (_) {
+      x = false;
+    }
+  }
+  if (x) {
+    split = user!.user!.displayName!.split("/");
+    firstname = split[3].split("-")[0];
+    lastname = split[3].split("-")[1];
+    uid = split[3].split("-")[2];
+
+    app.initSet(
+      split[0] == "CP_Accounts",
+      uid,
+      email,
+      firstname,
+      lastname,
+    );
+  }
+  return [
+    x,
+    firstname,
+    lastname,
+    email,
+    uid,
+  ];
+}
+
 Future<List> getAllAccounts(String path, String name, String passwords) async {
   bool results = false;
   List<int> t = [0, 0];
@@ -297,7 +331,9 @@ Future<List> getAllAccounts(String path, String name, String passwords) async {
   print("going");
   print(passwords);
   var password = sha256.convert(utf8.encode(passwords)).toString();
-  DataSnapshot dataSnapshot = await databaseReference.child(path).once();
+  //DatabaseEvent dataSnapshot = await databaseReference.child(path).once();
+  DatabaseEvent? dataSnapshot = await databaseReference.child(path).once();
+
   List<dynamic> accounts = [];
   bool result = false;
   String firstName = "";
@@ -309,9 +345,10 @@ Future<List> getAllAccounts(String path, String name, String passwords) async {
   print("CoachUserAccount Details");
 
   if (path == "asdasda") {
-    if (dataSnapshot.value != null) {
-      dataSnapshot.value.forEach((key, value) {
-        dataSnapshot.value.forEach((key, value) {
+    if (dataSnapshot.snapshot.value != null) {
+      dynamic values = dataSnapshot.snapshot.value!;
+      values.forEach((key, value) {
+        values.forEach((key, value) {
           value.forEach((key, value) {
             dynamic account = value;
             accounts.add(account);
@@ -321,8 +358,9 @@ Future<List> getAllAccounts(String path, String name, String passwords) async {
       });
     }
   } else {
-    if (dataSnapshot.value != null) {
-      dataSnapshot.value.forEach((key, value) {
+    if (dataSnapshot.snapshot.value != null) {
+      dynamic values = dataSnapshot.snapshot.value!;
+      values.forEach((key, value) {
         value.forEach((key, value) {
           dynamic account = value;
           accounts.add(account);

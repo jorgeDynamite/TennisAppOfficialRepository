@@ -34,13 +34,13 @@ dependencies:
   google_fonts: 
    
     
- 
+  
   cloud_firestore: ^2.4.0
   firebase_storage: ^10.0.1
-  firebase_database: 
+  firebase_database:
   provider: ^6.0.1
   firebase_auth: 
-  firebase_core: ^1.4.0
+  firebase_core: ^1.10.5
   transparent_image: ^2.0.0
   math_expressions: ^2.0.0
   flutter_bloc: 

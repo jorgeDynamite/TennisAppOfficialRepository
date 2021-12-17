@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:app/HomePageStuff/PopUpPlayers.dart';
 import 'package:app/HomePageStuff/View.dart';
 import 'package:app/bloc/app_bloc.dart';
@@ -38,10 +39,9 @@ class _LoginScreenState extends State<LoginScreen> {
     String password = passwordController.text;
     Timer _timer;
 
-    getAllAccounts(path, name, password).then((t) => {
+    newAccountChecker(path, name, password).then((boolean) => {
           this.setState(() {
-            this.ter = t[0][0];
-            if (ter == 1) {
+            if (boolean) {
               if (path == "CP_Accounts") {
                 appState.newActivePlayer = true;
                 Navigator.of(context).pushAndRemoveUntil(
@@ -60,8 +60,8 @@ class _LoginScreenState extends State<LoginScreen> {
               }
               ;
             }
-            if (t[0][0] == 0) {
-              /*
+
+            /*
               if (t[0][1] == 1) {
                 this.setState(() {
                   _build = errorMessage("wrong password");
@@ -86,20 +86,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   });
                 });
               }*/
-              if (path != "CP_Accounts") {
-                this.setState(() {
-                  borderColor = Colors.red;
+            if (path != "CP_Accounts") {
+              this.setState(() {
+                borderColor = Colors.red;
 
-                  _build = errorMessage("Wrong info");
+                _build = errorMessage("Wrong info");
+              });
+              _timer = new Timer(const Duration(milliseconds: 3000), () {
+                this.setState(() {
+                  _build = Row(children: [
+                    Text(""),
+                  ]);
                 });
-                _timer = new Timer(const Duration(milliseconds: 3000), () {
-                  this.setState(() {
-                    _build = Row(children: [
-                      Text(""),
-                    ]);
-                  });
-                });
-              }
+              });
             }
           }),
         });
@@ -298,6 +297,45 @@ _buildTextField(TextEditingController controller, IconData icon,
 
 // ignore: camel_case_types
 
+Future<bool> newAccountChecker(
+    String path, String email, String passwords) async {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  UserCredential? user;
+  String firstname;
+  List<String> split;
+  String lastname;
+  String uid;
+  bool coach;
+
+  bool x = true;
+  try {
+    user = (await _auth.signInWithEmailAndPassword(
+        email: email.trim(), password: email));
+  } on Exception catch (_) {
+    try {
+      user = (await _auth.createUserWithEmailAndPassword(
+          email: email.trim() + "@gmail.com", password: passwords));
+    } on Exception catch (_) {
+      x = false;
+    }
+  }
+  if (x) {
+    split = user!.user!.displayName!.split("/");
+    firstname = split[3].split("-")[0];
+    lastname = split[3].split("-")[1];
+    uid = split[3].split("-")[2];
+
+    app.initSet(
+      split[0] == "CP_Accounts",
+      uid,
+      email,
+      firstname,
+      lastname,
+    );
+  }
+  return x;
+}
+
 Future<List<dynamic>> getAllAccounts(
     String path, String name, String passwords) async {
   bool results = false;
@@ -318,13 +356,16 @@ Future<List<dynamic>> getAllAccounts(
   print("going");
   print(passwords);
   var password = sha256.convert(utf8.encode(passwords)).toString();
-  DataSnapshot dataSnapshot = await databaseReference.child(path).once();
+  DatabaseEvent? dataSnapshot = await databaseReference.child(path).once();
   List<dynamic> accounts = [];
   bool result = false;
   int x = 0;
+  dynamic values = dataSnapshot.snapshot.value!;
 
-  if (dataSnapshot.value != null) {
-    dataSnapshot.value.forEach((key, value) {
+  if (dataSnapshot.snapshot.value != null) {
+    dynamic values = dataSnapshot.snapshot.value!;
+
+    values.forEach((key, value) {
       x = 0;
 
       value.forEach((key, value) {

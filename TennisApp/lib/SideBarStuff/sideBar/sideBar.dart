@@ -35,7 +35,6 @@ class SideBar extends StatefulWidget {
 
 class _SideBarState extends State<SideBar>
     with SingleTickerProviderStateMixin<SideBar> {
-  final AppState _state = appState;
   appColors colors = appColors();
   bool? coach;
   bool loggedIN = true;
@@ -104,7 +103,7 @@ class _SideBarState extends State<SideBar>
           SizedBox(height: 40),
           MenuItem(
             onTap: () {
-              _state.AddedPlayerToCP = true;
+              appState.AddedPlayerToCP = true;
               Navigator.push(
                   context, MaterialPageRoute(builder: (_) => popUpPLayers()));
             },
@@ -127,6 +126,7 @@ class _SideBarState extends State<SideBar>
     print("run intisState");
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
+
     this.lastName = initAtributes[3];
     this.email = initAtributes[1];
     this.firstName = initAtributes[2];
@@ -134,7 +134,7 @@ class _SideBarState extends State<SideBar>
     if (coach!) {
       String uid = initAtributes[4];
       int? activePlayerIndex;
-      if (_state.newActivePlayer == false) {
+      if (appState.newActivePlayer == false) {
         print("asdassadasdasdd");
         activePlayerIndex = preferences.getInt("activePlayerIndex");
       } else {
@@ -144,11 +144,15 @@ class _SideBarState extends State<SideBar>
 
       final databaseReference = FirebaseDatabase.instance.reference();
 
-      DataSnapshot dataSnapshot =
+      //DataSnapshot dataSnapshot =
+      //   await databaseReference.child(initAtributes[5]["URLtoCoach"]).once();
+      DatabaseEvent? dataSnapshot =
           await databaseReference.child(initAtributes[5]["URLtoCoach"]).once();
+
       //print(_state.urlsFromCoach["URLtoCoach"]! + "dsadasdsadasds");
-      if (dataSnapshot.value != null) {
-        dataSnapshot.value.forEach((key, value) {
+      if (dataSnapshot.snapshot.value != null) {
+        dynamic values = dataSnapshot.snapshot.value!;
+        values.forEach((key, value) {
           playerKey = key;
           playerKeys.add(key);
           if (playerKey[0] != "-") {
@@ -162,13 +166,19 @@ class _SideBarState extends State<SideBar>
                 String lastNamePlayer = value["lastName"];
                 String emailPlayer = value["email"];
                 String passwordPlayer = value["password"];
-                _state.urlsFromTennisAccounts["URLtoPlayer"] =
-                    "Tennis_Accounts/" + playerKey + "/";
-                _state.urlsFromCoach["URLtoPlayer"] =
-                    _state.urlsFromCoach["URLtoCoach"]! + playerKey + "/";
+                appState.urlsFromTennisAccounts["URLtoPlayer"] =
+                    "Tennis_Accounts/" +
+                        playerKey.split("")[0] +
+                        "/" +
+                        playerKey.split("")[1] +
+                        "/" +
+                        playerKey +
+                        "/";
+                appState.urlsFromCoach["URLtoPlayer"] =
+                    appState.urlsFromCoach["URLtoCoach"]! + playerKey + "/";
 
-                print(_state.urlsFromTennisAccounts["URLtoPlayer"]);
-                print(_state.urlsFromCoach["URLtoPlayer"]);
+                print(appState.urlsFromTennisAccounts["URLtoPlayer"]);
+                print(appState.urlsFromCoach["URLtoPlayer"]);
                 print(firstNamePlayer);
                 players.add(
                   Player(
@@ -313,15 +323,19 @@ class _SideBarState extends State<SideBar>
     preferences.setString("activePlayerLastName", lastName);
     preferences.setInt("activePlayerIndex", index);
     widget.sendInitials();
-    appState.urlsFromTennisAccounts["URLtoPlayer"] =
-        "Tennis_Accounts/" + playerKey + "/";
-    _state.urlsFromTennisAccounts["URLtoPlayer"] =
-        "Tennis_Accounts/" + playerKey + "/";
+    appState.urlsFromTennisAccounts["URLtoPlayer"] = "Tennis_Accounts/" +
+        playerKey.split("")[0] +
+        "/" +
+        playerKey.split("")[1] +
+        "/" +
+        playerKey +
+        "/";
+
     if (preferences.getBool("coach")!) {
-      _state.urlsFromCoach["URLtoPlayer"] =
-          _state.urlsFromCoach["URLtoCoach"]! + playerKey + "/";
+      appState.urlsFromCoach["URLtoPlayer"] =
+          appState.urlsFromCoach["URLtoCoach"]! + playerKey + "/";
     }
-    print(_state.urlsFromTennisAccounts["URLtoPlayer"]);
+    print(appState.urlsFromTennisAccounts["URLtoPlayer"]);
     widget.setPlayerReference();
     print("Ending the first SetactivePlayerFunction ");
   }
@@ -329,7 +343,7 @@ class _SideBarState extends State<SideBar>
   @override
   void initState() {
     super.initState();
-
+    coach = true;
     _animationController =
         AnimationController(vsync: this, duration: _animationDuration);
 
@@ -393,7 +407,7 @@ class _SideBarState extends State<SideBar>
               Expanded(
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  color: colors.backgroundColor, //const Color(0xFF262AAA),
+                  color: Color(0xFF12161F), //const Color(0xFF262AAA),
                   child: Column(
                     children: <Widget>[
                       SizedBox(
@@ -432,7 +446,11 @@ class _SideBarState extends State<SideBar>
                       ),
                       selectedPlayersHeadLine(coach ?? false),
                       SizedBox(
-                        height: coach! ? 0 : 450,
+                        height: coach != null
+                            ? coach!
+                                ? 0
+                                : 450
+                            : 0,
                       ),
                       MenuItem(
                         onTap: () {
