@@ -1,4 +1,5 @@
 import 'package:app/HomePageStuff/FirstPageChartWindows/pie_chart.dart';
+import 'package:app/colors.dart';
 import 'package:flutter/material.dart';
 
 class PieChartView extends StatelessWidget {
@@ -14,8 +15,22 @@ class PieChartView extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraint) => Container(
           decoration: BoxDecoration(
-            color: Color(0xFF272626),
+            color: appColors().cardBlue, //Color(0xFF272626),
             shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                spreadRadius: -15,
+                blurRadius: 17,
+                offset: Offset(-10, -5),
+                color: Colors.white,
+              ),
+              BoxShadow(
+                spreadRadius: -10,
+                blurRadius: 10,
+                offset: Offset(7, 7),
+                color: Color.fromRGBO(146, 182, 216, 1),
+              )
+            ],
           ),
           child: Stack(
             children: [
@@ -41,7 +56,7 @@ class PieChartView extends StatelessWidget {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        blurRadius: 1,
+                        blurRadius: 0,
                         offset: Offset(-1, -1),
                         color: Colors.white,
                       ),

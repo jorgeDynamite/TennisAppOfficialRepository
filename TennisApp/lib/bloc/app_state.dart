@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class AppState {
   bool? coach;
   bool? loggedIn;
@@ -14,6 +16,9 @@ class AppState {
   bool? newActivePlayer;
   int? minuts;
   int? hours;
+  Color? navigationColor1;
+  Color? navigationColor2;
+  Color? navigationColor3;
   Map<String, String?> urlsFromCoach = {
     "URLtoCoach": "",
     "URLtoPlayer": "",

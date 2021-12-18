@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:app/HomePageStuff/FirstPageChartWindows/UnforcedErrors.dart';
+import 'package:app/colors.dart';
 import 'package:flutter/material.dart';
 
 class PieChart extends CustomPainter {
@@ -105,7 +106,7 @@ class cate {
   List<Color> kNeumorphicColors() {
     final kNeumorphicColors = [
       Color(0xFF089BF7), //  rgb(82, 98, 255)
-      Color(0xFF3E3B3B), // rgb(46, 198, 255)
+      appColors().backgroundColor //Color(0xFF3E3B3B), // rgb(46, 198, 255)
     ];
     return kNeumorphicColors;
   }

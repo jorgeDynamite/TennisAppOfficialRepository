@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../colors.dart';
 import 'categories_row.dart';
 import 'pieChartViwe.dart';
 
@@ -75,7 +76,7 @@ Widget UnforcedErrorWindowFunction(
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(20)),
-                      color: Color(0xFF272626),
+                      color: appColors().cardBlue, // Color(0xFF272626),
                     ),
                     height: 313,
                     width: 335,
@@ -88,7 +89,7 @@ Widget UnforcedErrorWindowFunction(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               SizedBox(
-                                height: height * 0.23,
+                                height: height * 0.21,
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 25.0),
@@ -204,7 +205,8 @@ Widget UnforcedErrorWindowFunction(
                     style: TextStyle(color: Color(0xFF0ADE7C), fontSize: 17),
                   ),
                   CircleAvatar(
-                    backgroundColor: Color(0xFF3E3B3B),
+                    backgroundColor:
+                        appColors().backgroundColor, // Color(0xFF3E3B3B),
                     child: Text(
                       initials.toUpperCase(),
                       style: TextStyle(

@@ -5,6 +5,7 @@ import 'package:app/Analys/no_analys_data.dart';
 import 'package:app/HomePageStuff/FirstPageChartWindows/pieChartViwe.dart';
 import 'package:app/LiveResultsScreens/CheckMatchID.dart';
 import 'package:app/Players.dart';
+import 'package:app/RandomWidgets/navigation_bar.dart';
 import 'package:app/Shop/soon.dart';
 import 'package:app/SideBarStuff/sideBar/sideBar.dart';
 import 'package:app/LiveResultsScreens/liveResults.dart';
@@ -187,7 +188,7 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: appColors().backgroundColor,
+        backgroundColor: Color(0xFF12161F),
         body: Stack(children: [
           Column(children: [
             SizedBox(height: 20),
@@ -236,152 +237,173 @@ class _HomePageViewState extends State<HomePageView> {
                   children: [
                     Expanded(
                       child: Padding(
-                        child: MaterialButton(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => CheckForMatchIDPage()));
-                          },
-                          child: Container(
-                            height: 190,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              color: Color(0xFF0ADE7C),
-                            ),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(20, 19, 0, 0),
-                                  child: Row(children: [
-                                    Image.asset(
-                                      "Style/Pictures/TennisBall.png",
-                                      height: 24,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        left: 10,
-                                      ),
-                                      child: Text("Live Results",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12.5,
-                                              fontFamily: "Telugu Sangam MN",
-                                              fontWeight: FontWeight.w600)),
-                                    )
-                                  ]),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(22, 28, 10, 0),
-                                  child: Text(
-                                    "Live Rapport",
-                                    style: TextStyle(
-                                        fontFamily: "Helvetica",
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 26,
-                                        color: Colors.white),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(22, 10, 10, 0),
-                                  child: Column(
-                                    children: [
-                                      Text("Follow your students match live",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 11.5,
-                                              fontFamily: "Telugu Sangam MN",
-                                              fontWeight: FontWeight.w600)),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
+                        child: Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          padding: EdgeInsets.all(0),
+                          color: appColors().backgroundColor,
+                          shadowColor: Colors.black,
+                          child: MaterialButton(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => CheckForMatchIDPage()));
+                            },
+                            child: Container(
+                              height: 190,
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                  color:
+                                      appColors().mainGreen //Color(0xFF0ADE7C),
+                                  ),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(20, 19, 0, 0),
+                                    child: Row(children: [
+                                      Image.asset(
+                                        "Style/Pictures/TennisBall.png",
+                                        height: 24,
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          left: 10,
+                                        ),
+                                        child: Text("Live Results",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12.5,
+                                                fontFamily: "Telugu Sangam MN",
+                                                fontWeight: FontWeight.w600)),
+                                      )
+                                    ]),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(22, 28, 10, 0),
+                                    child: Text(
+                                      "Live Rapport",
+                                      style: TextStyle(
+                                          fontFamily: "Helvetica",
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 26,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(22, 10, 10, 0),
+                                    child: Column(
+                                      children: [
+                                        Text("Follow your students match live",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 11.5,
+                                                fontFamily: "Telugu Sangam MN",
+                                                fontWeight: FontWeight.w600)),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            padding: EdgeInsets.all(0),
+                          ),
                         ),
-                        padding: EdgeInsets.fromLTRB(16, 18, 8, 0),
+                        padding: EdgeInsets.fromLTRB(12, 18, 4, 0),
                       ),
                     ),
                     Expanded(
                       child: Padding(
-                        child: MaterialButton(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onPressed: () {
-                            appState.chartData = lastGameString == "Last Match";
-                            appState.playerFirstName = playerFirstName;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => AnalysChartsScreen()));
-                          },
-                          child: Container(
-                            height: 190,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              color: Color(0xFF272626),
-                            ),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(20, 15, 0, 0),
-                                  child: Row(children: [
-                                    Image.asset(
-                                      "Style/Pictures/chartgreen.png",
-                                      height: 28,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        left: 10,
-                                      ),
-                                      child: Text("Tennis Analytics",
-                                          style: TextStyle(
-                                              color: Color(0xFF9B9191),
-                                              fontSize: 11.5,
-                                              fontFamily: "Telugu Sangam MN",
-                                              fontWeight: FontWeight.w200)),
-                                    )
-                                  ]),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 38, 25, 0),
-                                  child: Text(
-                                    "Analys",
-                                    style: TextStyle(
-                                        fontFamily: "Helvetica",
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 26,
-                                        color: Colors.white),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(22, 25, 10, 0),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                          "View " +
-                                              activePlayerFirstName +
-                                              "'s" +
-                                              " tracked analytics",
-                                          style: TextStyle(
-                                              color: Color(0xFF9B9191),
-                                              fontSize: 11.5,
-                                              fontFamily: "Telugu Sangam MN",
-                                              fontWeight: FontWeight.w200)),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
+                        child: Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          padding: EdgeInsets.all(0),
+                          color: appColors().backgroundColor,
+                          shadowColor: Colors.black,
+                          child: MaterialButton(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onPressed: () {
+                              appState.chartData =
+                                  lastGameString == "Last Match";
+                              appState.playerFirstName = playerFirstName;
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => AnalysChartsScreen()));
+                            },
+                            child: Container(
+                              height: 190,
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                  color:
+                                      appColors().cardBlue //Color(0xFF272626),
+                                  ),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(20, 15, 0, 0),
+                                    child: Row(children: [
+                                      Image.asset(
+                                        "Style/Pictures/chartgreen.png",
+                                        height: 28,
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          left: 10,
+                                        ),
+                                        child: Text("Tennis Analytics",
+                                            style: TextStyle(
+                                                color: Colors
+                                                    .white, //Color(0xFF9B9191),
+                                                fontSize: 11.5,
+                                                fontFamily: "Telugu Sangam MN",
+                                                fontWeight: FontWeight.w200)),
+                                      )
+                                    ]),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 38, 25, 0),
+                                    child: Text(
+                                      "Analys",
+                                      style: TextStyle(
+                                          fontFamily: "Helvetica",
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 26,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(22, 25, 10, 0),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                            "View " +
+                                                activePlayerFirstName +
+                                                "'s" +
+                                                " tracked analytics",
+                                            style: TextStyle(
+                                                color: Colors
+                                                    .white, //Color(0xFF9B9191),
+                                                fontSize: 11.5,
+                                                fontFamily: "Telugu Sangam MN",
+                                                fontWeight: FontWeight.w200)),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            padding: EdgeInsets.all(0),
+                          ),
                         ),
-                        padding: EdgeInsets.fromLTRB(8, 18, 16, 0),
+                        padding: EdgeInsets.fromLTRB(4, 18, 12, 0),
                       ),
                     ),
                   ],
@@ -464,291 +486,193 @@ class _HomePageViewState extends State<HomePageView> {
                     ),*/
                     Expanded(
                       child: Padding(
-                        child: MaterialButton(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onPressed: () {},
-                          child: Container(
-                            height: 145,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              color: Color(0xFF272626),
-                            ),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(20, 19, 0, 0),
-                                  child: Row(children: [
-                                    Image.asset(
-                                      "Style/Pictures/chartwhite.png",
-                                      height: 24,
-                                    ),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                          left: 10,
-                                        ),
-                                        child: Column(
-                                          children: [
-                                            Text("Match Packages",
-                                                style: TextStyle(
-                                                    color: Color(0xFF9B9191),
-                                                    fontSize: 12.5,
-                                                    fontFamily:
-                                                        "Telugu Sangam MN",
-                                                    fontWeight:
-                                                        FontWeight.w300)),
-                                          ],
-                                        ))
-                                  ]),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 20, 5, 17),
-                                  child: Text(
-                                    "5 left",
-                                    style: TextStyle(
-                                        fontFamily: "Helvetica",
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 24,
-                                        color: Colors.white),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 0,
-                                ),
-                                Text("Click to buy more.",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12.5,
-                                        fontFamily: "Telugu Sangam MN",
-                                        fontWeight: FontWeight.w800)),
-                              ],
-                            ),
+                        child: Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          padding: EdgeInsets.all(0),
+                          color: appColors().backgroundColor,
+                          shadowColor: Colors.black,
+                          child: MaterialButton(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onPressed: () {},
+                            child: Container(
+                              height: 145,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                                color:
+                                    appColors().cardBlue, //Color(0xFF272626),
+                              ),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(20, 19, 0, 0),
+                                    child: Row(children: [
+                                      Image.asset(
+                                        "Style/Pictures/chartwhite.png",
+                                        height: 24,
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                            left: 10,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Text("Match Packages",
+                                                  style: TextStyle(
+                                                      color: Colors
+                                                          .white, //Color(0xFF9B9191),
+                                                      fontSize: 12.5,
+                                                      fontFamily:
+                                                          "Telugu Sangam MN",
+                                                      fontWeight:
+                                                          FontWeight.w300)),
+                                            ],
+                                          ))
+                                    ]),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 20, 5, 17),
+                                    child: Text(
+                                      "5 left",
+                                      style: TextStyle(
+                                          fontFamily: "Helvetica",
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 0,
+                                  ),
+                                  Text("Click to buy more.",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12.5,
+                                          fontFamily: "Telugu Sangam MN",
+                                          fontWeight: FontWeight.w800)),
+                                ],
+                              ),
+                            ),
+                            padding: EdgeInsets.all(0),
+                          ),
                         ),
-                        padding: EdgeInsets.fromLTRB(16, 16, 8, 27),
+                        padding: EdgeInsets.fromLTRB(12, 8, 4, 0),
                       ),
                     ),
                     Expanded(
                       child: Padding(
-                        child: MaterialButton(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onPressed: () {},
-                          child: Container(
-                            height: 145,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              color: Color(0xFF272626),
-                            ),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(20, 19, 0, 0),
-                                  child: Row(children: [
-                                    Image.asset(
-                                      "Style/Pictures/chartwhite.png",
-                                      height: 24,
-                                    ),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                          left: 10,
-                                        ),
-                                        child: Column(
-                                          children: [
-                                            Text("Match Record",
-                                                style: TextStyle(
-                                                    color: Color(0xFF9B9191),
-                                                    fontSize: 12.5,
-                                                    fontFamily:
-                                                        "Telugu Sangam MN",
-                                                    fontWeight:
-                                                        FontWeight.w200)),
-                                          ],
-                                        ))
-                                  ]),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 20, 5, 17),
-                                  child: Text(
-                                    matchRecord[0].toString() +
-                                        " - " +
-                                        matchRecord[1].toString(),
-                                    style: TextStyle(
-                                        fontFamily: "Helvetica",
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 30,
-                                        color: Colors.white),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Padding(
-                                    padding: EdgeInsets.only(
-                                      right: 0,
-                                    ),
-                                    child: Stack(children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                          color: Color(0xFF9B9191),
-                                        ),
-                                        height: 6,
-                                        width: 115,
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                          gradient: LinearGradient(
-                                            colors: [
-                                              Color(0xFF6302C1),
-                                              Color(0xFF00FFF5)
-                                            ],
-                                          ),
-                                        ),
-                                        height: 6,
-                                        width: recordLineWidth,
-                                      ),
-                                    ]))
-                              ],
-                            ),
+                        child: Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          padding: EdgeInsets.all(0),
+                          color: appColors().backgroundColor,
+                          shadowColor: Colors.black,
+                          child: MaterialButton(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onPressed: () {},
+                            child: Container(
+                              height: 145,
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                  color:
+                                      appColors().cardBlue // Color(0xFF272626),
+                                  ),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(20, 19, 0, 0),
+                                    child: Row(children: [
+                                      Image.asset(
+                                        "Style/Pictures/chartwhite.png",
+                                        height: 24,
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                            left: 10,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Text("Match Record",
+                                                  style: TextStyle(
+                                                      color: Colors
+                                                          .white, // Color(0xFF9B9191),
+                                                      fontSize: 12.5,
+                                                      fontFamily:
+                                                          "Telugu Sangam MN",
+                                                      fontWeight:
+                                                          FontWeight.w200)),
+                                            ],
+                                          ))
+                                    ]),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 20, 5, 17),
+                                    child: Text(
+                                      matchRecord[0].toString() +
+                                          " - " +
+                                          matchRecord[1].toString(),
+                                      style: TextStyle(
+                                          fontFamily: "Helvetica",
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 30,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                        right: 0,
+                                      ),
+                                      child: Stack(children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                            color: Colors
+                                                .white, // Color(0xFF9B9191),
+                                          ),
+                                          height: 6,
+                                          width: 115,
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Color(0xFF6302C1),
+                                                Color(0xFF00FFF5)
+                                              ],
+                                            ),
+                                          ),
+                                          height: 6,
+                                          width: recordLineWidth,
+                                        ),
+                                      ]))
+                                ],
+                              ),
+                            ),
+                            padding: EdgeInsets.all(0),
+                          ),
                         ),
-                        padding: EdgeInsets.fromLTRB(8, 16, 16, 27),
+                        padding: EdgeInsets.fromLTRB(4, 8, 12, 0),
                       ),
                     ),
                   ],
                 ),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Stack(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          color: Color(0xFF272626),
-                        ),
-                        height: 54,
-                        width: 338,
-                      ),
-                      Padding(
-                        child: Column(children: [
-                          Stack(
-                            children: [
-                              Padding(
-                                child: IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.home_rounded,
-                                    color: Color(0xFF0ADE7C),
-                                  ),
-                                  iconSize: 27,
-                                ),
-                                padding: EdgeInsets.only(
-                                  top: 1,
-                                ),
-                              ),
-                              Padding(
-                                child: Text(
-                                  "Home",
-                                  style: TextStyle(
-                                      color: Color(0xFF0ADE7C), fontSize: 9),
-                                ),
-                                padding: EdgeInsets.only(top: 37, left: 11),
-                              )
-                            ],
-                          )
-                        ]),
-                        padding: EdgeInsets.only(left: 40, bottom: 28),
-                      ),
-                      Padding(
-                        child: Column(children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Stack(
-                                children: [
-                                  Padding(
-                                    child: IconButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (_) =>
-                                                    NewMatchFirstPage()));
-                                      },
-                                      icon: Image.asset(
-                                        "Style/Pictures/addButtonGreyReal.png",
-                                        height: 22,
-                                      ),
-                                      iconSize: 22,
-                                    ),
-                                    padding: EdgeInsets.only(
-                                      bottom: 1,
-                                      left: 20,
-                                    ),
-                                  ),
-                                  Padding(
-                                      child: Text(
-                                        "Play new Match",
-                                        style: TextStyle(
-                                            color: Color(0xFF9B9191),
-                                            fontSize: 9),
-                                      ),
-                                      padding: EdgeInsets.only(
-                                        top: 38,
-                                        left: 12,
-                                      ))
-                                ],
-                              ),
-                            ],
-                          )
-                        ]),
-                        padding: EdgeInsets.only(left: 123.5, bottom: 28),
-                      ),
-                      Padding(
-                        child: Column(children: [
-                          Stack(
-                            children: [
-                              Padding(
-                                child: IconButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) => Soon()));
-                                  },
-                                  icon: Image.asset(
-                                    "Style/Pictures/shopping-bag.png",
-                                    height: 22,
-                                  ),
-                                ),
-                                padding: EdgeInsets.only(
-                                  bottom: 1,
-                                ),
-                              ),
-                              Padding(
-                                child: Text(
-                                  "Shop",
-                                  style: TextStyle(
-                                      color: Color(0xFF9B9191), fontSize: 9),
-                                ),
-                                padding: EdgeInsets.only(top: 37, left: 13),
-                              )
-                            ],
-                          )
-                        ]),
-                        padding:
-                            EdgeInsets.only(left: 245, bottom: 28, right: 40),
-                      ),
-                    ],
-                  ),
-                ]),
+                SizedBox(
+                  height: 10,
+                ),
+                NavigationBar(Color(0xFF0ADE7C), appColors().cardBlue,
+                    appColors().transparentWhite),
               ],
             ),
           ]),
