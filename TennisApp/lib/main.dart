@@ -45,7 +45,7 @@ class _TennisAppHomePageState extends State<TennisAppHomePage> {
 
     _getIfUserLogedIn(context).whenComplete(() async {
       appState.newActivePlayer = true;
-      if (!loggedIN) {
+      if (loggedIN) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) => HomePageView([28, 21, 49], true)),

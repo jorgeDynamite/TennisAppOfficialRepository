@@ -305,7 +305,7 @@ addAccount(bool Cp, context) {
 
   getUser(
     nameController.text,
-    password,
+    passwordController.text,
   );
 }
 

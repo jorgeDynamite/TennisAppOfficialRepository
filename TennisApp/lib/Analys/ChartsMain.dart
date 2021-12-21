@@ -2,9 +2,10 @@ import 'package:app/Analys/matchLog/matchLogView.dart';
 import 'package:app/Analys/pieChart/neumorphic_expenses/pie_chart_view.dart';
 import 'package:app/Analys/pieChart/neumorphic_expenses/pie_chart_card.dart';
 import 'package:app/Players.dart';
+import 'package:app/RandomWidgets/loadingScreen.dart';
 import 'package:app/bloc/app_state.dart';
 import 'package:app/colors.dart';
-
+import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 
 import 'package:flutter/material.dart';
@@ -199,7 +200,8 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
     List<dynamic> tournament = [];
     List<List<dynamic>> match = [];
     List<dynamic> matches = [];
-
+    List<dynamic> matchesOrdered = [];
+    List<String> matchKeys = [];
     int x = 0;
     DatabaseEvent dataSnapshot = await databaseReference
         .child(urlTennisPlayer + "playerTournaments")
@@ -215,10 +217,11 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
           //tournamnets
           value.forEach((key, value) {
             //matches in tournamnet
-
+            matchKeys.add(key);
             x = 0;
             value.forEach((key, value) {
               print("value: " + value.toString());
+
               //print(value);
               //match stats
 
@@ -236,9 +239,18 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
             matches.add(match);
             match = [];
           });
-
-          tournament.add(matches);
+          for (var key in matchKeys) {
+            matchesOrdered.add([]);
+          }
+          var o = 0;
+          for (var key in matchKeys) {
+            matchesOrdered[int.parse(key.split(" ")[1]) - 1] = matches[o];
+            o++;
+          }
+          tournament.add(matchesOrdered);
           matches = [];
+          matchKeys = [];
+          matchesOrdered = [];
         });
         tournamnets.add(tournament);
         tournament = [];
@@ -553,9 +565,10 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
     } else {
       int x = 0;
       // print(tournaments[1]);
-      for (var match in clickedOntournament[1][0]) {
-        if (match.isNotEmpty) {
-          // print(clickedOntournament);
+      for (var i = 0; i < clickedOntournament[1].length; i++) {
+        if (clickedOntournament[1][i][0].isNotEmpty) {
+          var match = clickedOntournament[1][i][0];
+          print("match" + match.toString());
           x++;
           loadingTouranmnets = false;
           if (x == 1) {
@@ -571,6 +584,8 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
             cards.add(card(
                 x.toString() + "th    " + "" + match[5].toString(), match, 2));
           }
+        } else {
+          break;
         }
         //print(cards);
       }
@@ -679,19 +694,6 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
               ),
             ),
           ),
-          Column(
-            children: [
-              Text(
-                "Uploading",
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8.0),
-              Text(
-                "This may take a minute",
-                textAlign: TextAlign.center,
-              ),
-            ],
-          )
         ],
       );
     }
@@ -944,7 +946,7 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
                           ),
                         ],
                       )
-            : uploadingScreen());
+            : LoadingScreen());
   }
 }
 

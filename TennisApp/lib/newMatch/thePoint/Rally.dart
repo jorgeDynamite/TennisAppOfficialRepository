@@ -1,4 +1,5 @@
 import 'package:app/Players.dart';
+import 'package:app/colors.dart';
 import 'package:app/newMatch/matchPanel.dart';
 import 'package:flutter/material.dart';
 
@@ -52,7 +53,7 @@ class _RallyState extends State<Rally> {
   List<String> statsListLose = [];
   List<Color> statColorLose = [];
   List<Color> statColorWin = [];
-
+  appColors colors = appColors();
   void stats() {
     print(widget.winner.toString() +
         widget.doubleFaults.toString() +
@@ -69,35 +70,51 @@ class _RallyState extends State<Rally> {
       statsListWin.add("Forced Error");
 
       if (widget.whoServes == 1) {
-        statColorWin.add(Color(0xFF3E3B3B));
+        statColorWin.add(
+          colors.backgroundColor,
+        ); // Color(0xFF3E3B3B));
       } else {
-        statColorWin.add(Color(0xFF0ADE7C));
+        statColorWin.add(
+          colors.mainGreen,
+        ); // Color(0xFF0ADE7C));
       }
     }
 
     if (widget.winner) {
       statsListWin.add("Winner");
       if (widget.whoServes == 1) {
-        statColorWin.add(Color(0xFF3E3B3B));
+        statColorWin.add(
+          colors.backgroundColor,
+        );
       } else {
-        statColorWin.add(Color(0xFF0ADE7C));
+        statColorWin.add(
+          colors.mainGreen,
+        );
       }
     }
 
     if (widget.voleywinner) {
       statsListWin.add("Volley Winner");
       if (widget.whoServes == 1) {
-        statColorWin.add(Color(0xFF3E3B3B));
+        statColorWin.add(
+          colors.backgroundColor,
+        );
       } else {
-        statColorWin.add(Color(0xFF0ADE7C));
+        statColorWin.add(
+          colors.mainGreen,
+        );
       }
     }
     if (widget.returnwinner) {
       statsListWin.add("Return Winner");
       if (widget.whoServes == 1) {
-        statColorWin.add(Color(0xFF3E3B3B));
+        statColorWin.add(
+          colors.backgroundColor,
+        );
       } else {
-        statColorWin.add(Color(0xFF0ADE7C));
+        statColorWin.add(
+          colors.mainGreen,
+        );
       }
     }
 
@@ -105,18 +122,26 @@ class _RallyState extends State<Rally> {
     if (widget.unforcedErrors) {
       statsListLose.add("Unforced Error");
       if (widget.whoServes == 2) {
-        statColorLose.add(Color(0xFF3E3B3B));
+        statColorLose.add(
+          colors.backgroundColor,
+        );
       } else {
-        statColorLose.add(Color(0xFF0ADE7C));
+        statColorLose.add(
+          colors.mainGreen,
+        );
       }
     }
 
     if (widget.voleyError) {
       statsListLose.add("Volley Error");
       if (widget.whoServes == 2) {
-        statColorLose.add(Color(0xFF3E3B3B));
+        statColorLose.add(
+          colors.backgroundColor,
+        );
       } else {
-        statColorLose.add(Color(0xFF0ADE7C));
+        statColorLose.add(
+          colors.mainGreen,
+        );
       }
     }
     statColorLose.add(Colors.transparent);
@@ -159,172 +184,223 @@ class _RallyState extends State<Rally> {
         SizedBox(
           height: 20,
         ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            color: Color(0xFF272626),
-          ),
-          height: 290,
-          width: 350,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            SizedBox(height: 15),
-            Text(name,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                )),
-            SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    MaterialButton(
-                        onPressed: () {
-                          if (widget.whoServes == 1) {}
-                          if (statsListLose[0] == "Unforced Error") {
-                            widget.tournamentLiveData.matches[0]
-                                .unforcedErrors = widget.tournamentLiveData
-                                    .matches[0].unforcedErrors! +
-                                1;
-                            print(widget
-                                .tournamentLiveData.matches[0].unforcedErrors
-                                .toString());
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes,
-                                        )));
-                          }
-
-                          if (statsListLose[0] == "Volley Error") {
-                            widget.tournamentLiveData.matches[0].voleyErrors =
-                                widget.tournamentLiveData.matches[0]
-                                        .voleyErrors! +
-                                    1;
-                            print(widget
-                                .tournamentLiveData.matches[0].voleyErrors
-                                .toString());
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes,
-                                        )));
-                          }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            color: statColorLose[0],
-                          ),
-                          height: 100,
-                          width: 130,
-                          child: Stack(children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(statsListLose[0],
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ]),
-                        )),
-                  ],
-                ),
-                MaterialButton(
-                    onPressed: () {
-                      if (statsListLose[1] == "Volley Error") {
-                        widget.tournamentLiveData.matches[0].voleyErrors =
-                            widget.tournamentLiveData.matches[0].voleyErrors! +
-                                1;
-                        print(widget.tournamentLiveData.matches[0].voleyErrors
-                            .toString());
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => MatchPanel(
-                                      widget.tournamentData,
-                                      widget.opponentName,
-                                      widget.castLiveResults,
-                                      widget.matchID,
-                                      widget.tournamentLiveData,
-                                      widget.yourName,
-                                      widget
-                                          .opponentstournamentDataPackLiveStats,
-                                      widget.gameScorePackage,
-                                      widget.whoServes,
-                                    )));
-                      }
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        color: statColorLose[1],
-                      ),
-                      height: 100,
-                      width: 130,
-                      child: Stack(children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(statsListLose[1],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ))
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ]),
-                    ))
-              ],
+        Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
             ),
-            SizedBox(height: 20),
-            Row(
+            color: colors.backgroundColor,
+            shadowColor: Colors.black,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: colors.cardBlue,
+              ),
+              height: 210,
+              width: 350,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 15),
+                    Text(name,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        )),
+                    SizedBox(height: 15),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        statColorLose[0] != Colors.transparent
+                            ? Expanded(
+                                child: MaterialButton(
+                                onPressed: () {
+                                  if (widget.whoServes == 1) {}
+                                  if (statsListLose[0] == "Unforced Error") {
+                                    widget.tournamentLiveData.matches[0]
+                                        .unforcedErrors = widget
+                                            .tournamentLiveData
+                                            .matches[0]
+                                            .unforcedErrors! +
+                                        1;
+                                    print(widget.tournamentLiveData.matches[0]
+                                        .unforcedErrors
+                                        .toString());
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => MatchPanel(
+                                                  widget.tournamentData,
+                                                  widget.opponentName,
+                                                  widget.castLiveResults,
+                                                  widget.matchID,
+                                                  widget.tournamentLiveData,
+                                                  widget.yourName,
+                                                  widget
+                                                      .opponentstournamentDataPackLiveStats,
+                                                  widget.gameScorePackage,
+                                                  widget.whoServes,
+                                                )));
+                                  }
+
+                                  if (statsListLose[0] == "Volley Error") {
+                                    widget.tournamentLiveData.matches[0]
+                                        .voleyErrors = widget.tournamentLiveData
+                                            .matches[0].voleyErrors! +
+                                        1;
+                                    print(widget.tournamentLiveData.matches[0]
+                                        .voleyErrors
+                                        .toString());
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => MatchPanel(
+                                                  widget.tournamentData,
+                                                  widget.opponentName,
+                                                  widget.castLiveResults,
+                                                  widget.matchID,
+                                                  widget.tournamentLiveData,
+                                                  widget.yourName,
+                                                  widget
+                                                      .opponentstournamentDataPackLiveStats,
+                                                  widget.gameScorePackage,
+                                                  widget.whoServes,
+                                                )));
+                                  }
+                                },
+                                child: Padding(
+                                  padding:
+                                      statColorLose[1] == Colors.transparent
+                                          ? EdgeInsets.fromLTRB(10, 0, 10, 0)
+                                          : EdgeInsets.only(),
+                                  child: Card(
+                                      elevation: 5,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      color: colors.backgroundColor,
+                                      shadowColor: Colors.black,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
+                                          color: statColorLose[0],
+                                        ),
+                                        height: 100,
+                                        child: Stack(children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.only(),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(statsListLose[0],
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ))
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ]),
+                                      )),
+                                ),
+                              ))
+                            : Container(),
+                        statColorLose[1] != Colors.transparent
+                            ? Expanded(
+                                child: MaterialButton(
+                                onPressed: () {
+                                  if (statsListLose[1] == "Volley Error") {
+                                    widget.tournamentLiveData.matches[0]
+                                        .voleyErrors = widget.tournamentLiveData
+                                            .matches[0].voleyErrors! +
+                                        1;
+                                    print(widget.tournamentLiveData.matches[0]
+                                        .voleyErrors
+                                        .toString());
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => MatchPanel(
+                                                  widget.tournamentData,
+                                                  widget.opponentName,
+                                                  widget.castLiveResults,
+                                                  widget.matchID,
+                                                  widget.tournamentLiveData,
+                                                  widget.yourName,
+                                                  widget
+                                                      .opponentstournamentDataPackLiveStats,
+                                                  widget.gameScorePackage,
+                                                  widget.whoServes,
+                                                )));
+                                  }
+                                },
+                                child: Padding(
+                                    padding:
+                                        statColorLose[0] == Colors.transparent
+                                            ? EdgeInsets.fromLTRB(10, 0, 10, 0)
+                                            : EdgeInsets.only(),
+                                    child: Card(
+                                      elevation: 5,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      color: colors.backgroundColor,
+                                      shadowColor: Colors.black,
+                                      child: Container(
+                                        height: 100,
+                                        //width: 130,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
+                                          color: statColorLose[1],
+                                        ),
+                                        child: Stack(children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.only(),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(statsListLose[1],
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ))
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ]),
+                                      ),
+                                    )),
+                              ))
+                            : Container()
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    /* Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Column(
@@ -396,9 +472,9 @@ class _RallyState extends State<Rally> {
                       ]),
                     ))
               ],
-            ),
-          ]),
-        )
+            ), */
+                  ]),
+            ))
       ],
     );
     return thewidget;
@@ -416,1036 +492,1241 @@ class _RallyState extends State<Rally> {
         SizedBox(
           height: 20,
         ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            color: Color(0xFF272626),
-          ),
-          height: 290,
-          width: 350,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            SizedBox(height: 15),
-            Text(name,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                )),
-            SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    MaterialButton(
-                        onPressed: () {
-                          if (widget.whoServes == 2) {
-                            if (statsListWin[0] == "Forced Error") {
-                              widget.tournamentLiveData.matches[0]
-                                  .forcedErrors = widget.tournamentLiveData
-                                      .matches[0].forcedErrors! +
-                                  1;
-                              print("Forced Errors: " +
-                                  widget.tournamentLiveData.matches[0]
-                                      .forcedErrors
-                                      .toString());
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => MatchPanel(
-                                            widget.tournamentData,
-                                            widget.opponentName,
-                                            widget.castLiveResults,
-                                            widget.matchID,
-                                            widget.tournamentLiveData,
-                                            widget.yourName,
-                                            widget
-                                                .opponentstournamentDataPackLiveStats,
-                                            widget.gameScorePackage,
-                                            widget.whoServes,
-                                          )));
-                            }
-
-                            if (statsListWin[0] == "Winner") {
-                              widget.tournamentLiveData.matches[0].winners =
-                                  widget.tournamentLiveData.matches[0]
-                                          .winners! +
-                                      1;
-                              print("Winners: " +
-                                  widget.tournamentLiveData.matches[0].winners
-                                      .toString());
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => MatchPanel(
-                                            widget.tournamentData,
-                                            widget.opponentName,
-                                            widget.castLiveResults,
-                                            widget.matchID,
-                                            widget.tournamentLiveData,
-                                            widget.yourName,
-                                            widget
-                                                .opponentstournamentDataPackLiveStats,
-                                            widget.gameScorePackage,
-                                            widget.whoServes,
-                                          )));
-                            }
-                            if (statsListWin[0] == "Volley Winner") {
-                              widget.tournamentLiveData.matches[0].voleyWinner =
-                                  widget.tournamentLiveData.matches[0]
-                                          .voleyWinner! +
-                                      1;
-                              print("Volley Winner: " +
-                                  widget
-                                      .tournamentLiveData.matches[0].voleyWinner
-                                      .toString());
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => MatchPanel(
-                                            widget.tournamentData,
-                                            widget.opponentName,
-                                            widget.castLiveResults,
-                                            widget.matchID,
-                                            widget.tournamentLiveData,
-                                            widget.yourName,
-                                            widget
-                                                .opponentstournamentDataPackLiveStats,
-                                            widget.gameScorePackage,
-                                            widget.whoServes,
-                                          )));
-                            }
-                            if (statsListWin[0] == "Return Winner") {
-                              widget.tournamentLiveData.matches[0]
-                                  .returnWinner = widget.tournamentLiveData
-                                      .matches[0].returnWinner! +
-                                  1;
-                              print(widget
-                                  .tournamentLiveData.matches[0].returnWinner
-                                  .toString());
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => MatchPanel(
-                                            widget.tournamentData,
-                                            widget.opponentName,
-                                            widget.castLiveResults,
-                                            widget.matchID,
-                                            widget.tournamentLiveData,
-                                            widget.yourName,
-                                            widget
-                                                .opponentstournamentDataPackLiveStats,
-                                            widget.gameScorePackage,
-                                            widget.whoServes,
-                                          )));
-                            }
-                          } else {
-                            // IF OPPONENT won than:
-////
-                            ///
-                            ///
-                            ///
-                            ///
-
-                            if (statsListWin[0] == "Forced Error") {
-                              widget.opponentstournamentDataPackLiveStats
-                                  .matches[0].forcedErrors = widget
-                                      .opponentstournamentDataPackLiveStats
-                                      .matches[0]
-                                      .forcedErrors! +
-                                  1;
-                              print("Unforced Errors: " +
-                                  widget.opponentstournamentDataPackLiveStats
-                                      .matches[0].forcedErrors
-                                      .toString());
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => MatchPanel(
-                                            widget.tournamentData,
-                                            widget.opponentName,
-                                            widget.castLiveResults,
-                                            widget.matchID,
-                                            widget.tournamentLiveData,
-                                            widget.yourName,
-                                            widget
-                                                .opponentstournamentDataPackLiveStats,
-                                            widget.gameScorePackage,
-                                            widget.whoServes,
-                                          )));
-                            }
-
-                            if (statsListWin[0] == "Winner") {
-                              widget.opponentstournamentDataPackLiveStats
-                                  .matches[0].winners = widget
-                                      .opponentstournamentDataPackLiveStats
-                                      .matches[0]
-                                      .winners! +
-                                  1;
-                              print("Winners: " +
-                                  widget.opponentstournamentDataPackLiveStats
-                                      .matches[0].winners
-                                      .toString());
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => MatchPanel(
-                                            widget.tournamentData,
-                                            widget.opponentName,
-                                            widget.castLiveResults,
-                                            widget.matchID,
-                                            widget.tournamentLiveData,
-                                            widget.yourName,
-                                            widget
-                                                .opponentstournamentDataPackLiveStats,
-                                            widget.gameScorePackage,
-                                            widget.whoServes,
-                                          )));
-                            }
-                            if (statsListWin[0] == "Volley Winner") {
-                              widget.opponentstournamentDataPackLiveStats
-                                  .matches[0].voleyWinner = widget
-                                      .opponentstournamentDataPackLiveStats
-                                      .matches[0]
-                                      .voleyWinner! +
-                                  1;
-                              print("Voley Winners: " +
-                                  widget.opponentstournamentDataPackLiveStats
-                                      .matches[0].voleyWinner
-                                      .toString());
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => MatchPanel(
-                                            widget.tournamentData,
-                                            widget.opponentName,
-                                            widget.castLiveResults,
-                                            widget.matchID,
-                                            widget.tournamentLiveData,
-                                            widget.yourName,
-                                            widget
-                                                .opponentstournamentDataPackLiveStats,
-                                            widget.gameScorePackage,
-                                            widget.whoServes,
-                                          )));
-                              if (statsListWin[0] == "Return Winner") {
-                                widget.opponentstournamentDataPackLiveStats
-                                    .matches[0].returnWinner = widget
-                                        .opponentstournamentDataPackLiveStats
-                                        .matches[0]
-                                        .returnWinner! +
-                                    1;
-                                print(widget
-                                    .tournamentLiveData.matches[0].returnWinner
-                                    .toString());
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => MatchPanel(
-                                              widget.tournamentData,
-                                              widget.opponentName,
-                                              widget.castLiveResults,
-                                              widget.matchID,
-                                              widget.tournamentLiveData,
-                                              widget.yourName,
-                                              widget
-                                                  .opponentstournamentDataPackLiveStats,
-                                              widget.gameScorePackage,
-                                              widget.whoServes,
-                                            )));
-                              }
-                            }
-                          }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            color: statColorWin[0],
-                          ),
-                          height: 100,
-                          width: 130,
-                          child: Stack(children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(statsListWin[0],
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ]),
-                        )),
-                  ],
-                ),
-                MaterialButton(
-                    onPressed: () {
-                      if (widget.whoServes == 2) {
-                        if (statsListWin[1] == "Forced Error") {
-                          widget.tournamentLiveData.matches[1].forcedErrors =
-                              widget.tournamentLiveData.matches[1]
-                                      .forcedErrors! +
-                                  1;
-                          print("Forced Errors: " +
-                              widget.tournamentLiveData.matches[0].forcedErrors
-                                  .toString());
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes,
-                                      )));
-                        }
-
-                        if (statsListWin[1] == "Winner") {
-                          widget.tournamentLiveData.matches[0].winners =
-                              widget.tournamentLiveData.matches[0].winners! + 1;
-                          print("Winners: " +
-                              widget.tournamentLiveData.matches[0].winners
-                                  .toString());
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes,
-                                      )));
-                        }
-                        if (statsListWin[1] == "Volley Winner") {
-                          widget.tournamentLiveData.matches[0].voleyWinner =
-                              widget.tournamentLiveData.matches[0]
-                                      .voleyWinner! +
-                                  1;
-                          print("Volley Winner: " +
-                              widget.tournamentLiveData.matches[0].voleyWinner
-                                  .toString());
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes,
-                                      )));
-                        }
-                        if (statsListWin[1] == "Return Winner") {
-                          widget.tournamentLiveData.matches[0].returnWinner =
-                              widget.tournamentLiveData.matches[0]
-                                      .returnWinner! +
-                                  1;
-                          print(widget
-                              .tournamentLiveData.matches[0].returnWinner
-                              .toString());
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes,
-                                      )));
-                        }
-                      } else {
-                        // IF OPPONENT won than:
-////
-                        ///
-                        ///
-                        ///
-                        ///
-
-                        if (statsListWin[1] == "Forced Error") {
-                          widget.opponentstournamentDataPackLiveStats.matches[0]
-                              .forcedErrors = widget
-                                  .opponentstournamentDataPackLiveStats
-                                  .matches[0]
-                                  .forcedErrors! +
-                              1;
-                          print("Unforced Errors: " +
-                              widget.opponentstournamentDataPackLiveStats
-                                  .matches[0].forcedErrors
-                                  .toString());
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes,
-                                      )));
-                        }
-
-                        if (statsListWin[1] == "Winner") {
-                          widget.opponentstournamentDataPackLiveStats.matches[0]
-                              .winners = widget
-                                  .opponentstournamentDataPackLiveStats
-                                  .matches[0]
-                                  .winners! +
-                              1;
-                          print("Volley Errors: " +
-                              widget.opponentstournamentDataPackLiveStats
-                                  .matches[0].winners
-                                  .toString());
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes,
-                                      )));
-                        }
-                        if (statsListWin[1] == "Volley Winner") {
-                          widget.opponentstournamentDataPackLiveStats.matches[0]
-                              .voleyWinner = widget
-                                  .opponentstournamentDataPackLiveStats
-                                  .matches[0]
-                                  .voleyWinner! +
-                              1;
-                          print("Return Errors: " +
-                              widget.opponentstournamentDataPackLiveStats
-                                  .matches[0].voleyWinner
-                                  .toString());
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes,
-                                      )));
-                          if (statsListWin[1] == "Return Winner") {
-                            widget.opponentstournamentDataPackLiveStats
-                                .matches[0].returnWinner = widget
-                                    .opponentstournamentDataPackLiveStats
-                                    .matches[0]
-                                    .returnWinner! +
-                                1;
-                            print(widget
-                                .tournamentLiveData.matches[0].returnWinner
-                                .toString());
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
-                                          widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes,
-                                        )));
-                          }
-                        }
-                      }
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        color: statColorWin[1],
-                      ),
-                      height: 100,
-                      width: 130,
-                      child: Stack(children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(statsListWin[1],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ))
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ]),
-                    ))
-              ],
+        Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
             ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
+            color: colors.backgroundColor,
+            shadowColor: Colors.black,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: colors.cardBlue, // Color(0xFF272626),
+              ),
+              height: 320,
+              width: 350,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    MaterialButton(
-                        onPressed: () {
-                          if (widget.whoServes == 2) {
-                            if (statsListWin[2] == "Forced Error") {
-                              widget.tournamentLiveData.matches[0]
-                                  .forcedErrors = widget.tournamentLiveData
-                                      .matches[0].forcedErrors! +
-                                  1;
-                              print("Forced Errors: " +
-                                  widget.tournamentLiveData.matches[0]
-                                      .forcedErrors
-                                      .toString());
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => MatchPanel(
-                                            widget.tournamentData,
-                                            widget.opponentName,
-                                            widget.castLiveResults,
-                                            widget.matchID,
-                                            widget.tournamentLiveData,
-                                            widget.yourName,
-                                            widget
-                                                .opponentstournamentDataPackLiveStats,
-                                            widget.gameScorePackage,
-                                            widget.whoServes,
-                                          )));
-                            }
-
-                            if (statsListWin[2] == "Winner") {
-                              widget.tournamentLiveData.matches[0].winners =
-                                  widget.tournamentLiveData.matches[0]
-                                          .winners! +
-                                      1;
-                              print("Winners: " +
-                                  widget.tournamentLiveData.matches[0].winners
-                                      .toString());
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => MatchPanel(
-                                            widget.tournamentData,
-                                            widget.opponentName,
-                                            widget.castLiveResults,
-                                            widget.matchID,
-                                            widget.tournamentLiveData,
-                                            widget.yourName,
-                                            widget
-                                                .opponentstournamentDataPackLiveStats,
-                                            widget.gameScorePackage,
-                                            widget.whoServes,
-                                          )));
-                            }
-                            if (statsListWin[2] == "Volley Winner") {
-                              widget.tournamentLiveData.matches[0].voleyWinner =
-                                  widget.tournamentLiveData.matches[0]
-                                          .voleyWinner! +
-                                      1;
-                              print("Volley Winner: " +
-                                  widget
-                                      .tournamentLiveData.matches[0].voleyWinner
-                                      .toString());
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => MatchPanel(
-                                            widget.tournamentData,
-                                            widget.opponentName,
-                                            widget.castLiveResults,
-                                            widget.matchID,
-                                            widget.tournamentLiveData,
-                                            widget.yourName,
-                                            widget
-                                                .opponentstournamentDataPackLiveStats,
-                                            widget.gameScorePackage,
-                                            widget.whoServes,
-                                          )));
-                            }
-                            if (statsListWin[2] == "Return Winner") {
-                              widget.tournamentLiveData.matches[0]
-                                  .returnWinner = widget.tournamentLiveData
-                                      .matches[0].returnWinner! +
-                                  1;
-                              print(widget
-                                  .tournamentLiveData.matches[0].returnWinner
-                                  .toString());
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => MatchPanel(
-                                            widget.tournamentData,
-                                            widget.opponentName,
-                                            widget.castLiveResults,
-                                            widget.matchID,
-                                            widget.tournamentLiveData,
-                                            widget.yourName,
-                                            widget
-                                                .opponentstournamentDataPackLiveStats,
-                                            widget.gameScorePackage,
-                                            widget.whoServes,
-                                          )));
-                            }
-                          } else {
-                            // IF OPPONENT won than:
-////
-                            ///
-                            ///
-                            ///
-                            ///
-
-                            if (statsListWin[2] == "Forced Error") {
-                              widget.opponentstournamentDataPackLiveStats
-                                  .matches[0].forcedErrors = widget
-                                      .opponentstournamentDataPackLiveStats
-                                      .matches[0]
-                                      .forcedErrors! +
-                                  1;
-                              print("Unforced Errors: " +
-                                  widget.opponentstournamentDataPackLiveStats
-                                      .matches[0].forcedErrors
-                                      .toString());
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => MatchPanel(
-                                            widget.tournamentData,
-                                            widget.opponentName,
-                                            widget.castLiveResults,
-                                            widget.matchID,
-                                            widget.tournamentLiveData,
-                                            widget.yourName,
-                                            widget
-                                                .opponentstournamentDataPackLiveStats,
-                                            widget.gameScorePackage,
-                                            widget.whoServes,
-                                          )));
-                            }
-
-                            if (statsListWin[2] == "Winner") {
-                              widget.opponentstournamentDataPackLiveStats
-                                  .matches[0].winners = widget
-                                      .opponentstournamentDataPackLiveStats
-                                      .matches[0]
-                                      .winners! +
-                                  1;
-                              print("Volley Errors: " +
-                                  widget.opponentstournamentDataPackLiveStats
-                                      .matches[0].winners
-                                      .toString());
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => MatchPanel(
-                                            widget.tournamentData,
-                                            widget.opponentName,
-                                            widget.castLiveResults,
-                                            widget.matchID,
-                                            widget.tournamentLiveData,
-                                            widget.yourName,
-                                            widget
-                                                .opponentstournamentDataPackLiveStats,
-                                            widget.gameScorePackage,
-                                            widget.whoServes,
-                                          )));
-                            }
-                            if (statsListWin[2] == "Volley Winner") {
-                              widget.opponentstournamentDataPackLiveStats
-                                  .matches[0].voleyWinner = widget
-                                      .opponentstournamentDataPackLiveStats
-                                      .matches[0]
-                                      .voleyWinner! +
-                                  1;
-                              print("Return Errors: " +
-                                  widget.opponentstournamentDataPackLiveStats
-                                      .matches[0].voleyWinner
-                                      .toString());
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => MatchPanel(
-                                            widget.tournamentData,
-                                            widget.opponentName,
-                                            widget.castLiveResults,
-                                            widget.matchID,
-                                            widget.tournamentLiveData,
-                                            widget.yourName,
-                                            widget
-                                                .opponentstournamentDataPackLiveStats,
-                                            widget.gameScorePackage,
-                                            widget.whoServes,
-                                          )));
-                              if (statsListWin[2] == "Return Winner") {
-                                widget.opponentstournamentDataPackLiveStats
-                                    .matches[0].returnWinner = widget
-                                        .opponentstournamentDataPackLiveStats
-                                        .matches[0]
-                                        .returnWinner! +
-                                    1;
-                                print(widget
-                                    .tournamentLiveData.matches[0].returnWinner
-                                    .toString());
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => MatchPanel(
-                                              widget.tournamentData,
-                                              widget.opponentName,
-                                              widget.castLiveResults,
-                                              widget.matchID,
-                                              widget.tournamentLiveData,
-                                              widget.yourName,
-                                              widget
-                                                  .opponentstournamentDataPackLiveStats,
-                                              widget.gameScorePackage,
-                                              widget.whoServes,
-                                            )));
-                              }
-                            }
-                          }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            color: statColorWin[2],
-                          ),
-                          height: 100,
-                          width: 130,
-                          child: Stack(children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(statsListWin[2],
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ]),
+                    SizedBox(height: 15),
+                    Text(name,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
                         )),
-                  ],
-                ),
-                MaterialButton(
-                    onPressed: () {
-                      if (widget.whoServes == 2) {
-                        if (statsListWin[3] == "Forced Error") {
-                          widget.tournamentLiveData.matches[3].forcedErrors =
-                              widget.tournamentLiveData.matches[3]
-                                      .forcedErrors! +
-                                  1;
-                          print("Forced Errors: " +
-                              widget.tournamentLiveData.matches[0].forcedErrors
-                                  .toString());
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes,
-                                      )));
-                        }
+                    SizedBox(height: 15),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        statColorWin[0] != Colors.transparent
+                            ? Expanded(
+                                child: MaterialButton(
+                                onPressed: () {
+                                  if (widget.whoServes == 2) {
+                                    if (statsListWin[0] == "Forced Error") {
+                                      widget.tournamentLiveData.matches[0]
+                                          .forcedErrors = widget
+                                              .tournamentLiveData
+                                              .matches[0]
+                                              .forcedErrors! +
+                                          1;
+                                      print("Forced Errors: " +
+                                          widget.tournamentLiveData.matches[0]
+                                              .forcedErrors
+                                              .toString());
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) => MatchPanel(
+                                                    widget.tournamentData,
+                                                    widget.opponentName,
+                                                    widget.castLiveResults,
+                                                    widget.matchID,
+                                                    widget.tournamentLiveData,
+                                                    widget.yourName,
+                                                    widget
+                                                        .opponentstournamentDataPackLiveStats,
+                                                    widget.gameScorePackage,
+                                                    widget.whoServes,
+                                                  )));
+                                    }
 
-                        if (statsListWin[3] == "Winner") {
-                          widget.tournamentLiveData.matches[0].winners =
-                              widget.tournamentLiveData.matches[0].winners! + 1;
-                          print("Winners: " +
-                              widget.tournamentLiveData.matches[0].winners
-                                  .toString());
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes,
-                                      )));
-                        }
-                        if (statsListWin[3] == "Volley Winner") {
-                          widget.tournamentLiveData.matches[0].voleyWinner =
-                              widget.tournamentLiveData.matches[0]
-                                      .voleyWinner! +
-                                  1;
-                          print("Volley Winner: " +
-                              widget.tournamentLiveData.matches[0].voleyWinner
-                                  .toString());
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes,
-                                      )));
-                        }
-                        if (statsListWin[3] == "Return Winner") {
-                          widget.tournamentLiveData.matches[0].returnWinner =
-                              widget.tournamentLiveData.matches[0]
-                                      .returnWinner! +
-                                  1;
-                          print(widget
-                              .tournamentLiveData.matches[0].returnWinner
-                              .toString());
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes,
-                                      )));
-                        }
-                      } else {
-                        // IF OPPONENT won than:
+                                    if (statsListWin[0] == "Winner") {
+                                      widget.tournamentLiveData.matches[0]
+                                          .winners = widget.tournamentLiveData
+                                              .matches[0].winners! +
+                                          1;
+                                      print("Winners: " +
+                                          widget.tournamentLiveData.matches[0]
+                                              .winners
+                                              .toString());
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) => MatchPanel(
+                                                    widget.tournamentData,
+                                                    widget.opponentName,
+                                                    widget.castLiveResults,
+                                                    widget.matchID,
+                                                    widget.tournamentLiveData,
+                                                    widget.yourName,
+                                                    widget
+                                                        .opponentstournamentDataPackLiveStats,
+                                                    widget.gameScorePackage,
+                                                    widget.whoServes,
+                                                  )));
+                                    }
+                                    if (statsListWin[0] == "Volley Winner") {
+                                      widget.tournamentLiveData.matches[0]
+                                          .voleyWinner = widget
+                                              .tournamentLiveData
+                                              .matches[0]
+                                              .voleyWinner! +
+                                          1;
+                                      print("Volley Winner: " +
+                                          widget.tournamentLiveData.matches[0]
+                                              .voleyWinner
+                                              .toString());
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) => MatchPanel(
+                                                    widget.tournamentData,
+                                                    widget.opponentName,
+                                                    widget.castLiveResults,
+                                                    widget.matchID,
+                                                    widget.tournamentLiveData,
+                                                    widget.yourName,
+                                                    widget
+                                                        .opponentstournamentDataPackLiveStats,
+                                                    widget.gameScorePackage,
+                                                    widget.whoServes,
+                                                  )));
+                                    }
+                                    if (statsListWin[0] == "Return Winner") {
+                                      widget.tournamentLiveData.matches[0]
+                                          .returnWinner = widget
+                                              .tournamentLiveData
+                                              .matches[0]
+                                              .returnWinner! +
+                                          1;
+                                      print(widget.tournamentLiveData.matches[0]
+                                          .returnWinner
+                                          .toString());
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) => MatchPanel(
+                                                    widget.tournamentData,
+                                                    widget.opponentName,
+                                                    widget.castLiveResults,
+                                                    widget.matchID,
+                                                    widget.tournamentLiveData,
+                                                    widget.yourName,
+                                                    widget
+                                                        .opponentstournamentDataPackLiveStats,
+                                                    widget.gameScorePackage,
+                                                    widget.whoServes,
+                                                  )));
+                                    }
+                                  } else {
+                                    // IF OPPONENT won than:
 ////
-                        ///
-                        ///
-                        ///
-                        ///
+                                    ///
+                                    ///
+                                    ///
+                                    ///
 
-                        if (statsListWin[0] == "Forced Error") {
-                          widget.opponentstournamentDataPackLiveStats.matches[0]
-                              .forcedErrors = widget
-                                  .opponentstournamentDataPackLiveStats
-                                  .matches[0]
-                                  .forcedErrors! +
-                              1;
-                          print("Unforced Errors: " +
-                              widget.opponentstournamentDataPackLiveStats
-                                  .matches[0].forcedErrors
-                                  .toString());
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes,
-                                      )));
-                        }
-
-                        if (statsListWin[0] == "Winner") {
-                          widget.opponentstournamentDataPackLiveStats.matches[0]
-                              .winners = widget
-                                  .opponentstournamentDataPackLiveStats
-                                  .matches[0]
-                                  .winners! +
-                              1;
-                          print("Volley Errors: " +
-                              widget.opponentstournamentDataPackLiveStats
-                                  .matches[0].winners
-                                  .toString());
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes,
-                                      )));
-                        }
-                        if (statsListWin[0] == "Volley Winner") {
-                          widget.opponentstournamentDataPackLiveStats.matches[0]
-                              .voleyWinner = widget
-                                  .opponentstournamentDataPackLiveStats
-                                  .matches[0]
-                                  .voleyWinner! +
-                              1;
-                          print("Return Errors: " +
-                              widget.opponentstournamentDataPackLiveStats
-                                  .matches[0].voleyWinner
-                                  .toString());
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => MatchPanel(
-                                        widget.tournamentData,
-                                        widget.opponentName,
-                                        widget.castLiveResults,
-                                        widget.matchID,
-                                        widget.tournamentLiveData,
-                                        widget.yourName,
-                                        widget
-                                            .opponentstournamentDataPackLiveStats,
-                                        widget.gameScorePackage,
-                                        widget.whoServes,
-                                      )));
-                          if (statsListWin[0] == "Return Winner") {
-                            widget.opponentstournamentDataPackLiveStats
-                                .matches[0].returnWinner = widget
-                                    .opponentstournamentDataPackLiveStats
-                                    .matches[0]
-                                    .returnWinner! +
-                                1;
-                            print(widget
-                                .tournamentLiveData.matches[0].returnWinner
-                                .toString());
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => MatchPanel(
-                                          widget.tournamentData,
-                                          widget.opponentName,
-                                          widget.castLiveResults,
-                                          widget.matchID,
-                                          widget.tournamentLiveData,
-                                          widget.yourName,
+                                    if (statsListWin[0] == "Forced Error") {
+                                      widget
+                                          .opponentstournamentDataPackLiveStats
+                                          .matches[0]
+                                          .forcedErrors = widget
+                                              .opponentstournamentDataPackLiveStats
+                                              .matches[0]
+                                              .forcedErrors! +
+                                          1;
+                                      print("Forced Errors: " +
                                           widget
-                                              .opponentstournamentDataPackLiveStats,
-                                          widget.gameScorePackage,
-                                          widget.whoServes,
-                                        )));
-                          }
-                        }
-                      }
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        color: statColorWin[3],
-                      ),
-                      height: 100,
-                      width: 130,
-                      child: Stack(children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(statsListWin[3],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ))
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ]),
-                    ))
-              ],
-            ),
-          ]),
-        )
+                                              .opponentstournamentDataPackLiveStats
+                                              .matches[0]
+                                              .forcedErrors
+                                              .toString());
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) => MatchPanel(
+                                                    widget.tournamentData,
+                                                    widget.opponentName,
+                                                    widget.castLiveResults,
+                                                    widget.matchID,
+                                                    widget.tournamentLiveData,
+                                                    widget.yourName,
+                                                    widget
+                                                        .opponentstournamentDataPackLiveStats,
+                                                    widget.gameScorePackage,
+                                                    widget.whoServes,
+                                                  )));
+                                    }
+
+                                    if (statsListWin[0] == "Winner") {
+                                      widget
+                                          .opponentstournamentDataPackLiveStats
+                                          .matches[0]
+                                          .winners = widget
+                                              .opponentstournamentDataPackLiveStats
+                                              .matches[0]
+                                              .winners! +
+                                          1;
+                                      print("Winners: " +
+                                          widget
+                                              .opponentstournamentDataPackLiveStats
+                                              .matches[0]
+                                              .winners
+                                              .toString());
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) => MatchPanel(
+                                                    widget.tournamentData,
+                                                    widget.opponentName,
+                                                    widget.castLiveResults,
+                                                    widget.matchID,
+                                                    widget.tournamentLiveData,
+                                                    widget.yourName,
+                                                    widget
+                                                        .opponentstournamentDataPackLiveStats,
+                                                    widget.gameScorePackage,
+                                                    widget.whoServes,
+                                                  )));
+                                    }
+                                    if (statsListWin[0] == "Volley Winner") {
+                                      widget
+                                          .opponentstournamentDataPackLiveStats
+                                          .matches[0]
+                                          .voleyWinner = widget
+                                              .opponentstournamentDataPackLiveStats
+                                              .matches[0]
+                                              .voleyWinner! +
+                                          1;
+                                      print("Voley Winners: " +
+                                          widget
+                                              .opponentstournamentDataPackLiveStats
+                                              .matches[0]
+                                              .voleyWinner
+                                              .toString());
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) => MatchPanel(
+                                                    widget.tournamentData,
+                                                    widget.opponentName,
+                                                    widget.castLiveResults,
+                                                    widget.matchID,
+                                                    widget.tournamentLiveData,
+                                                    widget.yourName,
+                                                    widget
+                                                        .opponentstournamentDataPackLiveStats,
+                                                    widget.gameScorePackage,
+                                                    widget.whoServes,
+                                                  )));
+                                      if (statsListWin[0] == "Return Winner") {
+                                        widget
+                                            .opponentstournamentDataPackLiveStats
+                                            .matches[0]
+                                            .returnWinner = widget
+                                                .opponentstournamentDataPackLiveStats
+                                                .matches[0]
+                                                .returnWinner! +
+                                            1;
+                                        print(widget.tournamentLiveData
+                                            .matches[0].returnWinner
+                                            .toString());
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) => MatchPanel(
+                                                      widget.tournamentData,
+                                                      widget.opponentName,
+                                                      widget.castLiveResults,
+                                                      widget.matchID,
+                                                      widget.tournamentLiveData,
+                                                      widget.yourName,
+                                                      widget
+                                                          .opponentstournamentDataPackLiveStats,
+                                                      widget.gameScorePackage,
+                                                      widget.whoServes,
+                                                    )));
+                                      }
+                                    }
+                                  }
+                                },
+                                child: Card(
+                                    elevation: 5,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    color: colors.backgroundColor,
+                                    shadowColor: Colors.black,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20)),
+                                        color: statColorWin[0],
+                                      ),
+                                      height: 100,
+                                      child: Stack(children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(statsListWin[0],
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ))
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ]),
+                                    )),
+                              ))
+                            : Container(),
+                        statColorWin[1] != Colors.transparent
+                            ? Expanded(
+                                child: MaterialButton(
+                                    onPressed: () {
+                                      if (widget.whoServes == 2) {
+                                        if (statsListWin[1] == "Forced Error") {
+                                          widget.tournamentLiveData.matches[1]
+                                              .forcedErrors = widget
+                                                  .tournamentLiveData
+                                                  .matches[1]
+                                                  .forcedErrors! +
+                                              1;
+                                          print("Forced Errors: " +
+                                              widget.tournamentLiveData
+                                                  .matches[0].forcedErrors
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+
+                                        if (statsListWin[1] == "Winner") {
+                                          widget.tournamentLiveData.matches[0]
+                                              .winners = widget
+                                                  .tournamentLiveData
+                                                  .matches[0]
+                                                  .winners! +
+                                              1;
+                                          print("Winners: " +
+                                              widget.tournamentLiveData
+                                                  .matches[0].winners
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+                                        if (statsListWin[1] ==
+                                            "Volley Winner") {
+                                          widget.tournamentLiveData.matches[0]
+                                              .voleyWinner = widget
+                                                  .tournamentLiveData
+                                                  .matches[0]
+                                                  .voleyWinner! +
+                                              1;
+                                          print("Volley Winner: " +
+                                              widget.tournamentLiveData
+                                                  .matches[0].voleyWinner
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+                                        if (statsListWin[1] ==
+                                            "Return Winner") {
+                                          widget.tournamentLiveData.matches[0]
+                                              .returnWinner = widget
+                                                  .tournamentLiveData
+                                                  .matches[0]
+                                                  .returnWinner! +
+                                              1;
+                                          print(widget.tournamentLiveData
+                                              .matches[0].returnWinner
+                                              .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+                                      } else {
+                                        // IF OPPONENT won than:
+////
+                                        ///
+                                        ///
+                                        ///
+                                        ///
+
+                                        if (statsListWin[1] == "Forced Error") {
+                                          widget
+                                              .opponentstournamentDataPackLiveStats
+                                              .matches[0]
+                                              .forcedErrors = widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .forcedErrors! +
+                                              1;
+                                          print("Unforced Errors: " +
+                                              widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .forcedErrors
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+
+                                        if (statsListWin[1] == "Winner") {
+                                          widget
+                                              .opponentstournamentDataPackLiveStats
+                                              .matches[0]
+                                              .winners = widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .winners! +
+                                              1;
+                                          print("Winners: " +
+                                              widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .winners
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+                                        if (statsListWin[1] ==
+                                            "Volley Winner") {
+                                          widget
+                                              .opponentstournamentDataPackLiveStats
+                                              .matches[0]
+                                              .voleyWinner = widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .voleyWinner! +
+                                              1;
+                                          print("Return Errors: " +
+                                              widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .voleyWinner
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                          if (statsListWin[1] ==
+                                              "Return Winner") {
+                                            widget
+                                                .opponentstournamentDataPackLiveStats
+                                                .matches[0]
+                                                .returnWinner = widget
+                                                    .opponentstournamentDataPackLiveStats
+                                                    .matches[0]
+                                                    .returnWinner! +
+                                                1;
+                                            print(widget.tournamentLiveData
+                                                .matches[0].returnWinner
+                                                .toString());
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) => MatchPanel(
+                                                          widget.tournamentData,
+                                                          widget.opponentName,
+                                                          widget
+                                                              .castLiveResults,
+                                                          widget.matchID,
+                                                          widget
+                                                              .tournamentLiveData,
+                                                          widget.yourName,
+                                                          widget
+                                                              .opponentstournamentDataPackLiveStats,
+                                                          widget
+                                                              .gameScorePackage,
+                                                          widget.whoServes,
+                                                        )));
+                                          }
+                                        }
+                                      }
+                                    },
+                                    child: Card(
+                                        elevation: 5,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        color: colors.backgroundColor,
+                                        shadowColor: Colors.black,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                            color: statColorWin[1],
+                                          ),
+                                          height: 100,
+                                          // width: 130,
+                                          child: Stack(children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(statsListWin[1],
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ))
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ]),
+                                        ))))
+                            : Container(),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        statColorWin[2] != Colors.transparent
+                            ? Expanded(
+                                child: MaterialButton(
+                                    onPressed: () {
+                                      if (widget.whoServes == 2) {
+                                        if (statsListWin[2] == "Forced Error") {
+                                          widget.tournamentLiveData.matches[0]
+                                              .forcedErrors = widget
+                                                  .tournamentLiveData
+                                                  .matches[0]
+                                                  .forcedErrors! +
+                                              1;
+                                          print("Forced Errors: " +
+                                              widget.tournamentLiveData
+                                                  .matches[0].forcedErrors
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+
+                                        if (statsListWin[2] == "Winner") {
+                                          widget.tournamentLiveData.matches[0]
+                                              .winners = widget
+                                                  .tournamentLiveData
+                                                  .matches[0]
+                                                  .winners! +
+                                              1;
+                                          print("Winners: " +
+                                              widget.tournamentLiveData
+                                                  .matches[0].winners
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+                                        if (statsListWin[2] ==
+                                            "Volley Winner") {
+                                          widget.tournamentLiveData.matches[0]
+                                              .voleyWinner = widget
+                                                  .tournamentLiveData
+                                                  .matches[0]
+                                                  .voleyWinner! +
+                                              1;
+                                          print("Volley Winner: " +
+                                              widget.tournamentLiveData
+                                                  .matches[0].voleyWinner
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+                                        if (statsListWin[2] ==
+                                            "Return Winner") {
+                                          widget.tournamentLiveData.matches[0]
+                                              .returnWinner = widget
+                                                  .tournamentLiveData
+                                                  .matches[0]
+                                                  .returnWinner! +
+                                              1;
+                                          print(widget.tournamentLiveData
+                                              .matches[0].returnWinner
+                                              .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+                                      } else {
+                                        // IF OPPONENT won than:
+////
+                                        ///
+                                        ///
+                                        ///
+                                        ///
+
+                                        if (statsListWin[2] == "Forced Error") {
+                                          widget
+                                              .opponentstournamentDataPackLiveStats
+                                              .matches[0]
+                                              .forcedErrors = widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .forcedErrors! +
+                                              1;
+                                          print("Unforced Errors: " +
+                                              widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .forcedErrors
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+
+                                        if (statsListWin[2] == "Winner") {
+                                          widget
+                                              .opponentstournamentDataPackLiveStats
+                                              .matches[0]
+                                              .winners = widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .winners! +
+                                              1;
+                                          print("Volley Errors: " +
+                                              widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .winners
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+                                        if (statsListWin[2] ==
+                                            "Volley Winner") {
+                                          widget
+                                              .opponentstournamentDataPackLiveStats
+                                              .matches[0]
+                                              .voleyWinner = widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .voleyWinner! +
+                                              1;
+                                          print("Return Errors: " +
+                                              widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .voleyWinner
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                          if (statsListWin[2] ==
+                                              "Return Winner") {
+                                            widget
+                                                .opponentstournamentDataPackLiveStats
+                                                .matches[0]
+                                                .returnWinner = widget
+                                                    .opponentstournamentDataPackLiveStats
+                                                    .matches[0]
+                                                    .returnWinner! +
+                                                1;
+                                            print(widget.tournamentLiveData
+                                                .matches[0].returnWinner
+                                                .toString());
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) => MatchPanel(
+                                                          widget.tournamentData,
+                                                          widget.opponentName,
+                                                          widget
+                                                              .castLiveResults,
+                                                          widget.matchID,
+                                                          widget
+                                                              .tournamentLiveData,
+                                                          widget.yourName,
+                                                          widget
+                                                              .opponentstournamentDataPackLiveStats,
+                                                          widget
+                                                              .gameScorePackage,
+                                                          widget.whoServes,
+                                                        )));
+                                          }
+                                        }
+                                      }
+                                    },
+                                    child: Card(
+                                        elevation: 5,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        color: colors.backgroundColor,
+                                        shadowColor: Colors.black,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                            color: statColorWin[2],
+                                          ),
+                                          height: 100,
+                                          // width: 130,
+                                          child: Stack(children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(statsListWin[2],
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ))
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ]),
+                                        ))))
+                            : Container(),
+                        statColorWin[3] != Colors.transparent
+                            ? Expanded(
+                                child: MaterialButton(
+                                    onPressed: () {
+                                      if (widget.whoServes == 2) {
+                                        if (statsListWin[3] == "Forced Error") {
+                                          widget.tournamentLiveData.matches[3]
+                                              .forcedErrors = widget
+                                                  .tournamentLiveData
+                                                  .matches[3]
+                                                  .forcedErrors! +
+                                              1;
+                                          print("Forced Errors: " +
+                                              widget.tournamentLiveData
+                                                  .matches[0].forcedErrors
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+
+                                        if (statsListWin[3] == "Winner") {
+                                          widget.tournamentLiveData.matches[0]
+                                              .winners = widget
+                                                  .tournamentLiveData
+                                                  .matches[0]
+                                                  .winners! +
+                                              1;
+                                          print("Winners: " +
+                                              widget.tournamentLiveData
+                                                  .matches[0].winners
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+                                        if (statsListWin[3] ==
+                                            "Volley Winner") {
+                                          widget.tournamentLiveData.matches[0]
+                                              .voleyWinner = widget
+                                                  .tournamentLiveData
+                                                  .matches[0]
+                                                  .voleyWinner! +
+                                              1;
+                                          print("Volley Winner: " +
+                                              widget.tournamentLiveData
+                                                  .matches[0].voleyWinner
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+                                        if (statsListWin[3] ==
+                                            "Return Winner") {
+                                          widget.tournamentLiveData.matches[0]
+                                              .returnWinner = widget
+                                                  .tournamentLiveData
+                                                  .matches[0]
+                                                  .returnWinner! +
+                                              1;
+                                          print(widget.tournamentLiveData
+                                              .matches[0].returnWinner
+                                              .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+                                      } else {
+                                        // IF OPPONENT won than:
+////
+                                        ///
+                                        ///
+                                        ///
+                                        ///
+
+                                        if (statsListWin[0] == "Forced Error") {
+                                          widget
+                                              .opponentstournamentDataPackLiveStats
+                                              .matches[0]
+                                              .forcedErrors = widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .forcedErrors! +
+                                              1;
+                                          print("Unforced Errors: " +
+                                              widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .forcedErrors
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+
+                                        if (statsListWin[0] == "Winner") {
+                                          widget
+                                              .opponentstournamentDataPackLiveStats
+                                              .matches[0]
+                                              .winners = widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .winners! +
+                                              1;
+                                          print("Volley Errors: " +
+                                              widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .winners
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                        }
+                                        if (statsListWin[0] ==
+                                            "Volley Winner") {
+                                          widget
+                                              .opponentstournamentDataPackLiveStats
+                                              .matches[0]
+                                              .voleyWinner = widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .voleyWinner! +
+                                              1;
+                                          print("Return Errors: " +
+                                              widget
+                                                  .opponentstournamentDataPackLiveStats
+                                                  .matches[0]
+                                                  .voleyWinner
+                                                  .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => MatchPanel(
+                                                        widget.tournamentData,
+                                                        widget.opponentName,
+                                                        widget.castLiveResults,
+                                                        widget.matchID,
+                                                        widget
+                                                            .tournamentLiveData,
+                                                        widget.yourName,
+                                                        widget
+                                                            .opponentstournamentDataPackLiveStats,
+                                                        widget.gameScorePackage,
+                                                        widget.whoServes,
+                                                      )));
+                                          if (statsListWin[0] ==
+                                              "Return Winner") {
+                                            widget
+                                                .opponentstournamentDataPackLiveStats
+                                                .matches[0]
+                                                .returnWinner = widget
+                                                    .opponentstournamentDataPackLiveStats
+                                                    .matches[0]
+                                                    .returnWinner! +
+                                                1;
+                                            print(widget.tournamentLiveData
+                                                .matches[0].returnWinner
+                                                .toString());
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) => MatchPanel(
+                                                          widget.tournamentData,
+                                                          widget.opponentName,
+                                                          widget
+                                                              .castLiveResults,
+                                                          widget.matchID,
+                                                          widget
+                                                              .tournamentLiveData,
+                                                          widget.yourName,
+                                                          widget
+                                                              .opponentstournamentDataPackLiveStats,
+                                                          widget
+                                                              .gameScorePackage,
+                                                          widget.whoServes,
+                                                        )));
+                                          }
+                                        }
+                                      }
+                                    },
+                                    child: Card(
+                                        elevation: 5,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        color: colors.backgroundColor,
+                                        shadowColor: Colors.black,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                            color: statColorWin[3],
+                                          ),
+                                          height: 100,
+                                          child: Stack(children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(statsListWin[3],
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ))
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ]),
+                                        ))))
+                            : Container(),
+                      ],
+                    ),
+                  ]),
+            ))
       ],
     );
     return thewidget;
@@ -1454,60 +1735,68 @@ class _RallyState extends State<Rally> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: colors.backgroundColor, //
         body: Column(children: [
           SizedBox(height: 25),
           Stack(children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Color(0xFF272626),
+              Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                height: 49,
-                width: 350,
-                child: Column(children: [
-                  SizedBox(height: 17),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 55),
-                        child: Text(
-                          "Score",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Helvetica",
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(right: 60),
-                        child: Text(
-                          "Serve",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Helvetica",
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(),
-                        child: Text(
-                          "Rally",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Helvetica",
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      )
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.center,
+                color: colors.backgroundColor,
+                shadowColor: Colors.black,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    color: colors.cardBlue, // Color(0xFF272626),
                   ),
-                ]),
-              ),
+                  height: 49,
+                  width: 350,
+                  child: Column(children: [
+                    SizedBox(height: 17),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 55),
+                          child: Text(
+                            "Score",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Helvetica",
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 60),
+                          child: Text(
+                            "Serve",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Helvetica",
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(),
+                          child: Text(
+                            "Rally",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Helvetica",
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.center,
+                    ),
+                  ]),
+                ),
+              )
             ]),
             Padding(
                 padding: EdgeInsets.only(
@@ -1524,7 +1813,7 @@ class _RallyState extends State<Rally> {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(20)),
-                            color: Color(0xFF707070),
+                            color: colors.transparentWhite, //Color(0xFF707070),
                           ),
                           height: 3,
                           width: 321,
@@ -1549,34 +1838,55 @@ class _RallyState extends State<Rally> {
             height: 30,
           ),
           MaterialButton(
-              onPressed: () {},
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  gradient: LinearGradient(
-                    colors: [Color(0xFF272626), Color(0xFF6E6E6E)],
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => MatchPanel(
+                            widget.tournamentData,
+                            widget.opponentName,
+                            widget.castLiveResults,
+                            widget.matchID,
+                            widget.tournamentLiveData,
+                            widget.yourName,
+                            widget.opponentstournamentDataPackLiveStats,
+                            widget.gameScorePackage,
+                            widget.whoServes,
+                          )));
+            },
+            child: Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                color: colors.backgroundColor,
+                shadowColor: Colors.black,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    color: colors.cardBlue, //
                   ),
-                ),
-                height: 60,
-                width: 350,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Went in",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
+                  height: 60,
+                  width: 350,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Went in",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                        ),
                       ),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      size: 22,
-                      color: Colors.white,
-                    )
-                  ],
-                ),
-              )),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        size: 22,
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
+                )),
+          )
         ]));
   }
 }

@@ -7,6 +7,7 @@ import 'package:app/colors.dart';
 import 'package:app/newMatch/newMatchSecondPage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NewMatchFirstPage extends StatefulWidget {
@@ -18,7 +19,7 @@ class _NewMatchFirstPageState extends State<NewMatchFirstPage> {
   late String lastNameCoach;
   late String firstNameCoach;
   late String uidCoach;
-  String onOff = "OFF";
+  String onOff = "ON";
   late String activePlayerFirstName;
   late String activePlayerLastName;
   late int activePlayerIndex;
@@ -26,7 +27,7 @@ class _NewMatchFirstPageState extends State<NewMatchFirstPage> {
   late Tournament tournament;
   late int matchId;
   bool castMatchPressed = true;
-  String imageURL = "Style/Pictures/antenna-white.png";
+  String imageURL = "Style/Pictures/antenna-green.png";
   appColors colors = appColors();
 
   void getPreferncesData() async {
@@ -366,6 +367,9 @@ _buildTextField(TextEditingController controller, IconData icon,
         color: appColors().backgroundColor, //Color(0xFF3E3B3B),
         border: Border.all(color: Colors.transparent)),
     child: TextField(
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(18),
+      ],
       onChanged: (text) {
         if (text != "") {
           changedValue(true);

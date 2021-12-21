@@ -86,17 +86,7 @@ class _CPHomePageState extends State<EmailHomePage> {
 
         print(id.key);
       } else {
-        databaseReference
-            .child('Tennis_Accounts/' +
-                firstNameController.text +
-                lastNameController.text +
-                "-" +
-                uid.toString() +
-                "/" +
-                "playerTournaments" +
-                "/")
-            .push()
-            .set(null);
+        
         _id.set(accountdata);
       }
 

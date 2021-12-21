@@ -16,6 +16,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../colors.dart';
+
 class afterMatchPage extends StatefulWidget {
   @override
   _afterMatchPageState createState() => _afterMatchPageState();
@@ -63,9 +65,10 @@ class _afterMatchPageState extends State<afterMatchPage> {
   late Tournament newTournament;
   late String surface;
   late Matches match;
+  appColors colors = appColors();
   List<bool> trackedStats = [];
   List<Color> setDevidersLines = [
-    Color(0xFF707070),
+    appColors().transparentWhite,
     Colors.transparent,
     Colors.transparent,
     Colors.transparent,
@@ -176,19 +179,19 @@ class _afterMatchPageState extends State<afterMatchPage> {
   void getMatchData() async {
     int x = 0;
 
-    DatabaseEvent dataSnapshot = widget.url != ""
-        ? await databaseReference.child(widget.url).once()
-        : await databaseReference.child(widget.urlTA).once();
+    DatabaseEvent dataSnapshot =
+        await databaseReference.child(widget.urlTA).once();
     if (dataSnapshot.snapshot.value != null) {
       dynamic valuesDataSnapshot = dataSnapshot.snapshot.value!;
+      print(valuesDataSnapshot);
       valuesDataSnapshot.forEach((key, value) {
         print(key);
         this.setState(() {
-          if (x == 0) {
+          if (x == 11) {
             firstsetStandings[0] = value[0];
             firstsetStandings[1] = value[1];
           }
-          if (x == 1) {
+          if (x == 4) {
             secondsetStandings[0] = value[0];
             secondsetStandings[1] = value[1];
             if (secondsetStandings[0] != 0 || secondsetStandings[1] != 0) {
@@ -205,7 +208,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
               setDevidersLines[2] = setDevidersLines[0];
             }
           }
-          if (x == 3) {
+          if (x == 0) {
             fourthsetStandings[0] = value[0];
             fourthsetStandings[1] = value[1];
             if (fourthsetStandings[0] != 0 || fourthsetStandings[1] != 0) {
@@ -213,7 +216,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
               setDevidersLines[3] = setDevidersLines[0];
             }
           }
-          if (x == 4) {
+          if (x == 8) {
             fifthsetStandings[0] = value[0];
             fifthsetStandings[1] = value[1];
             if (fifthsetStandings[0] != 0 || fifthsetStandings[1] != 0) {
@@ -221,17 +224,17 @@ class _afterMatchPageState extends State<afterMatchPage> {
               setDevidersLines[4] = setDevidersLines[0];
             }
           }
-          if (x == 5) {
+          if (x == 1) {
             //Do nothing when it's 5 sets 4 min
 
           }
-          if (x == 6) {
+          if (x == 3) {
             //Do nothing
           }
-          if (x == 7) {
+          if (x == 9) {
             opponentName = value;
           }
-          if (x == 8) {
+          if (x == 13) {
             //double n = num.parse(numberToRound.toStringAsFixed(2));
             opponentStats = [];
             opponentStats.add(value[13].toDouble());
@@ -255,13 +258,13 @@ class _afterMatchPageState extends State<afterMatchPage> {
               opponentStats[3] = 0;
             }
           }
-          if (x == 12) {
+          if (x == 6) {
             for (var i = 0; i < 10; i++) {
               trackedStats.add(value[i]);
             }
           }
 
-          if (x == 13) {
+          if (x == 12) {
             yourName = value;
           }
           if (x == 14) {
@@ -308,7 +311,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
       child: Container(
         height: 2,
         width: 300,
-        color: Color(0xFF707070),
+        color: colors.transparentWhite,
       ),
     );
   }
@@ -374,7 +377,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
             child: Container(
               height: 2,
               width: 300,
-              color: Color(0xFF707070),
+              color: appColors().transparentWhite,
             ),
           ),
         ],
@@ -426,7 +429,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
             child: Container(
               height: 2,
               width: 300,
-              color: Color(0xFF707070),
+              color: appColors().transparentWhite,
             ),
           ),
         ],
@@ -474,7 +477,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    print("aftermatch init");
     getMatchData();
   }
 
@@ -513,7 +516,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: colors.backgroundColor,
         body: Column(children: [
           SizedBox(height: 25),
           Stack(children: [
@@ -526,7 +529,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
-                    color: Color(0xFF272626),
+                    color: colors.cardBlue,
                   ),
                   height: 270,
                   width: 350,
@@ -538,7 +541,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
                         child: Container(
                             height: 55,
                             width: 300,
-                            color: Color(0xFF3E3B3B),
+                            color: colors.backgroundColor,
                             child: Padding(
                                 padding: EdgeInsets.only(left: 15, right: 45),
                                 child: Row(children: [
@@ -557,7 +560,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
                         child: Container(
                             height: 55,
                             width: 300,
-                            color: Color(0xFF3E3B3B),
+                            color: colors.backgroundColor,
                             child: Padding(
                                 padding: EdgeInsets.only(left: 15, right: 45),
                                 child: Row(children: [
@@ -581,7 +584,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
                             height: 35,
                             width: 80,
                             decoration: BoxDecoration(
-                              color: Color(0xFF3E3B3B),
+                              color: colors.backgroundColor,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
                             ),
@@ -683,7 +686,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
                     Container(
                       height: 125,
                       width: 2,
-                      color: Color(0xFF707070),
+                      color: colors.transparentWhite,
                     )
                   ],
                 ),
@@ -929,7 +932,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(20)),
-              color: Color(0xFF272626),
+              color: colors.cardBlue,
             ),
             height: 360,
             width: 350,
@@ -955,7 +958,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
                         Container(
                           height: 20,
                           width: 3,
-                          color: Colors.green,
+                          color: colors.mainGreen,
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(52, 0, 0, 0),
@@ -1040,9 +1043,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
                             decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
-                              gradient: LinearGradient(
-                                colors: [Color(0xFF272626), Color(0xFF6E6E6E)],
-                              ),
+                              color: colors.mainGreen,
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -1077,35 +1078,4 @@ class _afterMatchPageState extends State<afterMatchPage> {
           ),
         ]));
   }
-}
-
-_buildTextField(TextEditingController controller, IconData icon,
-    String labelText, bool obscure, bool ifEddited) {
-  return Container(
-    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-        color: Color(0xFF3E3B3B),
-        border: Border.all(color: Colors.transparent)),
-    child: TextField(
-      onChanged: (text) {
-        if (text != "") {
-          ifEddited = true;
-        }
-      },
-      obscureText: obscure,
-      controller: controller,
-      style: TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-          labelText: labelText,
-          labelStyle: TextStyle(color: Colors.white),
-          icon: Icon(
-            icon,
-            color: Colors.white,
-          ),
-          // prefix: Icon(icon),
-          border: InputBorder.none),
-    ),
-  );
 }

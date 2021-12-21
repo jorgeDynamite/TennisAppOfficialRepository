@@ -33,6 +33,7 @@ class HomePageView extends StatefulWidget {
 
 class _HomePageViewState extends State<HomePageView> {
   bool y = false;
+  appColors colors = appColors();
   String activePlayerFirstLetter = "";
   String activePlayerlastLetter = "";
   String initials = "GT";
@@ -100,8 +101,10 @@ class _HomePageViewState extends State<HomePageView> {
   }
 
   void setPlayerReference() async {
-    String url;
     SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    String url;
+
     this.coachlastName = preferences.getString("lastName").toString();
     this.playerFirstName =
         preferences.getString("activePlayerFirstName").toString();
@@ -180,8 +183,10 @@ class _HomePageViewState extends State<HomePageView> {
     super.initState();
     selectedPlayerShow();
     getActivePlayerData();
+    if (!appState.coach!) {
+      setPlayerReference();
+    }
 
-    //setPlayerReference();
     appState.chartData = lastGameString == "Last Match";
   }
 

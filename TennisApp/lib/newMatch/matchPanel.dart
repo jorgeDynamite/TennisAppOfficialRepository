@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/RandomWidgets/loadingPage.dart';
 import 'package:app/bloc/app_state.dart';
 import 'package:app/newMatch/after_match.dart';
 import 'package:app/newMatch/newMatchLastPage.dart';
@@ -16,6 +17,8 @@ import 'package:app/newMatch/newMatchFirstPage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../colors.dart';
 
 class MatchPanel extends StatefulWidget {
   MatchPanel(
@@ -57,7 +60,7 @@ class _MatchPanelState extends State<MatchPanel> {
   late Timer timer;
   String onOff = "OFF";
   String imageURL = "Style/Pictures/antenna-white.png";
-
+  appColors colors = appColors();
   late String url;
   final databaseReference = FirebaseDatabase.instance.reference();
   late String coachlastName;
@@ -111,7 +114,11 @@ class _MatchPanelState extends State<MatchPanel> {
     double x = 0;
     if (dataSnapshot.snapshot.value != null) {
       dynamic values = dataSnapshot.snapshot.value!;
-      values[0].forEach((key, value) {
+      dynamic values1 = values[1];
+      values[0] = 0;
+      print(values1.toString() + "new");
+      // 1 turnering läggs till pågrund av ovan valuees[0]
+      values1.forEach((key, value) {
         x++;
       });
       return x + 1;
@@ -229,7 +236,7 @@ class _MatchPanelState extends State<MatchPanel> {
     }
   }
 
-  Future whenMatchFinischedFunc() async {
+  Future<void> whenMatchFinischedFunc() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     updateTime();
     late DatabaseReference reference;
@@ -256,8 +263,9 @@ class _MatchPanelState extends State<MatchPanel> {
     url = preferences.getBool("coach")!
         ? _state.urlsFromCoach["URLtoPlayer"]!
         : _state.urlsFromTennisAccounts["URLtoPlayer"]!;
-
+    print(url);
     urlTennisPlayer = _state.urlsFromTennisAccounts["URLtoPlayer"]!;
+    print(urlTennisPlayer);
     databaseReference.child(url).push();
     whoWonTheMatch();
     DatabaseEvent dataSnapshot =
@@ -269,7 +277,6 @@ class _MatchPanelState extends State<MatchPanel> {
             .child(urlTennisPlayer + "playerTournaments/")
             .once();
 
-    dynamic valuestournamentNumberSnapchot = dataSnapshot.snapshot.value!;
     if (yourtournament.servePointsPlayed != 0 ||
         yourtournament.recevingPointsPlayed != 0) {
       firstServeprocent = yourtournament.firstServeProcentage != 1
@@ -314,7 +321,7 @@ class _MatchPanelState extends State<MatchPanel> {
     int length = 0;
 
     int y = 1;
-
+    print("1");
     if (dataSnapshot.snapshot.value != null) {
       dynamic valuesDataSnapshot = dataSnapshot.snapshot.value!;
       valuesDataSnapshot.forEach((key, value) {
@@ -395,6 +402,7 @@ class _MatchPanelState extends State<MatchPanel> {
         }
       });
     }
+    print("3");
     if (!x) {
       Map<String, dynamic> recordData = {
         "matchesWon": mainPlayerWonTheMatch ? 1 : 0,
@@ -411,11 +419,12 @@ class _MatchPanelState extends State<MatchPanel> {
       matchRecordReferenceTA.push();
       matchRecordReferenceTA.set(recordData);
     }
+    print("4");
     String tournamentNumber =
         getTournamnetNumber(tournamentNumberSnapchot).toInt().toString();
-
+    print(tournamentNumber);
     // When you know you are on the right player
-
+    print("5");
     if (_state.newTournamnet!) {
       if (preferences.getBool("coach")!) {
         reference = databaseReference.child(url +
@@ -427,11 +436,20 @@ class _MatchPanelState extends State<MatchPanel> {
             "/" +
             "match" +
             " " +
-            widget.tournamentDataPack.matches[0].matchNumber.toString() +
+            "1" +
             "/");
         reference.push();
       }
-
+      print("playerTournaments" +
+          "/" +
+          tournamentNumber +
+          "/" +
+          widget.tournamentDataPack.tournamentName +
+          "/" +
+          "match" +
+          " " +
+          "1" +
+          "/");
       referenceTA = databaseReference.child(urlTennisPlayer +
           "playerTournaments" +
           "/" +
@@ -441,8 +459,9 @@ class _MatchPanelState extends State<MatchPanel> {
           "/" +
           "match" +
           " " +
-          widget.tournamentDataPack.matches[0].matchNumber.toString() +
+          "1" +
           "/");
+      referenceTA.push();
       preferences.getBool("coach")!
           ? afterMatchURL = url +
               "playerTournaments" +
@@ -453,7 +472,7 @@ class _MatchPanelState extends State<MatchPanel> {
               "/" +
               "match" +
               " " +
-              widget.tournamentDataPack.matches[0].matchNumber.toString() +
+              "1" +
               "/"
           : "";
       afterMatchURLTA = urlTennisPlayer +
@@ -465,11 +484,18 @@ class _MatchPanelState extends State<MatchPanel> {
           "/" +
           "match" +
           " " +
-          widget.tournamentDataPack.matches[0].matchNumber.toString() +
+          "1" +
           "/";
+
+      print("6");
     } else {
-      for (var i = 0; i < 10; i++) {
+      print("6");
+      dynamic valuestournamentNumberSnapchot =
+          tournamentNumberSnapchot.snapshot.value!;
+      for (var i = 1; i <= 100; i++) {
+        // print("value0: " + valuestournamentNumberSnapchot[1].toString());
         valuestournamentNumberSnapchot[i].forEach((key, value) {
+          //print("value1: " + value.toString());
           if (widget.tournamentDataPack.tournamentName == key) {
             var matchNumber = 1;
             value.forEach((key, value) {
@@ -479,7 +505,7 @@ class _MatchPanelState extends State<MatchPanel> {
               reference = databaseReference.child(url +
                   "playerTournaments" +
                   "/" +
-                  (i + 1).toString() +
+                  (i).toString() +
                   "/" +
                   widget.tournamentDataPack.tournamentName +
                   "/" +
@@ -488,12 +514,35 @@ class _MatchPanelState extends State<MatchPanel> {
                   matchNumber.toString() +
                   "/");
               reference.push();
+              print("url: " +
+                  url +
+                  "playerTournaments" +
+                  "/" +
+                  (i).toString() +
+                  "/" +
+                  widget.tournamentDataPack.tournamentName +
+                  "/" +
+                  "match" +
+                  " " +
+                  matchNumber.toString() +
+                  "/");
             }
-
+            print("url: " +
+                urlTennisPlayer +
+                "playerTournaments" +
+                "/" +
+                (i).toString() +
+                "/" +
+                widget.tournamentDataPack.tournamentName +
+                "/" +
+                "match" +
+                " " +
+                matchNumber.toString() +
+                "/");
             referenceTA = databaseReference.child(urlTennisPlayer +
                 "playerTournaments" +
                 "/" +
-                (i + 1).toString() +
+                (i).toString() +
                 "/" +
                 widget.tournamentDataPack.tournamentName +
                 "/" +
@@ -506,7 +555,7 @@ class _MatchPanelState extends State<MatchPanel> {
                 ? afterMatchURL = url +
                     "playerTournaments" +
                     "/" +
-                    (i + 1).toString() +
+                    (i).toString() +
                     "/" +
                     widget.tournamentDataPack.tournamentName +
                     "/" +
@@ -518,7 +567,7 @@ class _MatchPanelState extends State<MatchPanel> {
             afterMatchURLTA = urlTennisPlayer +
                 "playerTournaments" +
                 "/" +
-                (i + 1).toString() +
+                (i).toString() +
                 "/" +
                 widget.tournamentDataPack.tournamentName +
                 "/" +
@@ -528,7 +577,9 @@ class _MatchPanelState extends State<MatchPanel> {
                 "/";
           }
         });
-        break;
+        if (afterMatchURLTA != "") {
+          break;
+        }
       }
     }
     if (preferences.getBool("coach")!) {
@@ -544,7 +595,7 @@ class _MatchPanelState extends State<MatchPanel> {
 
     lastMatchReferenceTA.remove();
     lastMatchReferenceTA.push();
-
+    print(7);
     if (yourtournament.rules!.matchFormatVariable.numberSets != null) {
       if (yourtournament.rules!.matchFormatVariable.numberSets == 3) {
         threesets = true;
@@ -566,7 +617,7 @@ class _MatchPanelState extends State<MatchPanel> {
     if (opponenttTournamnet.returnErrors == null) {
       opponenttTournamnet.returnErrors = 0;
     }
-
+    print(8);
     int yourwinners = makeVariable([
       yourtournament.voleyWinner!,
       yourtournament.aces!,
@@ -656,15 +707,16 @@ class _MatchPanelState extends State<MatchPanel> {
 
       "surface": yourtournament.surface!.toString(),
     };
-
+    print(9);
     if (preferences.getBool("coach")!) {
-      reference.set(matchdata);
-      lastMatchReference.set(matchdata);
+      await reference.set(matchdata);
+      await lastMatchReference.set(matchdata);
     }
 
-    referenceTA.set(matchdata);
+    await referenceTA.set(matchdata);
 
-    lastMatchReferenceTA.set(matchdata);
+    await lastMatchReferenceTA.set(matchdata);
+    print(10);
   }
 
   double makeVariable(List<int> stats) {
@@ -1836,9 +1888,6 @@ class _MatchPanelState extends State<MatchPanel> {
     fourthsetStandings = widget.gameScorePackage[4];
     fifthsetStandings = widget.gameScorePackage[5];
 
-    if (widget.tournamentDataPack.matches[0].pointsPlayed != null) {
-      addTolivescore();
-    }
     if (widget.tournamentDataPack.matches[0].pointsPlayed != 0) {
       timeString = appState.minuts! >= 10
           ? appState.hours.toString() + ":" + appState.minuts.toString()
@@ -1856,6 +1905,7 @@ class _MatchPanelState extends State<MatchPanel> {
     if (_state.whoWon!.isNotEmpty) {
       print("setScore");
       setScore(_state.whoWon![0], _state.whoWon![1]);
+      addTolivescore();
     }
   }
 
@@ -1919,59 +1969,67 @@ class _MatchPanelState extends State<MatchPanel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: colors.backgroundColor,
         body: Column(children: [
           SizedBox(height: 25),
           Stack(children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Color(0xFF272626),
+              Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                height: 49,
-                width: 350,
-                child: Column(children: [
-                  SizedBox(height: 17),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 55),
-                        child: Text(
-                          "Score",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Helvetica",
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(right: 60),
-                        child: Text(
-                          "Serve",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Helvetica",
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(),
-                        child: Text(
-                          "Rally",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Helvetica",
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      )
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.center,
+                color: colors.backgroundColor,
+                shadowColor: Colors.black,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    color: colors.cardBlue, // Color(0xFF272626),
                   ),
-                ]),
+                  height: 49,
+                  width: 350,
+                  child: Column(children: [
+                    SizedBox(height: 17),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 55),
+                          child: Text(
+                            "Score",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Helvetica",
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 60),
+                          child: Text(
+                            "Serve",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Helvetica",
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(),
+                          child: Text(
+                            "Rally",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Helvetica",
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.center,
+                    ),
+                  ]),
+                ),
               ),
             ]),
             Padding(
@@ -1988,9 +2046,10 @@ class _MatchPanelState extends State<MatchPanel> {
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            color: Color(0xFF707070),
-                          ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                              color: colors.cardBlue //Color(0xFF707070),
+                              ),
                           height: 3,
                           width: 321,
                         ),
@@ -2011,100 +2070,137 @@ class _MatchPanelState extends State<MatchPanel> {
           Stack(
             children: [
               Padding(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    color: Color(0xFF272626),
+                child: Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  height: 270,
-                  width: 350,
-                  child: Column(
-                    children: [
-                      // ScoreBoard
-                      Padding(
-                        padding: EdgeInsets.only(left: 15, top: 65, right: 3),
-                        child: Container(
-                            height: 55,
-                            width: 300,
-                            color: Color(0xFF3E3B3B),
-                            child: Padding(
-                                padding: EdgeInsets.only(left: 15, right: 45),
-                                child: Row(children: [
-                                  Text(
-                                    nameToLongFunc(widget.yourName, 18),
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
-                                  ),
-                                  serveIndacator(1),
-                                ]))),
-                      ),
-
-                      Padding(
-                        padding: EdgeInsets.only(left: 15, top: 15, right: 3),
-                        child: Container(
-                            height: 55,
-                            width: 300,
-                            color: Color(0xFF3E3B3B),
-                            child: Padding(
-                                padding: EdgeInsets.only(left: 15, right: 45),
-                                child: Row(children: [
-                                  Text(
-                                    nameToLongFunc(widget.opponentName, 18),
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
-                                  ),
-                                  serveIndacator(2),
-                                ]))),
-                      ),
-                      // Game Stats
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 35,
-                            width: 80,
-                            decoration: BoxDecoration(
-                              color: Color(0xFF3E3B3B),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
+                  color: colors.backgroundColor,
+                  shadowColor: Colors.black,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        color: colors.cardBlue //Color(0xFF272626),
+                        ),
+                    height: 270,
+                    width: 350,
+                    child: Column(
+                      children: [
+                        // ScoreBoard
+                        Padding(
+                          padding: EdgeInsets.only(left: 15, top: 65, right: 3),
+                          child: Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    gameStandingsStrings[0],
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 15),
+                            color: colors.backgroundColor,
+                            shadowColor: Colors.black,
+                            child: Container(
+                                height: 55,
+                                width: 300,
+                                color:
+                                    colors.backgroundColor, //Color(0xFF3E3B3B),
+                                child: Padding(
+                                    padding:
+                                        EdgeInsets.only(left: 15, right: 45),
+                                    child: Row(children: [
+                                      Text(
+                                        nameToLongFunc(widget.yourName, 18),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15),
+                                      ),
+                                      serveIndacator(1),
+                                    ]))),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 15, top: 15, right: 3),
+                          child: Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            color: colors.backgroundColor,
+                            shadowColor: Colors.black,
+                            child: Container(
+                                height: 55,
+                                width: 300,
+                                color:
+                                    colors.backgroundColor, //Color(0xFF3E3B3B),
+                                child: Padding(
+                                    padding:
+                                        EdgeInsets.only(left: 15, right: 45),
+                                    child: Row(children: [
+                                      Text(
+                                        nameToLongFunc(widget.opponentName, 18),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15),
+                                      ),
+                                      serveIndacator(2),
+                                    ]))),
+                          ),
+                        ),
+                        // Game Stats
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Card(
+                                elevation: 5,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                color: colors.backgroundColor,
+                                shadowColor: Colors.black,
+                                child: Container(
+                                  height: 35,
+                                  width: 80,
+                                  decoration: BoxDecoration(
+                                    color: colors
+                                        .backgroundColor, //Color(0xFF3E3B3B),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
                                   ),
-                                  Text(
-                                    " - ",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 15),
-                                  ),
-                                  Text(
-                                    gameStandingsStrings[1],
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 15),
-                                  )
-                                ]),
-                          )
-                        ],
-                      )
-                      // Ends
-                    ],
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          gameStandingsStrings[0],
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 15),
+                                        ),
+                                        Text(
+                                          " - ",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 15),
+                                        ),
+                                        Text(
+                                          gameStandingsStrings[1],
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 15),
+                                        )
+                                      ]),
+                                )),
+                          ],
+                        )
+                        // Ends
+                      ],
+                    ),
                   ),
                 ),
                 padding: EdgeInsets.only(
@@ -2141,7 +2237,7 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 65,
+                  top: 77,
                   left: 285,
                 ),
                 child: Row(
@@ -2158,7 +2254,7 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 65,
+                  top: 77,
                   left: 315,
                 ),
                 child: Row(
@@ -2166,7 +2262,7 @@ class _MatchPanelState extends State<MatchPanel> {
                     Container(
                       height: 125,
                       width: 2,
-                      color: Color(0xFF707070),
+                      color: colors.transparentWhite, // Color(0xFF707070),
                     )
                   ],
                 ),
@@ -2174,7 +2270,7 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 65,
+                  top: 77,
                   left: 255,
                 ),
                 child: Row(
@@ -2191,7 +2287,7 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 65,
+                  top: 77,
                   left: 225,
                 ),
                 child: Row(
@@ -2208,7 +2304,7 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 65,
+                  top: 77,
                   left: 195,
                 ),
                 child: Row(
@@ -2228,7 +2324,7 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 82,
+                  top: 90,
                   left: 324,
                 ),
                 child: Row(
@@ -2246,7 +2342,7 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 152,
+                  top: 167,
                   left: 324,
                 ),
                 child: Row(
@@ -2264,7 +2360,7 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 82,
+                  top: 90,
                   left: 294,
                 ),
                 child: Row(
@@ -2282,7 +2378,7 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 152,
+                  top: 167,
                   left: 294,
                 ),
                 child: Row(
@@ -2300,7 +2396,7 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 82,
+                  top: 90,
                   left: 264,
                 ),
                 child: Row(
@@ -2318,7 +2414,7 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 152,
+                  top: 167,
                   left: 264,
                 ),
                 child: Row(
@@ -2336,7 +2432,7 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 82,
+                  top: 90,
                   left: 234,
                 ),
                 child: Row(
@@ -2354,7 +2450,7 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 152,
+                  top: 167,
                   left: 234,
                 ),
                 child: Row(
@@ -2372,7 +2468,7 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 82,
+                  top: 90,
                   left: 204,
                 ),
                 child: Row(
@@ -2390,7 +2486,7 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 152,
+                  top: 167,
                   left: 204,
                 ),
                 child: Row(
@@ -2598,67 +2694,75 @@ class _MatchPanelState extends State<MatchPanel> {
                             }
                             updateTime();
                           },
-                          child: Container(
-                            height: 175,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              color: Color(0xFF0ADE7C),
+                          child: Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(20, 19, 0, 0),
-                                  child: Row(children: [
-                                    Image.asset(
-                                      "Style/Pictures/TennisBall.png",
-                                      height: 24,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        left: 10,
+                            color: colors.backgroundColor,
+                            shadowColor: Colors.black,
+                            child: Container(
+                              height: 180,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                                color: colors.mainGreen, //Color(0xFF0ADE7C),
+                              ),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(20, 19, 0, 0),
+                                    child: Row(children: [
+                                      Image.asset(
+                                        "Style/Pictures/TennisBall.png",
+                                        height: 24,
                                       ),
-                                      child: Text("Point Won By",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12.5,
-                                              fontFamily: "Telugu Sangam MN",
-                                              fontWeight: FontWeight.w600)),
-                                    )
-                                  ]),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(22, 28, 10, 0),
-                                  child: Text(
-                                    nameToLongFunc(widget.yourName, 7) +
-                                        " "
-                                            "Won",
-                                    style: TextStyle(
-                                        fontFamily: "Helvetica",
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 26,
-                                        color: Colors.white),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          left: 10,
+                                        ),
+                                        child: Text("Point Won By",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12.5,
+                                                fontFamily: "Telugu Sangam MN",
+                                                fontWeight: FontWeight.w600)),
+                                      )
+                                    ]),
                                   ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(22, 10, 10, 0),
-                                  child: Column(
-                                    children: [
-                                      Text("",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 11.5,
-                                              fontFamily: "Telugu Sangam MN",
-                                              fontWeight: FontWeight.w600)),
-                                    ],
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(22, 28, 10, 0),
+                                    child: Text(
+                                      nameToLongFunc(widget.yourName, 7) +
+                                          " "
+                                              "Won",
+                                      style: TextStyle(
+                                          fontFamily: "Helvetica",
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 26,
+                                          color: Colors.white),
+                                    ),
                                   ),
-                                )
-                              ],
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(22, 10, 10, 0),
+                                    child: Column(
+                                      children: [
+                                        Text("",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 11.5,
+                                                fontFamily: "Telugu Sangam MN",
+                                                fontWeight: FontWeight.w600)),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                           padding: EdgeInsets.all(0),
                         ),
-                        padding: EdgeInsets.fromLTRB(16, 18, 8, 0),
+                        padding: EdgeInsets.fromLTRB(16, 18, 4, 0),
                       ),
                     ),
                     Expanded(
@@ -2850,69 +2954,76 @@ class _MatchPanelState extends State<MatchPanel> {
                             }
                             updateTime();
                           },
-                          child: Container(
-                            height: 175,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              gradient: LinearGradient(
-                                colors: [Color(0xFF272626), Color(0xFF6E6E6E)],
-                              ),
+                          child: Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(20, 15, 0, 0),
-                                  child: Row(children: [
-                                    Image.asset(
-                                      "Style/Pictures/chartgreen.png",
-                                      height: 28,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        left: 10,
+                            color: colors.backgroundColor,
+                            shadowColor: Colors.black,
+                            child: Container(
+                              height: 180,
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                  color: colors.cardBlue //
+                                  ),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(20, 15, 0, 0),
+                                    child: Row(children: [
+                                      Image.asset(
+                                        "Style/Pictures/chartgreen.png",
+                                        height: 28,
                                       ),
-                                      child: Text("Point Won By",
-                                          style: TextStyle(
-                                              color: Color(0xFF9B9191),
-                                              fontSize: 11.5,
-                                              fontFamily: "Telugu Sangam MN",
-                                              fontWeight: FontWeight.w200)),
-                                    )
-                                  ]),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(20, 28, 25, 0),
-                                  child: Text(
-                                    nameToLongFunc(widget.opponentName, 7) +
-                                        " " +
-                                        "Won",
-                                    style: TextStyle(
-                                        fontFamily: "Helvetica",
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 25,
-                                        color: Colors.white),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          left: 10,
+                                        ),
+                                        child: Text("Point Won By",
+                                            style: TextStyle(
+                                                color: colors
+                                                    .transparentWhite, //Color(0xFF9B9191),
+                                                fontSize: 11.5,
+                                                fontFamily: "Telugu Sangam MN",
+                                                fontWeight: FontWeight.w200)),
+                                      )
+                                    ]),
                                   ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(22, 25, 10, 0),
-                                  child: Column(
-                                    children: [
-                                      Text("",
-                                          style: TextStyle(
-                                              color: Color(0xFF9B9191),
-                                              fontSize: 11.5,
-                                              fontFamily: "Telugu Sangam MN",
-                                              fontWeight: FontWeight.w200)),
-                                    ],
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(20, 28, 25, 0),
+                                    child: Text(
+                                      nameToLongFunc(widget.opponentName, 7) +
+                                          " " +
+                                          "Won",
+                                      style: TextStyle(
+                                          fontFamily: "Helvetica",
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25,
+                                          color: Colors.white),
+                                    ),
                                   ),
-                                )
-                              ],
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(22, 25, 10, 0),
+                                    child: Column(
+                                      children: [
+                                        Text("",
+                                            style: TextStyle(
+                                                color: Color(0xFF9B9191),
+                                                fontSize: 11.5,
+                                                fontFamily: "Telugu Sangam MN",
+                                                fontWeight: FontWeight.w200)),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                           padding: EdgeInsets.all(0),
                         ),
-                        padding: EdgeInsets.fromLTRB(8, 18, 16, 0),
+                        padding: EdgeInsets.fromLTRB(4, 18, 16, 0),
                       ),
                     ),
                   ],
@@ -2923,7 +3034,7 @@ class _MatchPanelState extends State<MatchPanel> {
             ],
           ),
           SizedBox(
-            height: 120,
+            height: 79,
           ),
           Text(
             "Match ID: " + widget.matchID,
@@ -2939,13 +3050,21 @@ class _MatchPanelState extends State<MatchPanel> {
               Stack(
                 children: [
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        color: Color(0xFF272626),
+                    Card(
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      height: 60,
-                      width: 348,
+                      color: colors.backgroundColor,
+                      shadowColor: Colors.black,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          color: colors.cardBlue, //Color(0xFF272626),
+                        ),
+                        height: 60,
+                        width: 348,
+                      ),
                     ),
                   ]),
                   Padding(
@@ -2962,34 +3081,40 @@ class _MatchPanelState extends State<MatchPanel> {
                                     builder: (_) =>
                                         HomePageView([20, 20, 40], true)));
                           },
-                          child: Container(
-                            height: 40,
-                            width: 90,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              gradient: LinearGradient(
-                                colors: [Color(0xFF272626), Color(0xFF6E6E6E)],
-                              ),
+                          child: Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        "Quit",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 17,
+                            color: colors.backgroundColor,
+                            shadowColor: Colors.black,
+                            child: Container(
+                              height: 40,
+                              width: 90,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                                color: colors.backgroundColor, //
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "Quit",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 17,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  padding: EdgeInsets.only(top: 8),
-                                )
-                              ],
+                                      ],
+                                    ),
+                                    padding: EdgeInsets.only(top: 8),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -2997,7 +3122,7 @@ class _MatchPanelState extends State<MatchPanel> {
                       padding: EdgeInsets.only(
                         left: 0,
                         bottom: 28,
-                        top: 5,
+                        top: 10,
                       )),
                   Padding(
                     child: Column(children: [
@@ -3042,47 +3167,59 @@ class _MatchPanelState extends State<MatchPanel> {
                   Padding(
                       child: Column(children: [
                         MaterialButton(
-                          onPressed: () {
+                          onPressed: () async {
                             //timer.cancel;
                             _state.whoWon = [];
-                            whenMatchFinischedFunc().whenComplete(() =>
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => afterMatchPage(
-                                            afterMatchURL,
-                                            afterMatchURLTA,
-                                            widget.matchID,
-                                            timeString))));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => LoadingPage()));
+
+                            await whenMatchFinischedFunc().whenComplete(() => {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => afterMatchPage(
+                                              afterMatchURL,
+                                              afterMatchURLTA,
+                                              widget.matchID,
+                                              timeString)))
+                                });
                           },
-                          child: Container(
-                            height: 40,
-                            width: 110,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              gradient: LinearGradient(
-                                colors: [Color(0xFF272626), Color(0xFF6E6E6E)],
-                              ),
+                          child: Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        "Finish & Save",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
+                            color: colors.backgroundColor,
+                            shadowColor: Colors.black,
+                            child: Container(
+                              height: 40,
+                              width: 110,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                                color: colors.mainGreen, //
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "Finish & Save",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  padding: EdgeInsets.only(top: 12, left: 4),
-                                )
-                              ],
+                                      ],
+                                    ),
+                                    padding: EdgeInsets.only(top: 12, left: 4),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -3090,7 +3227,7 @@ class _MatchPanelState extends State<MatchPanel> {
                       padding: EdgeInsets.only(
                         left: 205,
                         bottom: 28,
-                        top: 5,
+                        top: 10,
                       )),
                 ],
               ),
@@ -3098,35 +3235,4 @@ class _MatchPanelState extends State<MatchPanel> {
           ),
         ]));
   }
-}
-
-_buildTextField(TextEditingController controller, IconData icon,
-    String labelText, bool obscure, bool ifEddited) {
-  return Container(
-    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-        color: Color(0xFF3E3B3B),
-        border: Border.all(color: Colors.transparent)),
-    child: TextField(
-      onChanged: (text) {
-        if (text != "") {
-          ifEddited = true;
-        }
-      },
-      obscureText: obscure,
-      controller: controller,
-      style: TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-          labelText: labelText,
-          labelStyle: TextStyle(color: Colors.white),
-          icon: Icon(
-            icon,
-            color: Colors.white,
-          ),
-          // prefix: Icon(icon),
-          border: InputBorder.none),
-    ),
-  );
 }

@@ -308,12 +308,15 @@ Future<bool> newAccountChecker(
   bool coach;
 
   bool x = true;
+  print(passwords);
+  print(email);
+
   try {
     user = (await _auth.signInWithEmailAndPassword(
         email: email.trim(), password: email));
   } on Exception catch (_) {
     try {
-      user = (await _auth.createUserWithEmailAndPassword(
+      user = (await _auth.signInWithEmailAndPassword(
           email: email.trim() + "@gmail.com", password: passwords));
     } on Exception catch (_) {
       x = false;
@@ -325,13 +328,7 @@ Future<bool> newAccountChecker(
     lastname = split[3].split("-")[1];
     uid = split[3].split("-")[2];
 
-    app.initSet(
-      split[0] == "CP_Accounts",
-      uid,
-      email,
-      firstname,
-      lastname,
-    );
+    app.initSet(split[0] == "CP_Accounts", uid, email, lastname, firstname);
   }
   return x;
 }

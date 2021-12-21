@@ -1,4 +1,5 @@
 import 'package:app/Players.dart';
+import 'package:app/colors.dart';
 import 'package:app/newMatch/matchPanel.dart';
 import 'package:app/newMatch/thePoint/RallyServeWon.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,7 @@ class Serve extends StatefulWidget {
 }
 
 class _ServeState extends State<Serve> {
+  appColors colors = appColors();
   Widget? serveButton(String text) {
     if (text == "Double Fault") {
       if (widget.aceOrNot) {
@@ -289,40 +291,44 @@ class _ServeState extends State<Serve> {
                             widget.whoServes)));
               }
             },
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                color: Color(0xFF272626),
-              ),
-              height: 170,
-              width: 350,
-              child: Stack(children: [
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 35,
-                    ),
-                    SizedBox(
-                      height: 35,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(text,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 28,
-                                fontWeight: FontWeight.w600,
-                              ))
-                        ],
-                      ),
-                    ),
-                  ],
+            child: Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              ]),
-            ))
+                color: colors.backgroundColor,
+                shadowColor: Colors.black,
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: colors.cardBlue //Color(0xFF272626),
+                      ),
+                  height: 100,
+                  width: 350,
+                  child: Stack(children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(text,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w600,
+                                  )),
+                              Icon(Icons.arrow_forward_ios,
+                                  size: 26, color: Colors.white)
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ]),
+                )))
       ],
     );
     if (text == "First Serve IN") {
@@ -360,59 +366,67 @@ class _ServeState extends State<Serve> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: colors.backgroundColor, //
         body: Column(children: [
           SizedBox(height: 25),
           Stack(children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Color(0xFF272626),
+              Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                height: 49,
-                width: 350,
-                child: Column(children: [
-                  SizedBox(height: 17),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 55),
-                        child: Text(
-                          "Score",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Helvetica",
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
+                color: colors.backgroundColor,
+                shadowColor: Colors.black,
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: colors.cardBlue //Color(0xFF272626),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(right: 60),
-                        child: Text(
-                          "Serve",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Helvetica",
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
+                  height: 49,
+                  width: 350,
+                  child: Column(children: [
+                    SizedBox(height: 17),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 55),
+                          child: Text(
+                            "Score",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Helvetica",
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(),
-                        child: Text(
-                          "Rally",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Helvetica",
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
+                        Padding(
+                          padding: EdgeInsets.only(right: 60),
+                          child: Text(
+                            "Serve",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Helvetica",
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      )
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.center,
-                  ),
-                ]),
+                        Padding(
+                          padding: EdgeInsets.only(),
+                          child: Text(
+                            "Rally",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Helvetica",
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.center,
+                    ),
+                  ]),
+                ),
               ),
             ]),
             Padding(
@@ -429,9 +443,10 @@ class _ServeState extends State<Serve> {
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            color: Color(0xFF707070),
-                          ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                              color: Colors.transparent // Color(0xFF707070),
+                              ),
                           height: 3,
                           width: 321,
                         ),
@@ -453,89 +468,95 @@ class _ServeState extends State<Serve> {
           serveButton("Second Serve IN")!,
           serveButton("Double Fault")!,
           SizedBox(
-            height: 30,
+            height: 60,
           ),
           MaterialButton(
-              onPressed: () {
-                if (widget.aceOrNot) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => RallyServeerWon(
-                                widget.whoServes,
-                                widget.doubleFaults,
-                                widget.firstServe,
-                                widget.secondServe,
-                                widget.forcedErrors,
-                                widget.unforcedErrors,
-                                widget.returnError,
-                                widget.voleyError,
-                                widget.returnwinner,
-                                widget.voleywinner,
-                                widget.winner,
-                                widget.tournamentData,
-                                widget.opponentName,
-                                widget.castLiveResults,
-                                widget.matchID,
-                                widget.tournamentDataLiveStats,
-                                widget.yourName,
-                                widget.opponentstournamentDataPackLiveStats,
-                                widget.gameScorePackage,
-                              )));
-                } else {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => Rally(
-                                widget.whoServes,
-                                widget.doubleFaults,
-                                widget.firstServe,
-                                widget.secondServe,
-                                widget.forcedErrors,
-                                widget.unforcedErrors,
-                                widget.returnError,
-                                widget.voleyError,
-                                widget.returnwinner,
-                                widget.voleywinner,
-                                widget.winner,
-                                widget.tournamentData,
-                                widget.opponentName,
-                                widget.castLiveResults,
-                                widget.matchID,
-                                widget.tournamentDataLiveStats,
-                                widget.yourName,
-                                widget.opponentstournamentDataPackLiveStats,
-                                widget.gameScorePackage,
-                              )));
-                }
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  gradient: LinearGradient(
-                    colors: [Color(0xFF272626), Color(0xFF6E6E6E)],
-                  ),
+            onPressed: () {
+              if (widget.aceOrNot) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => RallyServeerWon(
+                              widget.whoServes,
+                              widget.doubleFaults,
+                              widget.firstServe,
+                              widget.secondServe,
+                              widget.forcedErrors,
+                              widget.unforcedErrors,
+                              widget.returnError,
+                              widget.voleyError,
+                              widget.returnwinner,
+                              widget.voleywinner,
+                              widget.winner,
+                              widget.tournamentData,
+                              widget.opponentName,
+                              widget.castLiveResults,
+                              widget.matchID,
+                              widget.tournamentDataLiveStats,
+                              widget.yourName,
+                              widget.opponentstournamentDataPackLiveStats,
+                              widget.gameScorePackage,
+                            )));
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => Rally(
+                              widget.whoServes,
+                              widget.doubleFaults,
+                              widget.firstServe,
+                              widget.secondServe,
+                              widget.forcedErrors,
+                              widget.unforcedErrors,
+                              widget.returnError,
+                              widget.voleyError,
+                              widget.returnwinner,
+                              widget.voleywinner,
+                              widget.winner,
+                              widget.tournamentData,
+                              widget.opponentName,
+                              widget.castLiveResults,
+                              widget.matchID,
+                              widget.tournamentDataLiveStats,
+                              widget.yourName,
+                              widget.opponentstournamentDataPackLiveStats,
+                              widget.gameScorePackage,
+                            )));
+              }
+            },
+            child: Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                height: 60,
-                width: 350,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Went in",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
+                color: colors.backgroundColor,
+                shadowColor: Colors.black,
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: colors.cardBlue //
                       ),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      size: 22,
-                      color: Colors.white,
-                    )
-                  ],
-                ),
-              )),
+                  height: 60,
+                  width: 350,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Went in",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        size: 22,
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
+                )),
+          ),
         ]));
   }
 }

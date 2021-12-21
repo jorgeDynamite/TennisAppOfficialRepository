@@ -7,7 +7,10 @@ import 'package:app/newMatch/thePoint/whoStartsToServe.dart';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../colors.dart';
 
 class NewMatchLastPage extends StatefulWidget {
   NewMatchLastPage(this.matchFormat, this.ad, this.opponentName,
@@ -36,12 +39,13 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
   late String playerFirstName;
   late String playerLastName;
   late Matches1 match1;
+  appColors colors = appColors();
   int? matchNumber;
   Widget? iconPressed;
   bool iconPressedBool = false;
   int theWidgetIndex = 0;
   Widget theWidget = Container();
-  String matchTypeButtonText = "Tournament";
+  String matchTypeButtonText = "Active Tournaments";
   String surfaceTypeButtonText = "Surface";
   Color surfaceButtoniconColor = Colors.white;
   Color matchTypeButtoniconColor = Colors.white;
@@ -275,32 +279,39 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                   }
                 });
               },
-              child: Container(
-                height: 50,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    color: Color(0xFF3E3B3B),
-                    border: Border.all(color: Colors.transparent)),
-                child: Row(children: [
-                  Text(
-                    matchTypeButtonText,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15),
+              child: Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  Padding(
-                      padding: EdgeInsets.only(
-                        left: 0,
+                  color: colors.backgroundColor,
+                  shadowColor: Colors.black,
+                  child: Container(
+                    height: 50,
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: colors.backgroundColor, //Color(0xFF3E3B3B),
+                        border: Border.all(color: Colors.transparent)),
+                    child: Row(children: [
+                      Text(
+                        matchTypeButtonText,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15),
                       ),
-                      child: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 20,
-                        color: matchTypeButtoniconColor,
-                      ))
-                ]),
-              ))),
+                      Padding(
+                          padding: EdgeInsets.only(
+                            left: 0,
+                          ),
+                          child: Icon(
+                            Icons.arrow_forward_ios,
+                            size: 20,
+                            color: matchTypeButtoniconColor,
+                          ))
+                    ]),
+                  )))),
     ]);
   }
 
@@ -319,39 +330,49 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
   Widget newTounamentField(TextEditingController controller, IconData icon,
       String labelText, bool obscure) {
     return Padding(
-      child: Container(
-        height: 50,
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            color: Color(0xFF3E3B3B),
-            border: Border.all(color: Colors.transparent)),
-        child: TextField(
-          onChanged: (text) {
-            if (text != "") {
-              textFieldChangedBool = true;
-            } else {
-              textFieldChangedBool = false;
-            }
-          },
-          obscureText: obscure,
-          controller: controller,
-          style: TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(horizontal: 10),
-              labelText: labelText,
-              labelStyle: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14),
-              icon: Icon(
-                icon,
-                color: Colors.white,
-              ),
-              // prefix: Icon(icon),
-              border: InputBorder.none),
-        ),
-      ),
+      child: Card(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          color: colors.backgroundColor,
+          shadowColor: Colors.black,
+          child: Container(
+            height: 50,
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: colors.backgroundColor,
+                border: Border.all(color: Colors.transparent)),
+            child: TextField(
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(14),
+              ],
+              onChanged: (text) {
+                if (text != "") {
+                  textFieldChangedBool = true;
+                } else {
+                  textFieldChangedBool = false;
+                }
+              },
+              obscureText: obscure,
+              controller: controller,
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                  labelText: labelText,
+                  labelStyle: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14),
+                  icon: Icon(
+                    icon,
+                    color: Colors.white,
+                  ),
+                  // prefix: Icon(icon),
+                  border: InputBorder.none),
+            ),
+          )),
       padding: EdgeInsets.only(left: 30, top: 15, right: 60),
     );
   }
@@ -566,7 +587,7 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
             ),
           )),
       decoration: BoxDecoration(
-          color: Color(0xFF3E3B3B),
+          color: colors.backgroundColor, // Color(0xFF3E3B3B),
           shape: BoxShape.circle,
           border: Border.all(color: borderColor, width: 3)),
     ));
@@ -576,13 +597,21 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
     return Column(children: [
       Stack(children: [
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              color: Color(0xFF272626),
+          Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
-            height: 310,
-            width: 350,
+            color: colors.backgroundColor,
+            shadowColor: Colors.black,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: colors.cardBlue, // Color(0xFF272626),
+              ),
+              height: 310,
+              width: 350,
+            ),
           ),
         ]),
         Padding(
@@ -676,16 +705,23 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
       }
     }
 
-    return Container(
-      color: Color(0xFF3E3B3B),
-      height: 450,
-      width: 270,
-      child: SingleChildScrollView(
-        child: Column(
-          children: torunamentsWidget,
+    return Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
         ),
-      ),
-    );
+        color: colors.backgroundColor,
+        shadowColor: Colors.black,
+        child: Container(
+          color: colors.cardBlue, // Color(0xFF3E3B3B),
+          height: 450,
+          width: 270,
+          child: SingleChildScrollView(
+            child: Column(
+              children: torunamentsWidget,
+            ),
+          ),
+        ));
   }
 
   bool controllerHasText(bool theBool) {
@@ -738,7 +774,7 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
         });
       }
     } else {
-      if (matchTypeButtonText != "Tournament") {
+      if (matchTypeButtonText != "Active Tournaments") {
         if (surfaceTypeButtonText != "Surface") {
           matchDataPack();
 
@@ -788,33 +824,32 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
             checkForErrorFunction();
           });
         },
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            gradient: LinearGradient(
-              colors: [Color(0xFF272626), Color(0xFF6E6E6E)],
+        child: Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
-          ),
-          height: 70,
-          width: 350,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Start the match",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
+            color: colors.backgroundColor,
+            shadowColor: Colors.black,
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  color: colors.cardBlue),
+              height: 50,
+              width: 350,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Start the match",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
               ),
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 22,
-                color: Colors.white,
-              )
-            ],
-          ),
-        ));
+            )));
   }
 
   Widget SurfaceButton(
@@ -834,20 +869,24 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
             });
             //Rules and MAtchType text fixes
 
-            setState(() {
-              nextButtonWidgetStateDependent = nextButton();
-              paddingMenuBar = 216;
-              if (surfaceOrTournament == 2) {
+            nextButtonWidgetStateDependent = nextButton();
+            paddingMenuBar = 216;
+            if (surfaceOrTournament == 2) {
+              setState(() {
                 surfaceTypeButtonText = matchTypeText;
                 surfaceButtoniconColor = Color(0xFF0ADE7C);
 
                 matchTypenotClickOnTwoButtonsTwice = false;
-              } else {
+              });
+            } else {
+              setState(() {
+                currentTournamentarg = currentTournament();
                 matchTypeButtonText = matchTypeText;
                 matchTypeButtoniconColor = Color(0xFF0ADE7C);
                 surfacenotClickOnTwoButtonsTwice = false;
-              }
-            });
+                print(123123123);
+              });
+            }
           },
           child: Text(
             matchTypeText,
@@ -872,40 +911,47 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
   }
 
   Widget surfaceTypesWidget() {
-    return Container(
-      color: Color(0xFF3E3B3B),
-      height: 235,
-      width: 270,
-      child: Column(
-        children: [
-          SurfaceButton("Hard Court", 1, 2),
-          Divider(
-            thickness: 0.5,
-            color: Colors.white,
-            height: 0,
-            endIndent: 20,
-            indent: 20,
+    return Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        color: colors.backgroundColor,
+        shadowColor: Colors.black,
+        child: Container(
+          color: colors.cardBlue, //Color(0xFF3E3B3B),
+          height: 235,
+          width: 270,
+          child: Column(
+            children: [
+              SurfaceButton("Hard Court", 1, 2),
+              Divider(
+                thickness: 0.5,
+                color: Colors.white,
+                height: 0,
+                endIndent: 20,
+                indent: 20,
+              ),
+              SurfaceButton("Clay", 2, 2),
+              Divider(
+                thickness: 0.5,
+                color: Colors.white,
+                height: 0,
+                endIndent: 20,
+                indent: 20,
+              ),
+              SurfaceButton("Grass", 3, 2),
+              Divider(
+                thickness: 0.5,
+                color: Colors.white,
+                height: 0,
+                endIndent: 20,
+                indent: 20,
+              ),
+              SurfaceButton("Carpet", 4, 2),
+            ],
           ),
-          SurfaceButton("Clay", 2, 2),
-          Divider(
-            thickness: 0.5,
-            color: Colors.white,
-            height: 0,
-            endIndent: 20,
-            indent: 20,
-          ),
-          SurfaceButton("Grass", 3, 2),
-          Divider(
-            thickness: 0.5,
-            color: Colors.white,
-            height: 0,
-            endIndent: 20,
-            indent: 20,
-          ),
-          SurfaceButton("Carpet", 4, 2),
-        ],
-      ),
-    );
+        ));
   }
 
   double errorMessagePadding = 250;
@@ -938,59 +984,67 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: colors.backgroundColor,
         body: Column(children: [
           SizedBox(height: 25),
           Stack(children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Color(0xFF272626),
+              Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                height: 49,
-                width: 350,
-                child: Column(children: [
-                  SizedBox(height: 17),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 55),
-                        child: Text(
-                          "Opponent",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Helvetica",
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
+                color: colors.backgroundColor,
+                shadowColor: Colors.black,
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: colors.cardBlue // Color(0xFF272626),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(right: 60),
-                        child: Text(
-                          "Rules",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Helvetica",
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
+                  height: 49,
+                  width: 350,
+                  child: Column(children: [
+                    SizedBox(height: 17),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 55),
+                          child: Text(
+                            "Opponent",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Helvetica",
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(),
-                        child: Text(
-                          "Details",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Helvetica",
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
+                        Padding(
+                          padding: EdgeInsets.only(right: 60),
+                          child: Text(
+                            "Rules",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Helvetica",
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      )
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.center,
-                  ),
-                ]),
+                        Padding(
+                          padding: EdgeInsets.only(),
+                          child: Text(
+                            "Details",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Helvetica",
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.center,
+                    ),
+                  ]),
+                ),
               ),
             ]),
             Padding(
@@ -1008,7 +1062,7 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(20)),
-                            color: Color(0xFF707070),
+                            color: colors.cardBlue, //Color(0xFF707070),
                           ),
                           height: 3,
                           width: 321,
@@ -1026,141 +1080,167 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                   ),
                 ])),
           ]),
-          SizedBox(height: 30),
+          SizedBox(height: 10),
           Stack(
             children: [
               Padding(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    color: Color(0xFF272626),
+                child: Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  height: 210,
-                  width: 350,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 0, top: 10),
-                        child: Row(children: [
-                          Stack(
-                            children: [
-                              MaterialButton(
-                                onPressed: () {
-                                  if (!iconPressedBool) {
-                                    this.setState(() {
-                                      iconPressed = Icon(Icons.check,
-                                          color: Color(0xFF0ADE7C));
-                                      newTournamentButtonArg =
-                                          newTounamentField(
-                                              controller,
-                                              Icons.text_snippet,
-                                              "New Tournament Name",
-                                              false);
-                                      currentTournamentarg = Container();
-                                      iconPressedBool = !iconPressedBool;
-                                    });
-                                  } else {
-                                    this.setState(() {
-                                      iconPressed = null;
+                  color: colors.backgroundColor,
+                  shadowColor: Colors.black,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: colors.cardBlue, //Color(0xFF272626),
+                    ),
+                    height: 210,
+                    width: 350,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: 0, top: 10),
+                          child: Row(children: [
+                            Stack(
+                              children: [
+                                MaterialButton(
+                                  onPressed: () {
+                                    if (!iconPressedBool) {
+                                      this.setState(() {
+                                        iconPressed = Icon(Icons.check,
+                                            color: Color(0xFF0ADE7C));
+                                        newTournamentButtonArg =
+                                            newTounamentField(
+                                                controller,
+                                                Icons.text_snippet,
+                                                "Type Tournament Name",
+                                                false);
+                                        currentTournamentarg = Container();
+                                        iconPressedBool = !iconPressedBool;
+                                      });
+                                    } else {
+                                      this.setState(() {
+                                        iconPressed = null;
 
-                                      iconPressedBool = !iconPressedBool;
-                                      newTournamentButtonArg = null;
-                                      currentTournamentarg =
-                                          currentTournament();
-                                    });
-                                  }
-                                },
-                                child: Container(
-                                  height: 25,
-                                  width: 25,
-                                  color: Color(0xFF3E3B3B),
-                                  child: iconPressed,
-                                ),
-                              ),
-                              Padding(
-                                  padding: EdgeInsets.only(left: 62, top: 15),
-                                  child: Text(
-                                    "New Tournament",
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                  ))
-                            ],
-                          ),
-                        ]),
-                      ),
-                      // Tournament button start
-                      newTournamentTextFieldState(newTournamentButtonArg),
-                      currentTournamentState(currentTournamentarg),
-
-                      // Surface Type Button start
-                      Padding(
-                          padding:
-                              EdgeInsets.only(left: 15, top: 15, right: 45),
-                          child: MaterialButton(
-                              highlightColor: null,
-                              splashColor: null,
-                              onPressed: () {
-                                this.setState(() {
-                                  if (theWidgetIndex == 0) {
-                                    if (!surfacenotClickOnTwoButtonsTwice) {
-                                      statCheatCurrentWidget = Container();
-                                      nextButtonWidgetStateDependent =
-                                          SizedBox(height: 10);
-                                      surfaceTypesVariable =
-                                          surfaceTypesWidget();
-                                      matchTypenotClickOnTwoButtonsTwice = true;
-                                      theWidgetIndex = 1;
-                                      paddingMenuBar = 0;
+                                        iconPressedBool = !iconPressedBool;
+                                        newTournamentButtonArg = null;
+                                        currentTournamentarg =
+                                            currentTournament();
+                                      });
                                     }
-                                  } else {
-                                    if (!surfacenotClickOnTwoButtonsTwice) {
-                                      statCheatCurrentWidget = null;
-
-                                      nextButtonWidgetStateDependent =
-                                          nextButton();
-                                      surfaceTypesVariable = Container();
-                                      matchTypenotClickOnTwoButtonsTwice =
-                                          false;
-                                      theWidgetIndex = 0;
-                                      paddingMenuBar = 216;
-                                    }
-                                  }
-                                });
-                              },
-                              child: Container(
-                                height: 50,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 5),
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                    color: Color(0xFF3E3B3B),
-                                    border:
-                                        Border.all(color: Colors.transparent)),
-                                child: Row(children: [
-                                  Text(
-                                    surfaceTypeButtonText,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
+                                  },
+                                  child: Card(
+                                    elevation: 5,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    color: colors.backgroundColor,
+                                    shadowColor: Colors.black,
+                                    child: Container(
+                                      height: 25,
+                                      width: 25,
+                                      color: colors
+                                          .backgroundColor, //Color(0xFF3E3B3B),
+                                      child: iconPressed,
+                                    ),
                                   ),
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                        left: 0,
-                                      ),
-                                      child: Icon(
-                                        Icons.arrow_forward_ios,
-                                        size: 20,
-                                        color: surfaceButtoniconColor,
-                                      ))
-                                ]),
-                              ))),
+                                ),
+                                Padding(
+                                    padding: EdgeInsets.only(left: 62, top: 15),
+                                    child: Text(
+                                      "New Tournament",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ))
+                              ],
+                            ),
+                          ]),
+                        ),
+                        // Tournament button start
+                        newTournamentTextFieldState(newTournamentButtonArg),
+                        currentTournamentState(currentTournamentarg),
 
-                      //Surface type button end
-                    ],
+                        // Surface Type Button start
+                        Padding(
+                            padding:
+                                EdgeInsets.only(left: 15, top: 15, right: 45),
+                            child: MaterialButton(
+                                highlightColor: null,
+                                splashColor: null,
+                                onPressed: () {
+                                  this.setState(() {
+                                    if (theWidgetIndex == 0) {
+                                      if (!surfacenotClickOnTwoButtonsTwice) {
+                                        statCheatCurrentWidget = Container();
+                                        nextButtonWidgetStateDependent =
+                                            SizedBox(height: 10);
+                                        surfaceTypesVariable =
+                                            surfaceTypesWidget();
+                                        matchTypenotClickOnTwoButtonsTwice =
+                                            true;
+                                        theWidgetIndex = 1;
+                                        paddingMenuBar = 0;
+                                      }
+                                    } else {
+                                      if (!surfacenotClickOnTwoButtonsTwice) {
+                                        statCheatCurrentWidget = null;
+
+                                        nextButtonWidgetStateDependent =
+                                            nextButton();
+                                        surfaceTypesVariable = Container();
+                                        matchTypenotClickOnTwoButtonsTwice =
+                                            false;
+                                        theWidgetIndex = 0;
+                                        paddingMenuBar = 216;
+                                      }
+                                    }
+                                  });
+                                },
+                                child: Card(
+                                    elevation: 5,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    color: colors.backgroundColor,
+                                    shadowColor: Colors.black,
+                                    child: Container(
+                                      height: 50,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 5),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          color: colors
+                                              .backgroundColor, // Color(0xFF3E3B3B),
+                                          border: Border.all(
+                                              color: Colors.transparent)),
+                                      child: Row(children: [
+                                        Text(
+                                          surfaceTypeButtonText,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15),
+                                        ),
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                              left: 0,
+                                            ),
+                                            child: Icon(
+                                              Icons.arrow_forward_ios,
+                                              size: 20,
+                                              color: surfaceButtoniconColor,
+                                            ))
+                                      ]),
+                                    )))),
+
+                        //Surface type button end
+                      ],
+                    ),
                   ),
                 ),
                 padding: EdgeInsets.only(
@@ -1206,11 +1286,8 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                       height: 50,
                       width: 80,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        gradient: LinearGradient(
-                          colors: [Color(0xFF272626), Color(0xFF6E6E6E)],
-                        ),
-                      ),
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          color: colors.mainGreen),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -1235,35 +1312,4 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
           nextButtonState(nextButtonWidgetStateDependent),
         ]));
   }
-}
-
-_buildTextField(TextEditingController controller, IconData icon,
-    String labelText, bool obscure, bool ifEddited) {
-  return Container(
-    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-        color: Color(0xFF3E3B3B),
-        border: Border.all(color: Colors.transparent)),
-    child: TextField(
-      onChanged: (text) {
-        if (text != "") {
-          ifEddited = true;
-        }
-      },
-      obscureText: obscure,
-      controller: controller,
-      style: TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-          labelText: labelText,
-          labelStyle: TextStyle(color: Colors.white),
-          icon: Icon(
-            icon,
-            color: Colors.white,
-          ),
-          // prefix: Icon(icon),
-          border: InputBorder.none),
-    ),
-  );
 }

@@ -3,6 +3,7 @@ import 'package:app/newMatch/matchPanel.dart';
 import 'package:app/newMatch/thePoint/RallyServeWon.dart';
 import 'package:flutter/material.dart';
 
+import '../../colors.dart';
 import 'Rally.dart';
 
 class WhoStartsToserve extends StatefulWidget {
@@ -31,6 +32,7 @@ class WhoStartsToserve extends StatefulWidget {
 
 class _WhoStartsToserveState extends State<WhoStartsToserve> {
   late int whoServes;
+  appColors colors = appColors();
   String nameToLongFunc(String title, int maxAmountLetters) {
     List<String> splitTitle = title.split("");
 
@@ -46,7 +48,7 @@ class _WhoStartsToserveState extends State<WhoStartsToserve> {
     }
   }
 
-  Widget serveButton(String text) {
+  Widget serveButton(String text, Color color) {
     Widget thewidget = Column(
       children: [
         SizedBox(
@@ -81,40 +83,37 @@ class _WhoStartsToserveState extends State<WhoStartsToserve> {
                           ],
                           whoServes)));
             },
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                color: Color(0xFF272626),
-              ),
-              height: 260,
-              width: 350,
-              child: Stack(children: [
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 65,
-                    ),
-                    SizedBox(
-                      height: 35,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(nameToLongFunc(text, 7) + " startes to serve",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 28,
-                                fontWeight: FontWeight.w600,
-                              ))
-                        ],
-                      ),
-                    ),
-                  ],
+            child: Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              ]),
-            ))
+                color: colors.backgroundColor,
+                shadowColor: Colors.black,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    color: color,
+                  ),
+                  height: 80,
+                  width: 350,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(nameToLongFunc(text, 7) + " startes to serve",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          )),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.white,
+                        size: 22,
+                      )
+                    ],
+                  ),
+                )))
       ],
     );
 
@@ -124,97 +123,11 @@ class _WhoStartsToserveState extends State<WhoStartsToserve> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: colors.backgroundColor,
         body: Column(children: [
-          SizedBox(height: 25),
-          Stack(children: [
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Color(0xFF272626),
-                ),
-                height: 49,
-                width: 350,
-                child: Column(children: [
-                  SizedBox(height: 17),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 55),
-                        child: Text(
-                          "Score",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Helvetica",
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(right: 60),
-                        child: Text(
-                          "Serve",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Helvetica",
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(),
-                        child: Text(
-                          "Rally",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Helvetica",
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      )
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.center,
-                  ),
-                ]),
-              ),
-            ]),
-            Padding(
-                padding: EdgeInsets.only(
-                  top: 44,
-                ),
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Stack(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: 1,
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            color: Color(0xFF707070),
-                          ),
-                          height: 3,
-                          width: 321,
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          color: Color(0xFF0ADE7C),
-                        ),
-                        height: 4,
-                        width: 220,
-                      ),
-                    ],
-                  ),
-                ])),
-          ]),
-          SizedBox(height: 30),
-          serveButton(widget.yourName),
-          serveButton(widget.opponentName),
+          SizedBox(height: 255),
+          serveButton(widget.yourName, colors.mainGreen),
+          serveButton(widget.opponentName, colors.cardBlue),
           SizedBox(
             height: 30,
           ),
