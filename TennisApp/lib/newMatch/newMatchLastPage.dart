@@ -29,7 +29,7 @@ class NewMatchLastPage extends StatefulWidget {
 class _NewMatchLastPageState extends State<NewMatchLastPage> {
   AppState _state = appState;
   TextEditingController controller = TextEditingController();
-  double greenLineWidth = 214;
+  double greenLineWidth = 21.4 * appState.widthTenpx!;
   late String url;
   final databaseReference = FirebaseDatabase.instance.reference();
   late String coachlastName;
@@ -49,7 +49,7 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
   String surfaceTypeButtonText = "Surface";
   Color surfaceButtoniconColor = Colors.white;
   Color matchTypeButtoniconColor = Colors.white;
-  double paddingMenuBar = 216;
+  double paddingMenuBar = 21.6 * appState.heightTenpx!;
   Widget? nextButtonWidgetStateDependent;
   Widget? surfaceTypesVariable;
   bool surfacenotClickOnTwoButtonsTwice = false;
@@ -243,7 +243,10 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
   Widget currentTournament() {
     return Stack(children: [
       Padding(
-          padding: EdgeInsets.only(left: 15, top: 15, right: 45),
+          padding: EdgeInsets.only(
+              left: 1.5 * appState.widthTenpx!,
+              top: 1.5 * appState.heightTenpx!,
+              right: 4.5 * appState.widthTenpx!),
           child: MaterialButton(
               highlightColor: null,
               splashColor: null,
@@ -253,7 +256,8 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                     if (activeTournaments.length != 0) {
                       if (!matchTypenotClickOnTwoButtonsTwice) {
                         statCheatCurrentWidget = Container();
-                        nextButtonWidgetStateDependent = SizedBox(height: 10);
+                        nextButtonWidgetStateDependent =
+                            SizedBox(height: appState.heightTenpx!);
                         theWidget = surfaceTypesWidget();
                         witchTournamentStateActiveOrNot =
                             witchTournamentWidget();
@@ -288,7 +292,8 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                   shadowColor: Colors.black,
                   child: Container(
                     height: 50,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 2.0 * appState.widthTenpx!, vertical: 5),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         color: colors.backgroundColor, //Color(0xFF3E3B3B),
@@ -307,7 +312,7 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                           ),
                           child: Icon(
                             Icons.arrow_forward_ios,
-                            size: 20,
+                            size: 2.0 * appState.widthTenpx!,
                             color: matchTypeButtoniconColor,
                           ))
                     ]),
@@ -338,8 +343,9 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
           color: colors.backgroundColor,
           shadowColor: Colors.black,
           child: Container(
-            height: 50,
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            height: 5.0 * appState.heightTenpx!,
+            padding: EdgeInsets.symmetric(
+                horizontal: appState.widthTenpx!, vertical: 5),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 color: colors.backgroundColor,
@@ -359,7 +365,8 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
               controller: controller,
               style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: appState.widthTenpx!),
                   labelText: labelText,
                   labelStyle: TextStyle(
                       color: Colors.white,
@@ -373,7 +380,10 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                   border: InputBorder.none),
             ),
           )),
-      padding: EdgeInsets.only(left: 30, top: 15, right: 60),
+      padding: EdgeInsets.only(
+          left: 3.0 * appState.widthTenpx!,
+          top: 1.5 * appState.heightTenpx!,
+          right: 6.0 * appState.heightTenpx!),
     );
   }
 // Statcheat buttons
@@ -517,15 +527,15 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
       if (firststatButtonsOnPressedBool[buttonIndex]) {
         borderColor = Colors.cyan;
       } else {
-        borderColor = Colors.transparent;
+        borderColor = Colors.white;
       }
     });
 
     if (borderColor == null) {}
-    return Expanded(
+    return /*Expanded(
         child: Container(
-      height: 68,
-      width: 68,
+      height: 6.8 * appState.heightTenpx!,
+      width: 6.8 * appState.widthTenpx!,
       child: MaterialButton(
           onPressed: () {
             if (firststatButtonsOnPressedBool[buttonIndex]) {
@@ -590,7 +600,65 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
           color: colors.backgroundColor, // Color(0xFF3E3B3B),
           shape: BoxShape.circle,
           border: Border.all(color: borderColor, width: 3)),
-    ));
+    )); */
+        Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: CircleAvatar(
+        minRadius: 3.8 * appState.heightTenpx!,
+        maxRadius: 3.8 * appState.heightTenpx!,
+        child: TextButton(
+          onPressed: () {
+            if (firststatButtonsOnPressedBool[buttonIndex]) {
+              this.setState(() {
+                firststatButtonsOnPressedBool[buttonIndex] =
+                    !firststatButtonsOnPressedBool[buttonIndex];
+                borderColor = Colors.cyan;
+              });
+            } else {
+              this.setState(() {
+                firststatButtonsOnPressedBool[buttonIndex] =
+                    !firststatButtonsOnPressedBool[buttonIndex];
+                borderColor = Colors.white;
+              });
+            }
+            if (stat == "First Serves") {
+              this.setState(() {
+                firststatButtonsOnPressedBool[buttonIndex - 2] =
+                    firststatButtonsOnPressedBool[buttonIndex];
+                firststatButtonsOnPressedBool[buttonIndex + 1] =
+                    firststatButtonsOnPressedBool[buttonIndex];
+              });
+            }
+            if (stat == "Second Serves") {
+              this.setState(() {
+                firststatButtonsOnPressedBool[buttonIndex - 1] =
+                    firststatButtonsOnPressedBool[buttonIndex];
+                firststatButtonsOnPressedBool[buttonIndex - 3] =
+                    firststatButtonsOnPressedBool[buttonIndex];
+              });
+            }
+            if (stat == "Double Faults") {
+              this.setState(() {
+                firststatButtonsOnPressedBool[buttonIndex + 2] =
+                    firststatButtonsOnPressedBool[buttonIndex];
+
+                firststatButtonsOnPressedBool[buttonIndex + 3] =
+                    firststatButtonsOnPressedBool[buttonIndex];
+              });
+            }
+            noteTheStatsTrackedFunc(stat);
+          },
+          child: Text(stat,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: borderColor,
+                fontWeight: FontWeight.w800,
+                fontSize: fontSize,
+              )),
+        ),
+        backgroundColor: colors.backgroundColor,
+      ),
+    );
   }
 
   Widget statCheatWidget() {
@@ -609,13 +677,14 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 color: colors.cardBlue, // Color(0xFF272626),
               ),
-              height: 310,
-              width: 350,
+              height: 31.0 * appState.heightTenpx!,
+              width: 35.0 * appState.heightTenpx!,
             ),
           ),
         ]),
         Padding(
-          padding: EdgeInsets.only(left: 7, right: 7, top: 10),
+          padding:
+              EdgeInsets.only(left: 7, right: 7, top: appState.heightTenpx!),
           child: Column(
             children: [
               Row(
@@ -630,11 +699,14 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
               ),
               SizedBox(
-                height: 20,
+                height: 2.0 * appState.heightTenpx!,
               ),
               Padding(
-                padding: EdgeInsets.only(left: 35, right: 35),
+                padding: EdgeInsets.only(
+                    left: 3.5 * appState.widthTenpx!,
+                    right: 3.5 * appState.widthTenpx!),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     statCheatButtons("Winners", 0, 0, 2, 0, 0, 12),
                     statCheatButtons("Double Faults", 1, 2, 5, 7, 0, 12),
@@ -643,9 +715,10 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                 ),
               ),
               SizedBox(
-                height: 15,
+                height: 1.5 * appState.heightTenpx!,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   statCheatButtons("First Serves", 3, 0, 2, 6, 0, 12),
                   statCheatButtons("Second Serves", 4, 0, 2, 3, 0, 12),
@@ -654,9 +727,10 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                 ],
               ),
               SizedBox(
-                height: 15,
+                height: 1.5 * appState.heightTenpx!,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   statCheatButtons("Volley Errors", 7, 0, 2, 6, 0,
                       12), // last 4 is textPadding args and fontSize args
@@ -714,8 +788,8 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
         shadowColor: Colors.black,
         child: Container(
           color: colors.cardBlue, // Color(0xFF3E3B3B),
-          height: 450,
-          width: 270,
+          height: 45.0 * appState.heightTenpx!,
+          width: 27.0 * appState.widthTenpx!,
           child: SingleChildScrollView(
             child: Column(
               children: torunamentsWidget,
@@ -764,13 +838,13 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
         } else {
           setState(() {
             errorMessageArg = errorMessage();
-            errorMessagePadding = 37;
+            errorMessagePadding = 3.7 * appState.heightTenpx!;
           });
         }
       } else {
         setState(() {
           errorMessageArg = errorMessage();
-          errorMessagePadding = 37;
+          errorMessagePadding = 3.7 * appState.heightTenpx!;
         });
       }
     } else {
@@ -793,13 +867,13 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
         } else {
           setState(() {
             errorMessageArg = errorMessage();
-            errorMessagePadding = 37;
+            errorMessagePadding = 3.7 * appState.heightTenpx!;
           });
         }
       } else {
         setState(() {
           errorMessageArg = errorMessage();
-          errorMessagePadding = 37;
+          errorMessagePadding = 3.7 * appState.heightTenpx!;
         });
       }
     }
@@ -817,9 +891,6 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
     return MaterialButton(
         onPressed: () {
           setState(() {
-            if (greenLineWidth != 321) {
-              greenLineWidth = greenLineWidth + 107;
-            }
             appState.matchTimeTracker = 0;
             checkForErrorFunction();
           });
@@ -835,8 +906,8 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                   color: colors.cardBlue),
-              height: 50,
-              width: 350,
+              height: 5.0 * appState.heightTenpx!,
+              width: 20.0 * appState.widthTenpx!,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -880,10 +951,10 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
               });
             } else {
               setState(() {
-                currentTournamentarg = currentTournament();
                 matchTypeButtonText = matchTypeText;
                 matchTypeButtoniconColor = Color(0xFF0ADE7C);
                 surfacenotClickOnTwoButtonsTwice = false;
+                currentTournamentarg = currentTournament();
                 print(123123123);
               });
             }
@@ -897,7 +968,7 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
       ]),
       padding: EdgeInsets.symmetric(
         vertical: 5,
-        horizontal: 10,
+        horizontal: appState.widthTenpx!,
       ),
     );
   }
@@ -920,41 +991,43 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
         shadowColor: Colors.black,
         child: Container(
           color: colors.cardBlue, //Color(0xFF3E3B3B),
-          height: 235,
-          width: 270,
-          child: Column(
-            children: [
-              SurfaceButton("Hard Court", 1, 2),
-              Divider(
-                thickness: 0.5,
-                color: Colors.white,
-                height: 0,
-                endIndent: 20,
-                indent: 20,
-              ),
-              SurfaceButton("Clay", 2, 2),
-              Divider(
-                thickness: 0.5,
-                color: Colors.white,
-                height: 0,
-                endIndent: 20,
-                indent: 20,
-              ),
-              SurfaceButton("Grass", 3, 2),
-              Divider(
-                thickness: 0.5,
-                color: Colors.white,
-                height: 0,
-                endIndent: 20,
-                indent: 20,
-              ),
-              SurfaceButton("Carpet", 4, 2),
-            ],
+          height: 24.5 * appState.heightTenpx!,
+          width: 27.0 * appState.widthTenpx!,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SurfaceButton("Hard Court", 1, 2),
+                Divider(
+                  thickness: 0.5,
+                  color: Colors.white,
+                  height: 0,
+                  endIndent: 20,
+                  indent: 20,
+                ),
+                SurfaceButton("Clay", 2, 2),
+                Divider(
+                  thickness: 0.5,
+                  color: Colors.white,
+                  height: 0,
+                  endIndent: 20,
+                  indent: 20,
+                ),
+                SurfaceButton("Grass", 3, 2),
+                Divider(
+                  thickness: 0.5,
+                  color: Colors.white,
+                  height: 0,
+                  endIndent: 20,
+                  indent: 20,
+                ),
+                SurfaceButton("Carpet", 4, 2),
+              ],
+            ),
           ),
         ));
   }
 
-  double errorMessagePadding = 250;
+  double errorMessagePadding = 25.0 * appState.heightTenpx!;
   Widget? errorMessageArg;
 
   Widget errorMessageState(widget) {
@@ -984,9 +1057,10 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: colors.backgroundColor,
         body: Column(children: [
-          SizedBox(height: 25),
+          SizedBox(height: 2.5 * appState.heightTenpx!),
           Stack(children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Card(
@@ -1001,14 +1075,15 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       color: colors.cardBlue // Color(0xFF272626),
                       ),
-                  height: 49,
-                  width: 350,
+                  height: 4.9 * appState.heightTenpx!,
+                  width: 35.0 * appState.widthTenpx!,
                   child: Column(children: [
-                    SizedBox(height: 17),
+                    SizedBox(height: 1.4 * appState.heightTenpx!),
                     Row(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(right: 55),
+                          padding: EdgeInsets.only(
+                              right: 5.5 * appState.heightTenpx!),
                           child: Text(
                             "Opponent",
                             style: TextStyle(
@@ -1019,7 +1094,8 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: 60),
+                          padding: EdgeInsets.only(
+                              right: 6.0 * appState.heightTenpx!),
                           child: Text(
                             "Rules",
                             style: TextStyle(
@@ -1049,7 +1125,7 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
             ]),
             Padding(
                 padding: EdgeInsets.only(
-                  top: 44,
+                  top: 4.8 * appState.heightTenpx!,
                 ),
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -1065,7 +1141,7 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                             color: colors.cardBlue, //Color(0xFF707070),
                           ),
                           height: 3,
-                          width: 321,
+                          width: 32.1 * appState.widthTenpx!,
                         ),
                       ),
                       Container(
@@ -1074,13 +1150,13 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                           color: Color(0xFF0ADE7C),
                         ),
                         height: 4,
-                        width: 321,
+                        width: 32.1 * appState.heightTenpx!,
                       ),
                     ],
                   ),
                 ])),
           ]),
-          SizedBox(height: 10),
+          SizedBox(height: appState.heightTenpx!),
           Stack(
             children: [
               Padding(
@@ -1096,12 +1172,13 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       color: colors.cardBlue, //Color(0xFF272626),
                     ),
-                    height: 210,
-                    width: 350,
+                    height: 24.0 * appState.heightTenpx!,
+                    width: 35.0 * appState.widthTenpx!,
                     child: Column(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(left: 0, top: 10),
+                          padding: EdgeInsets.only(
+                              left: 0, top: appState.heightTenpx!),
                           child: Row(children: [
                             Stack(
                               children: [
@@ -1139,8 +1216,8 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                                     color: colors.backgroundColor,
                                     shadowColor: Colors.black,
                                     child: Container(
-                                      height: 25,
-                                      width: 25,
+                                      height: 2.5 * appState.heightTenpx!,
+                                      width: 2.5 * appState.widthTenpx!,
                                       color: colors
                                           .backgroundColor, //Color(0xFF3E3B3B),
                                       child: iconPressed,
@@ -1148,7 +1225,9 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                                   ),
                                 ),
                                 Padding(
-                                    padding: EdgeInsets.only(left: 62, top: 15),
+                                    padding: EdgeInsets.only(
+                                        left: 6.2 * appState.widthTenpx!,
+                                        top: 1.5 * appState.heightTenpx!),
                                     child: Text(
                                       "New Tournament",
                                       style: TextStyle(
@@ -1166,8 +1245,10 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
 
                         // Surface Type Button start
                         Padding(
-                            padding:
-                                EdgeInsets.only(left: 15, top: 15, right: 45),
+                            padding: EdgeInsets.only(
+                                left: 1.5 * appState.widthTenpx!,
+                                top: 1.5 * appState.heightTenpx!,
+                                right: 4.5 * appState.widthTenpx!),
                             child: MaterialButton(
                                 highlightColor: null,
                                 splashColor: null,
@@ -1195,7 +1276,8 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                                         matchTypenotClickOnTwoButtonsTwice =
                                             false;
                                         theWidgetIndex = 0;
-                                        paddingMenuBar = 216;
+                                        paddingMenuBar =
+                                            21.6 * appState.heightTenpx!;
                                       }
                                     }
                                   });
@@ -1208,9 +1290,11 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                                     color: colors.backgroundColor,
                                     shadowColor: Colors.black,
                                     child: Container(
-                                      height: 50,
+                                      height: 5.0 * appState.heightTenpx!,
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 5),
+                                          horizontal:
+                                              2.0 * appState.widthTenpx!,
+                                          vertical: 5),
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(10)),
@@ -1232,7 +1316,7 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                                             ),
                                             child: Icon(
                                               Icons.arrow_forward_ios,
-                                              size: 20,
+                                              size: 2.0 * appState.widthTenpx!,
                                               color: surfaceButtoniconColor,
                                             ))
                                       ]),
@@ -1244,12 +1328,15 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                   ),
                 ),
                 padding: EdgeInsets.only(
-                  left: 13.5,
-                  right: 13.5,
+                  left: 1.35 * appState.widthTenpx!,
+                  right: 1.35 * appState.widthTenpx!,
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(left: 50, top: 130, right: 50),
+                padding: EdgeInsets.only(
+                    left: 5.0 * appState.widthTenpx!,
+                    top: 13.0 * appState.heightTenpx!,
+                    right: 5.0 * appState.widthTenpx!),
                 child: Container(
                   child: Column(children: [
                     witchTournamentWidgetState(witchTournamentStateActiveOrNot),
@@ -1257,7 +1344,10 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(left: 50, top: 200, right: 50),
+                padding: EdgeInsets.only(
+                    left: 5.0 * appState.widthTenpx!,
+                    top: 20.0 * appState.heightTenpx!,
+                    right: 5.0 * appState.widthTenpx!),
                 child: Container(
                   child: Column(children: [
                     surfaceTypeWidgetState(surfaceTypesVariable),
@@ -1267,49 +1357,48 @@ class _NewMatchLastPageState extends State<NewMatchLastPage> {
             ],
           ),
           SizedBox(
-            height: 15,
+            height: 1.5 * appState.heightTenpx!,
           ),
           statCheatWidgetState(statCheatCurrentWidget),
           SizedBox(height: 0), // paddingMenuBar
-          SizedBox(height: 10),
-          Padding(
-              padding: EdgeInsets.only(right: errorMessagePadding),
-              child: Row(
-                children: [
-                  MaterialButton(
-                    onPressed: () {
-                      greenLineWidth = greenLineWidth - 107;
-
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      height: 50,
-                      width: 80,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          color: colors.mainGreen),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            child: Text(
-                              "Back",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
+          SizedBox(height: 2 * appState.heightTenpx!),
+          Row(
+            children: [
+              statCheatCurrentWidget == null
+                  ? MaterialButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        height: 5.0 * appState.heightTenpx!,
+                        width: 8.0 * appState.widthTenpx!,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            color: colors.mainGreen),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              child: Text(
+                                "Back",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
                               ),
-                            ),
-                            padding: EdgeInsets.only(),
-                          )
-                        ],
+                              padding: EdgeInsets.only(),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                  errorMessageState(errorMessageArg),
-                ],
-              )),
+                    )
+                  : Container(),
+              nextButtonState(nextButtonWidgetStateDependent),
+            ],
+            mainAxisAlignment: MainAxisAlignment.center,
+          ),
           SizedBox(height: 15),
-          nextButtonState(nextButtonWidgetStateDependent),
+          errorMessageState(errorMessageArg),
         ]));
   }
 }

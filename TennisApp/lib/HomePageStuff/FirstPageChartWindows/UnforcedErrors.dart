@@ -1,5 +1,6 @@
 import 'package:app/HomePageStuff/View.dart';
 import 'package:app/SideBarStuff/sideBar/sideBar.dart';
+import 'package:app/bloc/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -69,8 +70,8 @@ Widget UnforcedErrorWindowFunction(
                       colors: [Color(0xFF6302C1), Color(0xFF00FFF5)],
                     ),
                   ),
-                  height: 319,
-                  width: 340,
+                  height: 31.9 * appState.heightTenpx!,
+                  width: 33.2 * appState.widthTenpx!,
                 ),
                 Positioned(
                   child: Container(
@@ -78,12 +79,12 @@ Widget UnforcedErrorWindowFunction(
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       color: appColors().cardBlue, // Color(0xFF272626),
                     ),
-                    height: 313,
-                    width: 335,
+                    height: 31.3 * appState.heightTenpx!,
+                    width: 32.7 * appState.widthTenpx!,
                     child: //185
                         Column(
                       children: [
-                        SizedBox(height: 20),
+                        SizedBox(height: 2.0 * appState.heightTenpx!),
                         SafeArea(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -91,17 +92,18 @@ Widget UnforcedErrorWindowFunction(
                               SizedBox(
                                 height: height * 0.21,
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 25.0),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 2.5 * appState.widthTenpx!),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
                                         text,
-                                        style: GoogleFonts.rubik(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 20),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 20,
+                                            color: Colors.black),
                                       ),
                                       Expanded(
                                         child: Row(
@@ -139,7 +141,8 @@ Widget UnforcedErrorWindowFunction(
               ],
             )),
         Padding(
-          padding: EdgeInsets.fromLTRB(30, 260, 0, 0),
+          padding: EdgeInsets.fromLTRB(
+              3.0 * appState.widthTenpx!, 25.5 * appState.heightTenpx!, 0, 0),
           child: Row(
             children: [
               Text(
@@ -163,7 +166,8 @@ Widget UnforcedErrorWindowFunction(
                     fontWeight: FontWeight.bold,
                   )),
               Padding(
-                  padding: EdgeInsets.fromLTRB(59, 0, 12, 0),
+                  padding: EdgeInsets.fromLTRB(5.9 * appState.widthTenpx!, 0,
+                      1.2 * appState.heightTenpx!, 0),
                   child: MaterialButton(
                     elevation: 0,
                     onPressed: () {
@@ -183,7 +187,8 @@ Widget UnforcedErrorWindowFunction(
                                   fontSize: 20,
                                   fontFamily: "Helvetica",
                                 )),
-                            padding: EdgeInsets.fromLTRB(0, 3, 10, 0),
+                            padding: EdgeInsets.fromLTRB(
+                                0, 3, appState.widthTenpx!, 0),
                           ),
                         ),
                       ],
@@ -194,7 +199,8 @@ Widget UnforcedErrorWindowFunction(
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(paddingSelectedPlayer, 18, 0, 0),
+          padding: EdgeInsets.fromLTRB(
+              paddingSelectedPlayer, 1.8 * appState.heightTenpx!, 0, 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -212,7 +218,7 @@ Widget UnforcedErrorWindowFunction(
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.white),
                     ),
-                    radius: 19,
+                    radius: 1.9 * appState.heightTenpx!,
                   ),
                 ],
               )
@@ -220,13 +226,14 @@ Widget UnforcedErrorWindowFunction(
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(114, 5, 0, 0),
+          padding: EdgeInsets.fromLTRB(11.4 * appState.widthTenpx!, 5, 0, 0),
           child: Row(
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(165, 10, 0, 0),
+                padding: EdgeInsets.fromLTRB(
+                    16.5 * appState.widthTenpx!, appState.heightTenpx!, 0, 0),
                 child: IconButton(
-                  icon: Icon(Icons.menu, color: Color(0xFF9B9191)),
+                  icon: Icon(Icons.menu, color: Colors.white),
                   onPressed: setState,
                   iconSize: 32,
                 ),

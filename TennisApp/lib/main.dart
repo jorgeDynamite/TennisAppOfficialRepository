@@ -41,6 +41,10 @@ class _TennisAppHomePageState extends State<TennisAppHomePage> {
 
   @override
   void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      appState.heightTenpx = app.getDimensions(context)[0] / 81.2;
+      appState.widthTenpx = app.getDimensions(context)[1] / 37.5;
+    });
     // TODO: implement initState
 
     _getIfUserLogedIn(context).whenComplete(() async {

@@ -49,6 +49,7 @@ class _SignUpPCState extends State<SignUpPC> {
   Widget build(BuildContext context) {
     appColors colors = appColors();
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,

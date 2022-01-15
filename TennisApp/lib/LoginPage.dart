@@ -131,11 +131,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double widthtenpx = appState.heightTenpx = app.getDimensions(context)[0];
+    double heighttenpx = appState.widthTenpx = app.getDimensions(context)[1];
     return Screen();
   }
 
   Widget Screen() {
+    double heighttenpx =
+        appState.heightTenpx = app.getDimensions(context)[0] / 81.2;
+    double widthtenpx =
+        appState.widthTenpx = app.getDimensions(context)[1] / 37.5;
+
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -143,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: colors.backgroundColor,
         body: Container(
           alignment: Alignment.topCenter,
-          margin: EdgeInsets.symmetric(horizontal: 30),
+          margin: EdgeInsets.symmetric(horizontal: 3 * widthtenpx),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -155,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style:
                       GoogleFonts.openSans(color: Colors.white, fontSize: 28),
                 ),
-                SizedBox(height: 50),
+                SizedBox(height: 5 * heighttenpx),
                 Text(
                   'Enter your email and password below if you have an account. Otherwise click on "Sign Up"!',
                   textAlign: TextAlign.center,
@@ -163,20 +171,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       GoogleFonts.openSans(color: Colors.white, fontSize: 14),
                 ),
                 SizedBox(
-                  height: 90,
+                  height: 9 * heighttenpx,
                 ),
                 _buildTextField(nameCController, Icons.account_circle,
                     'Username / Email', false, borderColor),
-                SizedBox(height: 20),
+                SizedBox(height: 2 * heighttenpx),
                 _buildTextField(passwordController, Icons.lock, 'Password',
                     true, borderColor),
-                SizedBox(height: 30),
+                SizedBox(height: 3 * heighttenpx),
                 MaterialButton(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0)),
                   elevation: 0,
                   minWidth: double.maxFinite,
-                  height: 60,
+                  height: 6 * heighttenpx,
                   onPressed: () {
                     this.setState(() {
                       path = "CP_Accounts";
@@ -193,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(color: Colors.white, fontSize: 19)),
                   textColor: Colors.white,
                 ),
-                SizedBox(height: 50),
+                SizedBox(height: 5 * heighttenpx),
                 /*
                 MaterialButton(
                   shape: RoundedRectangleBorder(
@@ -218,9 +226,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   textColor: Colors.white,
                 ),*/
-                SizedBox(height: 15),
+                SizedBox(height: 1.5 * heighttenpx),
                 _build,
-                SizedBox(height: 45),
+                SizedBox(height: 4.5 * heighttenpx),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: _buildFooterLogo(),
@@ -256,7 +264,7 @@ _buildFooterLogo() {
     children: <Widget>[
       Image.asset(
         'Style/Pictures/TennisWhiteVersion.png',
-        height: 40,
+        height: 4.0 * appState.heightTenpx!,
       ),
       SizedBox(
         width: 5,
@@ -272,7 +280,9 @@ _buildFooterLogo() {
 _buildTextField(TextEditingController controller, IconData icon,
     String labelText, bool obscure, Color borderColor) {
   return Container(
-    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+    padding: EdgeInsets.symmetric(
+        horizontal: appState.widthTenpx!,
+        vertical: 0.5 * appState.heightTenpx!),
     decoration: BoxDecoration(
         color: appColors().cardBlue,
         border: Border.all(
@@ -282,7 +292,8 @@ _buildTextField(TextEditingController controller, IconData icon,
       controller: controller,
       style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: appState.widthTenpx!),
           labelText: labelText,
           labelStyle: TextStyle(color: Colors.white),
           icon: Icon(

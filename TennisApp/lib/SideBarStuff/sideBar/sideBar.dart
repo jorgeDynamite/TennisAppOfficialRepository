@@ -75,7 +75,8 @@ class _SideBarState extends State<SideBar>
       return Column(
         children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(25, 10, 0, 10),
+            padding: EdgeInsets.fromLTRB(2.5 * appState.widthTenpx!,
+                appState.heightTenpx!, 0, appState.heightTenpx!),
             child: Row(
               children: [
                 Text(
@@ -92,15 +93,15 @@ class _SideBarState extends State<SideBar>
               child: SingleChildScrollView(
                 child: Column(children: playersWidgets),
               ),
-              height: 250),
+              height: 25.0 * appState.heightTenpx!),
           Divider(
-            height: 24,
+            height: 2.4 * appState.heightTenpx!,
             thickness: 0.5,
             color: Colors.white.withOpacity(0.3),
             indent: 32,
             endIndent: 32,
           ),
-          SizedBox(height: 40),
+          SizedBox(height: 4.0 * appState.heightTenpx!),
           MenuItem(
             onTap: () {
               appState.AddedPlayerToCP = true;
@@ -406,12 +407,13 @@ class _SideBarState extends State<SideBar>
             children: <Widget>[
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 2.0 * appState.widthTenpx!),
                   color: Color(0xFF12161F), //const Color(0xFF262AAA),
                   child: Column(
                     children: <Widget>[
                       SizedBox(
-                        height: 100,
+                        height: 10.0 * appState.heightTenpx!,
                       ),
                       ListTile(
                         title: Text(
@@ -438,7 +440,7 @@ class _SideBarState extends State<SideBar>
                         ),
                       ),
                       Divider(
-                        height: 40,
+                        height: 4.0 * appState.heightTenpx!,
                         thickness: 0.5,
                         color: Colors.white.withOpacity(0.3),
                         indent: 32,
@@ -449,7 +451,7 @@ class _SideBarState extends State<SideBar>
                         height: coach != null
                             ? coach!
                                 ? 0
-                                : 450
+                                : 45.0 * appState.heightTenpx!
                             : 0,
                       ),
                       MenuItem(
@@ -475,8 +477,8 @@ class _SideBarState extends State<SideBar>
                   child: ClipPath(
                     clipper: CustomMenuClipper(),
                     child: Container(
-                      width: 35,
-                      height: 110,
+                      width: 3.5 * appState.widthTenpx!,
+                      height: 11.0 * appState.heightTenpx!,
                       color: colors.backgroundColor, // Color(0xFF262AAA),
                       alignment: Alignment.centerLeft,
                       child: AnimatedIcon(

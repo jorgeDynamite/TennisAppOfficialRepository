@@ -32,7 +32,7 @@ class MenuItem extends StatelessWidget {
               color: Colors.white,
               size: iconSize == null ? 30 : iconSize,
             ),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             Text(
@@ -84,7 +84,7 @@ class MenuItemPlayers extends StatelessWidget {
               color: iconColor,
               size: 30,
             ),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             Text(

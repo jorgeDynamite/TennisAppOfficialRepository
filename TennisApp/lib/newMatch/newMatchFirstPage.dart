@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:app/HomePageStuff/View.dart';
 import 'package:app/Players.dart';
 import 'package:app/RandomWidgets/navigation_bar.dart';
+import 'package:app/bloc/app_state.dart';
 import 'package:app/colors.dart';
 import 'package:app/newMatch/newMatchSecondPage.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -56,7 +57,7 @@ class _NewMatchFirstPageState extends State<NewMatchFirstPage> {
     textFieldFilled = theBool;
   }
 
-  double errorMessagePadding = 26;
+  double errorMessagePadding = 2.6 * appState.heightTenpx!;
 
   Widget? errorMessageArg;
 
@@ -110,13 +111,14 @@ class _NewMatchFirstPageState extends State<NewMatchFirstPage> {
     reference.set(accountdata);
   }
 
-  double greenLineWidth = 107;
+  double greenLineWidth = 10.7 * appState.widthTenpx!;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: colors.backgroundColor,
         body: Column(children: [
-          SizedBox(height: 25),
+          SizedBox(height: 2.5 * appState.heightTenpx!),
           Stack(children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Card(
@@ -131,14 +133,15 @@ class _NewMatchFirstPageState extends State<NewMatchFirstPage> {
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                     color: colors.cardBlue, //Color(0xFF272626),
                   ),
-                  height: 49,
-                  width: 350,
+                  height: 4.9 * appState.heightTenpx!,
+                  width: 35.0 * appState.widthTenpx!,
                   child: Column(children: [
-                    SizedBox(height: 17),
+                    SizedBox(height: 1.4 * appState.heightTenpx!),
                     Row(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(right: 55),
+                          padding: EdgeInsets.only(
+                              right: 5.5 * appState.widthTenpx!),
                           child: Text(
                             "Opponent",
                             style: TextStyle(
@@ -149,7 +152,8 @@ class _NewMatchFirstPageState extends State<NewMatchFirstPage> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: 60),
+                          padding: EdgeInsets.only(
+                              right: 6.0 * appState.widthTenpx!),
                           child: Text(
                             "Rules",
                             style: TextStyle(
@@ -179,7 +183,7 @@ class _NewMatchFirstPageState extends State<NewMatchFirstPage> {
             ]),
             Padding(
                 padding: EdgeInsets.only(
-                  top: 44,
+                  top: 4.8 * appState.heightTenpx!,
                 ),
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -196,7 +200,7 @@ class _NewMatchFirstPageState extends State<NewMatchFirstPage> {
                                 colors.transparentWhite, // Color(0xFF707070),
                           ),
                           height: 3,
-                          width: 321,
+                          width: 32.1 * appState.widthTenpx!,
                         ),
                       ),
                       Container(
@@ -211,7 +215,7 @@ class _NewMatchFirstPageState extends State<NewMatchFirstPage> {
                   ),
                 ])),
           ]),
-          SizedBox(height: 30),
+          SizedBox(height: 3.0 * appState.heightTenpx!),
           Card(
             elevation: 5,
             shape: RoundedRectangleBorder(
@@ -224,18 +228,18 @@ class _NewMatchFirstPageState extends State<NewMatchFirstPage> {
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 color: colors.cardBlue, //Color(0xFF272626),
               ),
-              height: 270,
-              width: 350,
+              height: 27.0 * appState.heightTenpx!,
+              width: 35.0 * appState.widthTenpx!,
               child: Stack(children: [
                 Column(
                   children: [
                     SizedBox(
-                      height: 50,
+                      height: 5.0 * appState.heightTenpx!,
                     ),
                     Padding(
                         padding: EdgeInsets.only(
-                          left: 30,
-                          right: 30,
+                          left: 3.0 * appState.widthTenpx!,
+                          right: 3.0 * appState.widthTenpx!,
                         ),
                         child: Card(
                             elevation: 5,
@@ -247,12 +251,12 @@ class _NewMatchFirstPageState extends State<NewMatchFirstPage> {
                             child: _buildTextField(controller, Icons.person,
                                 "Opponent Name", false, changeFilledValue))),
                     SizedBox(
-                      height: 45,
+                      height: 4.5 * appState.heightTenpx!,
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                        left: 30,
-                        right: 90,
+                        left: 3.0 * appState.heightTenpx!,
+                        right: 9.0 * appState.widthTenpx!,
                       ),
                       child: Column(
                         children: [
@@ -270,15 +274,15 @@ class _NewMatchFirstPageState extends State<NewMatchFirstPage> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                    left: 270,
-                    top: 135,
+                    left: 27.0 * appState.widthTenpx!,
+                    top: 13.5 * appState.heightTenpx!,
                   ),
                   child: castMatch(castMatchPressed),
                 ),
                 Padding(
                     padding: EdgeInsets.only(
-                      left: 210,
-                      top: 15,
+                      left: 21.0 * appState.widthTenpx!,
+                      top: 1.5 * appState.heightTenpx!,
                     ),
                     child: Text("Match ID: " + matchId.toString(),
                         style: TextStyle(
@@ -291,7 +295,7 @@ class _NewMatchFirstPageState extends State<NewMatchFirstPage> {
             ),
           ),
           SizedBox(
-            height: 15,
+            height: 1.5 * appState.heightTenpx!,
           ),
           MaterialButton(
               onPressed: () {
@@ -328,8 +332,8 @@ class _NewMatchFirstPageState extends State<NewMatchFirstPage> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       color: colors.cardBlue),
-                  height: 70,
-                  width: 350,
+                  height: 7.0 * appState.heightTenpx!,
+                  width: 35.0 * appState.widthTenpx!,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -342,7 +346,7 @@ class _NewMatchFirstPageState extends State<NewMatchFirstPage> {
                       ),
                       Icon(
                         Icons.arrow_forward_ios,
-                        size: 22,
+                        size: 2.2 * appState.widthTenpx!,
                         color: Colors.white,
                       )
                     ],
@@ -351,7 +355,7 @@ class _NewMatchFirstPageState extends State<NewMatchFirstPage> {
               )),
           SizedBox(height: errorMessagePadding),
           errorMessageState(errorMessageArg),
-          SizedBox(height: 220),
+          SizedBox(height: 21.0 * appState.heightTenpx!),
           NavigationBar(appColors().transparentWhite, appColors().mainGreen,
               appColors().transparentWhite)
         ]));
@@ -381,7 +385,8 @@ _buildTextField(TextEditingController controller, IconData icon,
       controller: controller,
       style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 1.0 * appState.heightTenpx!),
           labelText: labelText,
           labelStyle: TextStyle(color: Colors.white),
           icon: Icon(

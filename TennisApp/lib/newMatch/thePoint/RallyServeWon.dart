@@ -1,4 +1,5 @@
 import 'package:app/Players.dart';
+import 'package:app/bloc/app_state.dart';
 import 'package:app/newMatch/matchPanel.dart';
 
 import 'package:flutter/material.dart';
@@ -161,7 +162,7 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
     Widget thewidget = Column(
       children: [
         SizedBox(
-          height: 10,
+          height: appState.heightTenpx!,
         ),
         Card(
             elevation: 5,
@@ -175,19 +176,19 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 color: colors.cardBlue,
               ),
-              height: 290,
-              width: 350,
+              height: 29.0 * appState.heightTenpx!,
+              width: 35.0 * appState.widthTenpx!,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 10),
+                    SizedBox(height: 1.0 * appState.heightTenpx!),
                     Text(name,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
                         )),
-                    SizedBox(height: 10),
+                    SizedBox(height: 1.0 * appState.heightTenpx!),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -396,8 +397,8 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                                             Radius.circular(20)),
                                         color: statColorLose[0],
                                       ),
-                                      height: 100,
-                                      width: 290,
+                                      height: 10.0 * appState.heightTenpx!,
+                                      width: 29.0 * appState.widthTenpx!,
                                       child: Stack(children: [
                                         Column(
                                           crossAxisAlignment:
@@ -429,7 +430,7 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                             : Container(),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: appState.heightTenpx!),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -635,7 +636,7 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                                             Radius.circular(20)),
                                         color: statColorLose[1],
                                       ),
-                                      height: 100,
+                                      height: 10.0 * appState.heightTenpx!,
                                       //width: 130,
                                       child: Stack(children: [
                                         Column(
@@ -816,7 +817,7 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                                                 Radius.circular(20)),
                                             color: statColorLose[2],
                                           ),
-                                          height: 100,
+                                          height: 10.0 * appState.heightTenpx!,
                                           // width: 130,
                                           child: Stack(children: [
                                             Column(
@@ -881,19 +882,19 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 color: colors.cardBlue,
               ),
-              height: 290,
-              width: 350,
+              height: 29.0 * appState.heightTenpx!,
+              width: 35.0 * appState.widthTenpx!,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 10),
+                    SizedBox(height: appState.heightTenpx!),
                     Text(name,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
                         )),
-                    SizedBox(height: 10),
+                    SizedBox(height: appState.heightTenpx!),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -1093,8 +1094,8 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                                             Radius.circular(20)),
                                         color: statColorWin[0],
                                       ),
-                                      height: 100,
-                                      width: 290,
+                                      height: 10.0 * appState.heightTenpx!,
+                                      width: 29.0 * appState.heightTenpx!,
                                       child: Stack(children: [
                                         Column(
                                           crossAxisAlignment:
@@ -1126,7 +1127,7 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                             : Container(),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 1.0 * appState.heightTenpx!),
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                       statColorWin[1] != Colors.transparent
                           ? Expanded(
@@ -1290,7 +1291,7 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                                           BorderRadius.all(Radius.circular(20)),
                                       color: statColorWin[1],
                                     ),
-                                    height: 100,
+                                    height: 10.0 * appState.heightTenpx!,
                                     // width: 130,
                                     child: Stack(children: [
                                       Column(
@@ -1398,7 +1399,7 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                                               Radius.circular(20)),
                                           color: statColorWin[2],
                                         ),
-                                        height: 100,
+                                        height: 10.0 * appState.heightTenpx!,
                                         // width: 130,
                                         child: Stack(children: [
                                           Column(
@@ -1441,7 +1442,7 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
     return Scaffold(
         backgroundColor: colors.backgroundColor,
         body: Column(children: [
-          SizedBox(height: 25),
+          SizedBox(height: 2.5 * appState.heightTenpx!),
           Stack(children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Card(
@@ -1456,14 +1457,15 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                     color: colors.cardBlue,
                   ),
-                  height: 49,
-                  width: 350,
+                  height: 4.9 * appState.heightTenpx!,
+                  width: 35.0 * appState.widthTenpx!,
                   child: Column(children: [
-                    SizedBox(height: 17),
+                    SizedBox(height: 1.4 * appState.heightTenpx!),
                     Row(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(right: 55),
+                          padding: EdgeInsets.only(
+                              right: 5.5 * appState.widthTenpx!),
                           child: Text(
                             "Score",
                             style: TextStyle(
@@ -1474,7 +1476,8 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: 60),
+                          padding: EdgeInsets.only(
+                              right: 6.0 * appState.widthTenpx!),
                           child: Text(
                             "Serve",
                             style: TextStyle(
@@ -1504,7 +1507,7 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
             ]),
             Padding(
                 padding: EdgeInsets.only(
-                  top: 44,
+                  top: 4.4 * appState.heightTenpx!,
                 ),
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -1520,7 +1523,7 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                             color: colors.transparentWhite,
                           ),
                           height: 3,
-                          width: 321,
+                          width: 32.1 * appState.widthTenpx!,
                         ),
                       ),
                       Container(
@@ -1529,18 +1532,18 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                           color: Color(0xFF0ADE7C),
                         ),
                         height: 4,
-                        width: 321,
+                        width: 32.1 * appState.widthTenpx!,
                       ),
                     ],
                   ),
                 ])),
           ]),
-          SizedBox(height: 10),
+          SizedBox(height: appState.heightTenpx!),
           serveButtonWinners(
               "widget.opponentName", "asdasd", true, statColorWin),
           serveButtonUnforced("widget.yourName", "asdad", true),
           SizedBox(
-            height: 10,
+            height: appState.heightTenpx!,
           ),
           MaterialButton(
             onPressed: () {
@@ -1571,8 +1574,8 @@ class _RallyServeerWonState extends State<RallyServeerWon> {
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                     color: colors.cardBlue,
                   ),
-                  height: 60,
-                  width: 350,
+                  height: 6.0 * appState.heightTenpx!,
+                  width: 35.0 * appState.widthTenpx!,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

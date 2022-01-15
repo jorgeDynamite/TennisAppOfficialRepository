@@ -105,13 +105,13 @@ class _HomePageViewState extends State<HomePageView> {
 
     String url;
 
-    this.coachlastName = preferences.getString("lastName").toString();
+    // this.coachlastName = preferences.getString("lastName").toString();
     this.playerFirstName =
         preferences.getString("activePlayerFirstName").toString();
-    this.playerLastName =
-        preferences.getString("activePlayerLastName").toString();
-    this.coachfirstName = preferences.getString("firstName").toString();
-    this.coachuid = preferences.getString("accountRandomUID").toString();
+    // this.playerLastName =
+    // preferences.getString("activePlayerLastName").toString();
+    //this.coachfirstName = preferences.getString("firstName").toString();
+    //this.coachuid = preferences.getString("accountRandomUID").toString();
 
     print("asdasdad" + appState.urlsFromTennisAccounts["URLtoPlayer"]!);
     playerReference = (appState.urlsFromTennisAccounts["URLtoPlayer"]!);
@@ -127,29 +127,26 @@ class _HomePageViewState extends State<HomePageView> {
     if (dataSnapshot.snapshot.value != null) {
       dynamic valuesDataSnapshot = dataSnapshot.snapshot.value!;
       valuesDataSnapshot.forEach((key, value) {
+        print(value);
+
         //print(value);
-        value.forEach((key, value) {
-          //print(value);
-          if (x == 13) {
-            lastMatchDataVariable = [value[10], 0];
-            lastMatchDataVariableWinners = [value[13], 0];
-          }
-          if (x == 14) {
-            setState(() {
-              lastGameString = "Last Match";
-              lastMatchDataVariable[1] = value[10];
-              lastMatchDataVariable
-                  .add(lastMatchDataVariable[1] + lastMatchDataVariable[0]);
-              lastMatchDataVariableWinners[1] = value[13];
-              lastMatchDataVariableWinners.add(lastMatchDataVariableWinners[0] +
-                  lastMatchDataVariableWinners[1]);
-            });
+        setState(() {
+          lastMatchDataVariable = [value["opponentStats"][10], 0];
+          print(value["opponentStats"][10]);
+          lastMatchDataVariableWinners = [value["opponentStats"][13], 0];
 
-            ;
-          }
-
-          x++;
+          lastGameString = "Last Match";
+          lastMatchDataVariable[1] = value["yourStats"][10];
+          lastMatchDataVariable
+              .add(lastMatchDataVariable[1] + lastMatchDataVariable[0]);
+          lastMatchDataVariableWinners[1] = value["yourStats"][13];
+          lastMatchDataVariableWinners.add(lastMatchDataVariableWinners[0] +
+              lastMatchDataVariableWinners[1]);
         });
+
+        ;
+
+        x++;
       });
     } else {
       setState(() {
@@ -165,13 +162,13 @@ class _HomePageViewState extends State<HomePageView> {
     int f = 1;
     valuesDataSnapshot.forEach((key, value) {
       if (key == "matchRecord") {
-        value.forEach((key, value) {
-          matchRecord[f] = value;
-          f--;
-        });
+        matchRecord[0] = value["matchesWon"];
+        matchRecord[1] = value["matchesLost"];
         setState(() {
           recordLineWidth =
-              (matchRecord[0] / (matchRecord[0] + matchRecord[1])) * 115 + 5;
+              ((matchRecord[0] / (matchRecord[0] + matchRecord[1])) * 115 + 5) /
+                  10 *
+                  appState.heightTenpx!;
         });
       }
     });
@@ -181,6 +178,7 @@ class _HomePageViewState extends State<HomePageView> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print(appState.widthTenpx);
     selectedPlayerShow();
     getActivePlayerData();
     if (!appState.coach!) {
@@ -192,16 +190,19 @@ class _HomePageViewState extends State<HomePageView> {
 
   @override
   Widget build(BuildContext context) {
+    print(MediaQuery.of(context).size.height);
+    print(1);
     return Scaffold(
         backgroundColor: Color(0xFF12161F),
         body: Stack(children: [
           Column(children: [
-            SizedBox(height: 20),
+            SizedBox(height: 10),
             Container(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-              constraints: BoxConstraints.expand(height: 319),
+              constraints:
+                  BoxConstraints.expand(height: 31.9 * appState.heightTenpx!),
               child: ListView(
-                  padding: EdgeInsets.only(left: 20),
+                  padding: EdgeInsets.only(left: 2 * appState.widthTenpx!), //W
                   scrollDirection: Axis.horizontal,
                   children: [
                     UnforcedErrorWindowFunction(
@@ -217,7 +218,7 @@ class _HomePageViewState extends State<HomePageView> {
                       lastGameString,
                     ),
                     SizedBox(
-                      width: 20,
+                      width: 3 * appState.widthTenpx!,
                     ),
                     UnforcedErrorWindowFunction(
                       "Winners",
@@ -259,7 +260,7 @@ class _HomePageViewState extends State<HomePageView> {
                                       builder: (_) => CheckForMatchIDPage()));
                             },
                             child: Container(
-                              height: 190,
+                              height: 19.0 * appState.heightTenpx!,
                               decoration: BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20)),
@@ -269,15 +270,19 @@ class _HomePageViewState extends State<HomePageView> {
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(20, 19, 0, 0),
+                                    padding: EdgeInsets.fromLTRB(
+                                        2 * appState.widthTenpx!,
+                                        1.9 * appState.heightTenpx!,
+                                        0,
+                                        0),
                                     child: Row(children: [
                                       Image.asset(
                                         "Style/Pictures/TennisBall.png",
-                                        height: 24,
+                                        height: 2.4 * appState.heightTenpx!,
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(
-                                          left: 10,
+                                          left: appState.widthTenpx!,
                                         ),
                                         child: Text("Live Results",
                                             style: TextStyle(
@@ -289,7 +294,11 @@ class _HomePageViewState extends State<HomePageView> {
                                     ]),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(22, 28, 10, 0),
+                                    padding: EdgeInsets.fromLTRB(
+                                        2.2 * appState.widthTenpx!,
+                                        2.8 * appState.heightTenpx!,
+                                        appState.widthTenpx!,
+                                        0),
                                     child: Text(
                                       "Live Rapport",
                                       style: TextStyle(
@@ -300,7 +309,11 @@ class _HomePageViewState extends State<HomePageView> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(22, 10, 10, 0),
+                                    padding: EdgeInsets.fromLTRB(
+                                        2.2 * appState.widthTenpx!,
+                                        appState.heightTenpx!,
+                                        appState.widthTenpx!,
+                                        0),
                                     child: Column(
                                       children: [
                                         Text("Follow your students match live",
@@ -318,7 +331,11 @@ class _HomePageViewState extends State<HomePageView> {
                             padding: EdgeInsets.all(0),
                           ),
                         ),
-                        padding: EdgeInsets.fromLTRB(12, 18, 4, 0),
+                        padding: EdgeInsets.fromLTRB(
+                            1.6 * appState.widthTenpx!,
+                            1.8 * appState.heightTenpx!,
+                            0.4 * appState.widthTenpx!,
+                            0),
                       ),
                     ),
                     Expanded(
@@ -343,7 +360,7 @@ class _HomePageViewState extends State<HomePageView> {
                                       builder: (_) => AnalysChartsScreen()));
                             },
                             child: Container(
-                              height: 190,
+                              height: 19.0 * appState.heightTenpx!,
                               decoration: BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20)),
@@ -353,7 +370,11 @@ class _HomePageViewState extends State<HomePageView> {
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(20, 15, 0, 0),
+                                    padding: EdgeInsets.fromLTRB(
+                                        2.0 * appState.widthTenpx!,
+                                        1.5 * appState.heightTenpx!,
+                                        0,
+                                        0),
                                     child: Row(children: [
                                       Image.asset(
                                         "Style/Pictures/chartgreen.png",
@@ -374,7 +395,11 @@ class _HomePageViewState extends State<HomePageView> {
                                     ]),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 38, 25, 0),
+                                    padding: EdgeInsets.fromLTRB(
+                                        0,
+                                        3.8 * appState.heightTenpx!,
+                                        2.5 * appState.widthTenpx!,
+                                        0),
                                     child: Text(
                                       "Analys",
                                       style: TextStyle(
@@ -385,7 +410,11 @@ class _HomePageViewState extends State<HomePageView> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(22, 25, 10, 0),
+                                    padding: EdgeInsets.fromLTRB(
+                                        2.2 * appState.widthTenpx!,
+                                        2.5 * appState.heightTenpx!,
+                                        appState.widthTenpx!,
+                                        0),
                                     child: Column(
                                       children: [
                                         Text(
@@ -408,7 +437,11 @@ class _HomePageViewState extends State<HomePageView> {
                             padding: EdgeInsets.all(0),
                           ),
                         ),
-                        padding: EdgeInsets.fromLTRB(4, 18, 12, 0),
+                        padding: EdgeInsets.fromLTRB(
+                            0.4 * appState.widthTenpx!,
+                            1.8 * appState.heightTenpx!,
+                            1.6 * appState.widthTenpx!,
+                            0),
                       ),
                     ),
                   ],
@@ -503,7 +536,7 @@ class _HomePageViewState extends State<HomePageView> {
                             highlightColor: Colors.transparent,
                             onPressed: () {},
                             child: Container(
-                              height: 145,
+                              height: 14.5 * appState.heightTenpx!,
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20)),
@@ -513,15 +546,19 @@ class _HomePageViewState extends State<HomePageView> {
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(20, 19, 0, 0),
+                                    padding: EdgeInsets.fromLTRB(
+                                        2.0 * appState.widthTenpx!,
+                                        1.9 * appState.heightTenpx!,
+                                        0,
+                                        0),
                                     child: Row(children: [
                                       Image.asset(
                                         "Style/Pictures/chartwhite.png",
-                                        height: 24,
+                                        height: 2.4 * appState.heightTenpx!,
                                       ),
                                       Padding(
                                           padding: EdgeInsets.only(
-                                            left: 10,
+                                            left: appState.widthTenpx!,
                                           ),
                                           child: Column(
                                             children: [
@@ -539,7 +576,11 @@ class _HomePageViewState extends State<HomePageView> {
                                     ]),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 20, 5, 17),
+                                    padding: EdgeInsets.fromLTRB(
+                                        0,
+                                        2.0 * appState.heightTenpx!,
+                                        5,
+                                        1.7 * appState.heightTenpx!),
                                     child: Text(
                                       "5 left",
                                       style: TextStyle(
@@ -564,7 +605,8 @@ class _HomePageViewState extends State<HomePageView> {
                             padding: EdgeInsets.all(0),
                           ),
                         ),
-                        padding: EdgeInsets.fromLTRB(12, 8, 4, 0),
+                        padding: EdgeInsets.fromLTRB(
+                            1.6 * appState.widthTenpx!, 8, 4, 0),
                       ),
                     ),
                     Expanded(
@@ -581,7 +623,7 @@ class _HomePageViewState extends State<HomePageView> {
                             highlightColor: Colors.transparent,
                             onPressed: () {},
                             child: Container(
-                              height: 145,
+                              height: 14.5 * appState.heightTenpx!,
                               decoration: BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20)),
@@ -591,7 +633,11 @@ class _HomePageViewState extends State<HomePageView> {
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(20, 19, 0, 0),
+                                    padding: EdgeInsets.fromLTRB(
+                                        2.0 * appState.widthTenpx!,
+                                        1.9 * appState.heightTenpx!,
+                                        0,
+                                        0),
                                     child: Row(children: [
                                       Image.asset(
                                         "Style/Pictures/chartwhite.png",
@@ -599,7 +645,7 @@ class _HomePageViewState extends State<HomePageView> {
                                       ),
                                       Padding(
                                           padding: EdgeInsets.only(
-                                            left: 10,
+                                            left: appState.widthTenpx!,
                                           ),
                                           child: Column(
                                             children: [
@@ -617,7 +663,11 @@ class _HomePageViewState extends State<HomePageView> {
                                     ]),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 20, 5, 17),
+                                    padding: EdgeInsets.fromLTRB(
+                                        0,
+                                        2.0 * appState.heightTenpx!,
+                                        5,
+                                        0.8 * appState.heightTenpx!),
                                     child: Text(
                                       matchRecord[0].toString() +
                                           " - " +
@@ -630,7 +680,7 @@ class _HomePageViewState extends State<HomePageView> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: 10,
+                                    height: appState.heightTenpx,
                                   ),
                                   Padding(
                                       padding: EdgeInsets.only(
@@ -645,7 +695,7 @@ class _HomePageViewState extends State<HomePageView> {
                                                 .white, // Color(0xFF9B9191),
                                           ),
                                           height: 6,
-                                          width: 115,
+                                          width: 11.5 * appState.widthTenpx!,
                                         ),
                                         Container(
                                           decoration: BoxDecoration(
@@ -668,13 +718,14 @@ class _HomePageViewState extends State<HomePageView> {
                             padding: EdgeInsets.all(0),
                           ),
                         ),
-                        padding: EdgeInsets.fromLTRB(4, 8, 12, 0),
+                        padding: EdgeInsets.fromLTRB(
+                            4, 8, 1.6 * appState.widthTenpx!, 0),
                       ),
                     ),
                   ],
                 ),
                 SizedBox(
-                  height: 10,
+                  height: appState.heightTenpx!,
                 ),
                 NavigationBar(Color(0xFF0ADE7C), appColors().cardBlue,
                     appColors().transparentWhite),
@@ -699,7 +750,7 @@ List<Widget> menuScreensGather() {
 Widget menuScreens() {
   return Column(children: [
     SizedBox(
-      height: 20,
+      height: 2 * appState.heightTenpx!,
     )
   ]);
 }

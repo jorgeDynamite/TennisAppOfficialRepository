@@ -1,3 +1,4 @@
+import 'package:app/bloc/app_state.dart';
 import 'package:flutter/material.dart';
 
 import '../../Players.dart';
@@ -52,7 +53,7 @@ class _MatchLogViewState extends State<MatchLogView> {
 
   List<bool> trackedStats = [];
   List<Color> setDevidersLines = [
-    Color(0xFFB3FFFFFF),
+    Colors.transparent,
     Colors.transparent,
     Colors.transparent,
     Colors.transparent,
@@ -313,7 +314,8 @@ class _MatchLogViewState extends State<MatchLogView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 40, 0),
+                padding:
+                    EdgeInsets.fromLTRB(0, 0, 4.0 * appState.heightTenpx!, 0),
                 child: Text(
                   yourStats[statIndex].toString(),
                   style: TextStyle(
@@ -332,7 +334,8 @@ class _MatchLogViewState extends State<MatchLogView> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+                padding:
+                    EdgeInsets.fromLTRB(4.0 * appState.heightTenpx!, 0, 0, 0),
                 child: Text(
                   opponentStats[statIndex].toString(),
                   style: TextStyle(
@@ -348,7 +351,7 @@ class _MatchLogViewState extends State<MatchLogView> {
             padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
             child: Container(
               height: 2,
-              width: 300,
+              width: 30.0 * appState.heightTenpx!,
               color: Color(0xFFB3FFFFFF),
             ),
           ),
@@ -365,7 +368,8 @@ class _MatchLogViewState extends State<MatchLogView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 40, 0),
+                padding:
+                    EdgeInsets.fromLTRB(0, 0, 4.0 * appState.heightTenpx!, 0),
                 child: Text(
                   yourStats[statIndex].toInt().toString(),
                   style: TextStyle(
@@ -384,7 +388,8 @@ class _MatchLogViewState extends State<MatchLogView> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+                padding:
+                    EdgeInsets.fromLTRB(4.0 * appState.heightTenpx!, 0, 0, 0),
                 child: Text(
                   opponentStats[statIndex].toInt().toString(),
                   style: TextStyle(
@@ -400,7 +405,7 @@ class _MatchLogViewState extends State<MatchLogView> {
             padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
             child: Container(
               height: 2,
-              width: 300,
+              width: 30.0 * appState.heightTenpx!,
               color: Color(0xFFB3FFFFFF),
             ),
           ),
@@ -484,7 +489,7 @@ class _MatchLogViewState extends State<MatchLogView> {
     return Scaffold(
         backgroundColor: backgroundColor,
         body: Column(children: [
-          SizedBox(height: 25),
+          SizedBox(height: 2.5 * appState.heightTenpx!),
           Stack(children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: []),
           ]),
@@ -504,14 +509,16 @@ class _MatchLogViewState extends State<MatchLogView> {
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         color: cardBlue,
                       ),
-                      height: 240,
-                      width: 350,
+                      height: 24.0 * appState.heightTenpx!,
+                      width: 35.0 * appState.widthTenpx!,
                       child: Column(
                         children: [
                           // ScoreBoard
                           Padding(
-                              padding:
-                                  EdgeInsets.only(left: 15, top: 65, right: 3),
+                              padding: EdgeInsets.only(
+                                  left: 1.5 * appState.heightTenpx!,
+                                  top: 6.5 * appState.heightTenpx!,
+                                  right: 3),
                               child: Card(
                                 elevation: 5,
                                 shape: RoundedRectangleBorder(
@@ -520,11 +527,12 @@ class _MatchLogViewState extends State<MatchLogView> {
                                 color: backgroundColor,
                                 shadowColor: Colors.black,
                                 child: Container(
-                                    height: 55,
-                                    width: 300,
+                                    height: 5.5 * appState.heightTenpx!,
+                                    width: 30.0 * appState.widthTenpx!,
                                     child: Padding(
                                         padding: EdgeInsets.only(
-                                            left: 15, right: 45),
+                                            left: 1.5 * appState.widthTenpx!,
+                                            right: 4.5 * appState.widthTenpx!),
                                         child: Row(children: [
                                           Text(
                                             nameToLongFunc(yourName, 18),
@@ -537,8 +545,10 @@ class _MatchLogViewState extends State<MatchLogView> {
                               )),
 
                           Padding(
-                              padding:
-                                  EdgeInsets.only(left: 15, top: 15, right: 3),
+                              padding: EdgeInsets.only(
+                                  left: 1.5 * appState.widthTenpx!,
+                                  top: 1.5 * appState.heightTenpx!,
+                                  right: 3),
                               child: Card(
                                 elevation: 1,
                                 shape: RoundedRectangleBorder(
@@ -547,11 +557,12 @@ class _MatchLogViewState extends State<MatchLogView> {
                                 color: backgroundColor,
                                 shadowColor: Colors.black,
                                 child: Container(
-                                    height: 55,
-                                    width: 300,
+                                    height: 5.5 * appState.heightTenpx!,
+                                    width: 30.0 * appState.widthTenpx!,
                                     child: Padding(
                                         padding: EdgeInsets.only(
-                                            left: 15, right: 45),
+                                            left: 1.5 * appState.widthTenpx!,
+                                            right: 4.5 * appState.widthTenpx!),
                                         child: Row(children: [
                                           Text(
                                             nameToLongFunc(opponentName, 18),
@@ -612,13 +623,13 @@ class _MatchLogViewState extends State<MatchLogView> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 76,
-                  left: 285,
+                  top: 7.6 * appState.heightTenpx!,
+                  left: 28.5 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
                     Container(
-                      height: 125,
+                      height: 12.5 * appState.heightTenpx!,
                       width: 2,
                       color: setDevidersLines[1],
                     )
@@ -629,15 +640,15 @@ class _MatchLogViewState extends State<MatchLogView> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 76,
-                  left: 315,
+                  top: 7.6 * appState.heightTenpx!,
+                  left: 31.5 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
                     Container(
-                      height: 125,
+                      height: 12.5 * appState.heightTenpx!,
                       width: 2,
-                      color: Color(0xFF707070),
+                      color: Colors.transparent,
                     )
                   ],
                 ),
@@ -645,13 +656,13 @@ class _MatchLogViewState extends State<MatchLogView> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 76,
-                  left: 255,
+                  top: 7.6 * appState.heightTenpx!,
+                  left: 25.5 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
                     Container(
-                      height: 125,
+                      height: 12.5 * appState.heightTenpx!,
                       width: 2,
                       color: setDevidersLines[2],
                     )
@@ -662,13 +673,13 @@ class _MatchLogViewState extends State<MatchLogView> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 76,
-                  left: 225,
+                  top: 7.6 * appState.heightTenpx!,
+                  left: 22.5 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
                     Container(
-                      height: 125,
+                      height: 12.5 * appState.heightTenpx!,
                       width: 2,
                       color: setDevidersLines[3],
                     )
@@ -679,13 +690,13 @@ class _MatchLogViewState extends State<MatchLogView> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 76,
-                  left: 195,
+                  top: 7.6 * appState.heightTenpx!,
+                  left: 19.5 * appState.heightTenpx!,
                 ),
                 child: Row(
                   children: [
                     Container(
-                      height: 125,
+                      height: 12.5 * appState.heightTenpx!,
                       width: 2,
                       color: setDevidersLines[4],
                     )
@@ -699,8 +710,8 @@ class _MatchLogViewState extends State<MatchLogView> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 90,
-                  left: 324,
+                  top: 9.0 * appState.heightTenpx!,
+                  left: 32.4 * appState.heightTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -717,8 +728,8 @@ class _MatchLogViewState extends State<MatchLogView> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 170,
-                  left: 324,
+                  top: 17.0 * appState.heightTenpx!,
+                  left: 32.4 * appState.heightTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -735,8 +746,8 @@ class _MatchLogViewState extends State<MatchLogView> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 90,
-                  left: 294,
+                  top: 9.0 * appState.heightTenpx!,
+                  left: 29.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -753,8 +764,8 @@ class _MatchLogViewState extends State<MatchLogView> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 170,
-                  left: 294,
+                  top: 17.0 * appState.heightTenpx!,
+                  left: 29.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -771,8 +782,8 @@ class _MatchLogViewState extends State<MatchLogView> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 90,
-                  left: 264,
+                  top: 9.0 * appState.heightTenpx!,
+                  left: 26.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -789,8 +800,8 @@ class _MatchLogViewState extends State<MatchLogView> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 170,
-                  left: 264,
+                  top: 17.0 * appState.heightTenpx!,
+                  left: 26.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -807,8 +818,8 @@ class _MatchLogViewState extends State<MatchLogView> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 90,
-                  left: 234,
+                  top: 9.0 * appState.heightTenpx!,
+                  left: 23.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -825,8 +836,8 @@ class _MatchLogViewState extends State<MatchLogView> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 170,
-                  left: 234,
+                  top: 17.0 * appState.heightTenpx!,
+                  left: 23.4 * appState.heightTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -843,8 +854,8 @@ class _MatchLogViewState extends State<MatchLogView> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 90,
-                  left: 204,
+                  top: 9.0 * appState.heightTenpx!,
+                  left: 20.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -861,8 +872,8 @@ class _MatchLogViewState extends State<MatchLogView> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 170,
-                  left: 204,
+                  top: 17.0 * appState.heightTenpx!,
+                  left: 20.4 * appState.heightTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -878,15 +889,15 @@ class _MatchLogViewState extends State<MatchLogView> {
             ],
           ),
           SizedBox(
-            height: 20,
+            height: 2.0 * appState.heightTenpx!,
           ),
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(20)),
               color: cardBlue, //Color(0xFF3E3B3B),
             ),
-            height: 360,
-            width: 350,
+            height: 36.0 * appState.heightTenpx!,
+            width: 35.0 * appState.heightTenpx!,
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -933,9 +944,8 @@ class _MatchLogViewState extends State<MatchLogView> {
             ),
           ),
           SizedBox(
-            height: 20,
+            height: 34,
           ),
-          SizedBox(height: 14),
           Align(
             alignment: Alignment.bottomCenter,
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -967,8 +977,8 @@ class _MatchLogViewState extends State<MatchLogView> {
                             Navigator.of(context).pop();
                           },
                           child: Container(
-                            height: 40,
-                            width: 90,
+                            height: 4.0 * appState.heightTenpx!,
+                            width: 9.0 * appState.widthTenpx!,
                             decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
@@ -991,8 +1001,8 @@ class _MatchLogViewState extends State<MatchLogView> {
                         ),
                       ]),
                       padding: EdgeInsets.only(
-                        left: 233.5,
-                        bottom: 28,
+                        left: 23.35 * appState.widthTenpx!,
+                        bottom: 2.8 * appState.heightTenpx!,
                         top: 5,
                       )),
                 ],

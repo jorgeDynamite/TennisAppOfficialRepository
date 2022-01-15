@@ -10,8 +10,11 @@ Change inlogging system - started at signup
 
 
 
-
-
+List of pages dimension fixed: 
+- Navigation bar
+- Log in page
+- Home Page 
+- Sidebar
 
 
 

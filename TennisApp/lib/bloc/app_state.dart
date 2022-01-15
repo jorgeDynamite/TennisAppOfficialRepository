@@ -19,6 +19,8 @@ class AppState {
   Color? navigationColor1;
   Color? navigationColor2;
   Color? navigationColor3;
+  double? heightTenpx;
+  double? widthTenpx;
   Map<String, String?> urlsFromCoach = {
     "URLtoCoach": "",
     "URLtoPlayer": "",

@@ -33,6 +33,7 @@ class _popUpPLayersState extends State<popUpPLayers> {
         : [colors.cardBlue, Colors.white];
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,

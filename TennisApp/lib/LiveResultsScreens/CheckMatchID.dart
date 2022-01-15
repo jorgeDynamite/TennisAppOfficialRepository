@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:app/HomePageStuff/View.dart';
 import 'package:app/Players.dart';
 import 'package:app/RandomWidgets/navigation_bar.dart';
+import 'package:app/bloc/app_state.dart';
 import 'package:app/newMatch/newMatchSecondPage.dart';
 
 import 'package:firebase_database/firebase_database.dart';
@@ -57,6 +58,7 @@ class _CheckForMatchIDPageState extends State<CheckForMatchIDPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: colors.backgroundColor,
         body: Column(children: [
           SizedBox(height: 25),
@@ -74,8 +76,8 @@ class _CheckForMatchIDPageState extends State<CheckForMatchIDPage> {
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                     color: colors.cardBlue, //Color(0xFF272626),
                   ),
-                  height: 55,
-                  width: 350,
+                  height: 5.5 * appState.heightTenpx!,
+                  width: 35.0 * appState.widthTenpx!,
                   child: Column(children: [
                     SizedBox(height: 17),
                     Row(
@@ -159,18 +161,18 @@ class _CheckForMatchIDPageState extends State<CheckForMatchIDPage> {
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 color: colors.cardBlue, //Color(0xFF272626),
               ),
-              height: 270,
-              width: 350,
+              height: 27.0 * appState.heightTenpx!,
+              width: 35.0 * appState.widthTenpx!,
               child: Stack(children: [
                 Column(
                   children: [
                     SizedBox(
-                      height: 50,
+                      height: 5.0 * appState.heightTenpx!,
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                        left: 30,
-                        right: 30,
+                        left: 3.0 * appState.widthTenpx!,
+                        right: 3.0 * appState.widthTenpx!,
                       ),
                       child: Card(
                           elevation: 5,
@@ -183,7 +185,7 @@ class _CheckForMatchIDPageState extends State<CheckForMatchIDPage> {
                               "Match ID", false, changeFilledValue)),
                     ),
                     SizedBox(
-                      height: 45,
+                      height: 4.5 * appState.heightTenpx!,
                     ),
                   ],
                 ),
@@ -200,15 +202,20 @@ class _CheckForMatchIDPageState extends State<CheckForMatchIDPage> {
                   await databaseReference.child(url).once();
               if (dataSnapshot.snapshot.value != null) {
                 dynamic valuesDataSnapshot = dataSnapshot.snapshot.value!;
+                var y = false;
                 valuesDataSnapshot.forEach((key, value) {
                   print(key);
                   if (key == controller.text) {
+                    y = true;
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (_) => liveResultsPage(controller.text)));
                   }
                 });
+                if (!y) {
+                  popUpChangeStat(context);
+                }
               }
               print(controller.text);
             },
@@ -248,11 +255,46 @@ class _CheckForMatchIDPageState extends State<CheckForMatchIDPage> {
           ),
           SizedBox(height: errorMessagePadding),
           errorMessageState(errorMessageArg),
-          SizedBox(height: 210),
+          SizedBox(height: 17.0 * appState.heightTenpx!),
           NavigationBar(appColors().transparentWhite, appColors().cardBlue,
               appColors().transparentWhite),
         ]));
   }
+}
+
+popUpChangeStat(
+  BuildContext context,
+) {
+  List<Widget> buttons = [];
+
+  return showDialog(
+      context: context,
+      barrierColor: Colors.black38,
+      builder: (context) {
+        return AlertDialog(
+          elevation: 5,
+          backgroundColor: Colors.white70,
+          content: Text("Sorry we couldn't find a match with that Match ID",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  //fontFamily: "Telugu Sangam MN",
+                  fontWeight: FontWeight.w600)),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("OK",
+                  style: TextStyle(
+                      color: appColors().opponentColor,
+                      fontSize: 18,
+                      //fontFamily: "Telugu Sangam MN",
+                      fontWeight: FontWeight.w600)),
+            )
+          ],
+        );
+      });
 }
 
 _buildTextField(TextEditingController controller, IconData icon,
@@ -264,6 +306,7 @@ _buildTextField(TextEditingController controller, IconData icon,
         color: appColors().backgroundColor, //Color(0xFF3E3B3B),
         border: Border.all(color: Colors.transparent)),
     child: TextField(
+      keyboardType: TextInputType.number,
       onChanged: (text) {
         if (text != "") {
           changedValue(true);

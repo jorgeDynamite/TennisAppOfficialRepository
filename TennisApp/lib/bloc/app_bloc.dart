@@ -1,4 +1,5 @@
 import 'package:app/bloc/app_state.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppBloc {
@@ -110,6 +111,13 @@ class AppBloc {
       _state.urlsFromCoach,
       _state.urlsFromTennisAccounts,
     ];
+  }
+
+  List<double> getDimensions(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
+    return [height, width];
   }
 }
 

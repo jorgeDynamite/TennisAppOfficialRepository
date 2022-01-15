@@ -50,8 +50,8 @@ class _AddExistingState extends State<AddExisting> {
 
     newAccountChecker(path, name, password).then((value) => {
           this.setState(() {
-            t[0];
-            if (t[0] == true) {
+            print(value);
+            if (value[0] == true) {
               this.setState(() {
                 Map<String, dynamic> accountdata = {
                   "firstName": value[1],
@@ -70,7 +70,7 @@ class _AddExistingState extends State<AddExisting> {
                         "-" +
                         value[2] +
                         "-" +
-                        value[3] +
+                        value[4] +
                         "/")
                     .push();
                 id.set(accountdata);
@@ -133,6 +133,7 @@ class _AddExistingState extends State<AddExisting> {
 
   Widget Screen() {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -292,10 +293,12 @@ Future<List> newAccountChecker(
         email: email.trim(), password: email));
   } on Exception catch (_) {
     try {
-      user = (await _auth.createUserWithEmailAndPassword(
+      user = (await _auth.signInWithEmailAndPassword(
           email: email.trim() + "@gmail.com", password: passwords));
+      print(1);
     } on Exception catch (_) {
       x = false;
+      print(2);
     }
   }
   if (x) {
@@ -303,14 +306,14 @@ Future<List> newAccountChecker(
     firstname = split[3].split("-")[0];
     lastname = split[3].split("-")[1];
     uid = split[3].split("-")[2];
-
-    app.initSet(
+/*
+    await app.initSet(
       split[0] == "CP_Accounts",
       uid,
       email,
       firstname,
       lastname,
-    );
+    );*/
   }
   return [
     x,

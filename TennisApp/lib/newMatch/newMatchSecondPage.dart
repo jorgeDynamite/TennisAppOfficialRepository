@@ -1,6 +1,7 @@
 import 'package:app/HomePageStuff/View.dart';
 import 'package:app/Players.dart';
 import 'package:app/RandomWidgets/navigation_bar.dart';
+import 'package:app/bloc/app_state.dart';
 import 'package:app/newMatch/newMatchFirstPage.dart';
 import 'package:flutter/material.dart';
 
@@ -20,14 +21,14 @@ class NewMatchSecondPage extends StatefulWidget {
 
 class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
   late TextEditingController controller;
-  double greenLineWidth = 214;
+  double greenLineWidth = 21.4 * appState.widthTenpx!;
   Widget? iconPressed = Icon(Icons.check, color: Color(0xFF0ADE7C));
   bool iconPressedBool = true;
   int theWidgetIndex = 0;
   Widget theWidget = Container();
   String matchTypeButtonText = "Match Format";
   Color iconColor = Colors.white;
-  double paddingMenuBar = 146;
+  double paddingMenuBar = 14.6 * appState.heightTenpx!;
   Widget? nextButtonWidgetStateDependent;
   double errorMessagePadding = 0;
   late bool ad;
@@ -215,9 +216,6 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
     return MaterialButton(
         onPressed: () {
           setState(() {
-            if (greenLineWidth != 321) {
-              greenLineWidth = greenLineWidth + 107;
-            }
             if (matchTypeButtonText != "Match Format") {
               Navigator.push(
                   context,
@@ -231,7 +229,7 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
                           widget.yourName,
                           theMatchFormatDataPackage1(matchTypeButtonText))));
             } else {
-              errorMessagePadding = 17;
+              errorMessagePadding = 1.7 * appState.heightTenpx!;
               errorMessageArg = errorMessage();
             }
           });
@@ -248,8 +246,8 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 color: colors.cardBlue,
               ),
-              height: 70,
-              width: 350,
+              height: 7.0 * appState.heightTenpx!,
+              width: 35.0 * appState.widthTenpx!,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -262,7 +260,7 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
                   ),
                   Icon(
                     Icons.arrow_forward_ios,
-                    size: 22,
+                    size: 2.2 * appState.heightTenpx!,
                     color: Colors.white,
                   )
                 ],
@@ -289,7 +287,9 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
       ));
     }
     return Padding(
-        padding: EdgeInsets.only(left: 40, top: 140),
+        padding: EdgeInsets.only(
+            left: 4.0 * appState.widthTenpx!,
+            top: 14.0 * appState.heightTenpx!),
         child: Column(
           children: textWidgets,
         ));
@@ -316,7 +316,7 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
             if (matchTyperIndex == 1) {
               rulesWidget =
                   rules(["3 sets", "6 games in each set", "standard tiebreak"]);
-              paddingMenuBar = 146;
+              paddingMenuBar = 14.6 * appState.heightTenpx!;
               matchTypeButtonText = matchTypeText;
             }
             if (matchTyperIndex == 2) {
@@ -326,7 +326,7 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
                 "Standard tiebreaks in the 2 sets",
                 "If 1-1 in sets deciding supertiebreak",
               ]);
-              paddingMenuBar = 146;
+              paddingMenuBar = 14.6 * appState.heightTenpx!;
 
               matchTypeButtonText = "2 sets + ST";
             }
@@ -337,7 +337,7 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
                 "Standard tiebreaks in the 5 sets",
                 "Tiebreak if 3-3 in games",
               ]);
-              paddingMenuBar = 146;
+              paddingMenuBar = 14.6 * appState.heightTenpx!;
               matchTypeButtonText = matchTypeText;
             }
             if (matchTyperIndex == 4) {
@@ -346,17 +346,17 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
                 "6 games",
                 "Standard tiebreak",
               ]);
-              paddingMenuBar = 146;
+              paddingMenuBar = 14.6 * appState.heightTenpx!;
               matchTypeButtonText = matchTypeText;
             }
             if (matchTyperIndex == 5) {
               rulesWidget = rules([
                 "Match on time",
                 "Person with most games wins",
+                "Timer in app",
                 "You keep track off the time",
-                "Same as 30 min format",
               ]);
-              paddingMenuBar = 146;
+              paddingMenuBar = 14.6 * appState.heightTenpx!;
               matchTypeButtonText = "Time match";
             }
             if (matchTyperIndex == 6) {
@@ -366,7 +366,7 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
                 "You keep track off the time",
                 "only games not sets",
               ]);
-              paddingMenuBar = 146;
+              paddingMenuBar = 14.6 * appState.heightTenpx!;
               matchTypeButtonText = "30 min";
             }
             if (matchTyperIndex == 7) {
@@ -376,7 +376,7 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
                 " and equal games in last set",
                 "Tiebreaks at 3 all",
               ]);
-              paddingMenuBar = 146;
+              paddingMenuBar = 14.6 * appState.heightTenpx!;
               matchTypeButtonText = "60 min 4 games";
             }
             setState(() {
@@ -392,7 +392,7 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
       ]),
       padding: EdgeInsets.symmetric(
         vertical: 5,
-        horizontal: 10,
+        horizontal: appState.widthTenpx!,
       ),
     );
   }
@@ -411,8 +411,8 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
         shadowColor: Colors.black,
         child: Container(
           color: colors.cardBlue,
-          height: 326,
-          width: 270,
+          height: 32.6 * appState.heightTenpx!,
+          width: 27.0 * appState.widthTenpx!,
           child: Column(
             children: [
               matchTypesButton("Standard 3 Sets", 1),
@@ -465,7 +465,7 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
     return Scaffold(
         backgroundColor: colors.backgroundColor,
         body: Column(children: [
-          SizedBox(height: 25),
+          SizedBox(height: 2.5 * appState.heightTenpx!),
           Stack(children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Card(
@@ -480,14 +480,15 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                     color: colors.cardBlue, //Color(0xFF272626),
                   ),
-                  height: 55,
-                  width: 350,
+                  height: 5.5 * appState.heightTenpx!,
+                  width: 35.0 * appState.widthTenpx!,
                   child: Column(children: [
-                    SizedBox(height: 17),
+                    SizedBox(height: 1.4 * appState.heightTenpx!),
                     Row(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(right: 55),
+                          padding: EdgeInsets.only(
+                              right: 5.5 * appState.widthTenpx!),
                           child: Text(
                             "Opponent",
                             style: TextStyle(
@@ -498,7 +499,8 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: 60),
+                          padding: EdgeInsets.only(
+                              right: 6.0 * appState.widthTenpx!),
                           child: Text(
                             "Rules",
                             style: TextStyle(
@@ -528,7 +530,7 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
             ]),
             Padding(
                 padding: EdgeInsets.only(
-                  top: 44,
+                  top: 4.8 * appState.heightTenpx!,
                 ),
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -545,7 +547,7 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
                                 colors.transparentWhite, // Color(0xFF707070),
                           ),
                           height: 3,
-                          width: 321,
+                          width: 32.1 * appState.widthTenpx!,
                         ),
                       ),
                       Container(
@@ -576,12 +578,13 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       color: colors.cardBlue, //Color(0xFF272626),
                     ),
-                    height: 260,
-                    width: 350,
+                    height: 26.0 * appState.heightTenpx!,
+                    width: 35.0 * appState.widthTenpx!,
                     child: Column(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(left: 0, top: 10),
+                          padding: EdgeInsets.only(
+                              left: 0, top: appState.heightTenpx!),
                           child: Row(children: [
                             Stack(
                               children: [
@@ -600,15 +603,17 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
                                     iconPressedBool = !iconPressedBool;
                                   },
                                   child: Container(
-                                    height: 25,
-                                    width: 25,
+                                    height: 2.5 * appState.heightTenpx!,
+                                    width: 2.5 * appState.widthTenpx!,
                                     color: colors
                                         .backgroundColor, //Color(0xFF3E3B3B),
                                     child: iconPressed,
                                   ),
                                 ),
                                 Padding(
-                                    padding: EdgeInsets.only(left: 62, top: 15),
+                                    padding: EdgeInsets.only(
+                                        left: 6.2 * appState.widthTenpx!,
+                                        top: 1.5 * appState.heightTenpx!),
                                     child: Text(
                                       "AD",
                                       style: TextStyle(
@@ -623,8 +628,10 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
                         // Matchtype button start
                         Stack(children: [
                           Padding(
-                              padding:
-                                  EdgeInsets.only(left: 15, top: 15, right: 45),
+                              padding: EdgeInsets.only(
+                                  left: 1.5 * appState.widthTenpx!,
+                                  top: 1.5 * appState.heightTenpx!,
+                                  right: 4.5 * appState.widthTenpx!),
                               child: MaterialButton(
                                   highlightColor: null,
                                   splashColor: null,
@@ -645,14 +652,16 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
                                             nextButton();
                                         theWidgetIndex = 0;
                                         theWidget = Container();
-                                        paddingMenuBar = 146;
+                                        paddingMenuBar =
+                                            14.6 * appState.heightTenpx!;
                                       }
                                     });
                                   },
                                   child: Container(
-                                    height: 50,
+                                    height: 5.0 * appState.heightTenpx!,
                                     padding: EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 5),
+                                        horizontal: 2.0 * appState.widthTenpx!,
+                                        vertical: 5),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(10)),
@@ -674,7 +683,7 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
                                           ),
                                           child: Icon(
                                             Icons.arrow_forward_ios,
-                                            size: 20,
+                                            size: 2.0 * appState.widthTenpx!,
                                             color: iconColor,
                                           ))
                                     ]),
@@ -685,38 +694,38 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
                   ),
                 ),
                 padding: EdgeInsets.only(
-                  left: 13.5,
-                  right: 13.5,
+                  left: 1.35 * appState.widthTenpx!,
+                  right: 1.35 * appState.widthTenpx!,
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(left: 50, top: 130, right: 50),
+                padding: EdgeInsets.only(
+                    left: 5.0 * appState.widthTenpx!,
+                    top: 13.0 * appState.heightTenpx!,
+                    right: 5.0 * appState.widthTenpx!),
                 child: Container(child: matchTypeWidgetState(theWidget)),
               ),
               rulesState(rulesWidget),
             ],
           ),
           SizedBox(
-            height: 15,
+            height: 1.5 * appState.heightTenpx!,
           ),
           nextButtonState(nextButtonWidgetStateDependent),
           SizedBox(height: 5),
           errorMessageState(errorMessageArg),
           SizedBox(height: paddingMenuBar - errorMessagePadding),
-          SizedBox(height: 45),
+          SizedBox(height: 2.0 * appState.heightTenpx!),
           Padding(
-            padding: EdgeInsets.only(right: 250),
+            padding: EdgeInsets.only(right: 25.0 * appState.widthTenpx!),
             child: MaterialButton(
               onPressed: () {
-                if (greenLineWidth != 321) {
-                  greenLineWidth = greenLineWidth - 107;
-                }
                 Navigator.push(context,
                     MaterialPageRoute(builder: (_) => NewMatchFirstPage()));
               },
               child: Container(
-                height: 50,
-                width: 80,
+                height: 5.0 * appState.heightTenpx!,
+                width: 8.0 * appState.widthTenpx!,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                   color: colors.mainGreen,
@@ -743,30 +752,4 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
               appColors().transparentWhite),
         ]));
   }
-}
-
-_buildTextField(TextEditingController controller, IconData icon,
-    String labelText, bool obscure) {
-  return Container(
-    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-        color: Color(0xFF3E3B3B),
-        border: Border.all(color: Colors.transparent)),
-    child: TextField(
-      obscureText: obscure,
-      controller: controller,
-      style: TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-          labelText: labelText,
-          labelStyle: TextStyle(color: Colors.white),
-          icon: Icon(
-            icon,
-            color: Colors.white,
-          ),
-          // prefix: Icon(icon),
-          border: InputBorder.none),
-    ),
-  );
 }

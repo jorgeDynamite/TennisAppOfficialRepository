@@ -1,4 +1,5 @@
 import 'package:app/Players.dart';
+import 'package:app/bloc/app_state.dart';
 import 'package:app/colors.dart';
 import 'package:app/newMatch/matchPanel.dart';
 import 'package:app/newMatch/thePoint/RallyServeWon.dart';
@@ -68,7 +69,7 @@ class _ServeState extends State<Serve> {
     Widget thewidget = Column(
       children: [
         SizedBox(
-          height: 20,
+          height: 2.0 * appState.heightTenpx!,
         ),
         MaterialButton(
             onPressed: () {
@@ -303,8 +304,8 @@ class _ServeState extends State<Serve> {
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       color: colors.cardBlue //Color(0xFF272626),
                       ),
-                  height: 100,
-                  width: 350,
+                  height: 10.0 * appState.heightTenpx!,
+                  width: 35.0 * appState.widthTenpx!,
                   child: Stack(children: [
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -368,7 +369,7 @@ class _ServeState extends State<Serve> {
     return Scaffold(
         backgroundColor: colors.backgroundColor, //
         body: Column(children: [
-          SizedBox(height: 25),
+          SizedBox(height: 2.5 * appState.heightTenpx!),
           Stack(children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Card(
@@ -383,14 +384,15 @@ class _ServeState extends State<Serve> {
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       color: colors.cardBlue //Color(0xFF272626),
                       ),
-                  height: 49,
-                  width: 350,
+                  height: 4.9 * appState.heightTenpx!,
+                  width: 35.0 * appState.widthTenpx!,
                   child: Column(children: [
-                    SizedBox(height: 17),
+                    SizedBox(height: 1.4 * appState.heightTenpx!),
                     Row(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(right: 55),
+                          padding: EdgeInsets.only(
+                              right: 5.5 * appState.widthTenpx!),
                           child: Text(
                             "Score",
                             style: TextStyle(
@@ -401,7 +403,8 @@ class _ServeState extends State<Serve> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: 60),
+                          padding: EdgeInsets.only(
+                              right: 6.0 * appState.widthTenpx!),
                           child: Text(
                             "Serve",
                             style: TextStyle(
@@ -431,7 +434,7 @@ class _ServeState extends State<Serve> {
             ]),
             Padding(
                 padding: EdgeInsets.only(
-                  top: 44,
+                  top: 4.4 * appState.heightTenpx!,
                 ),
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -448,7 +451,7 @@ class _ServeState extends State<Serve> {
                               color: Colors.transparent // Color(0xFF707070),
                               ),
                           height: 3,
-                          width: 321,
+                          width: 32.1 * appState.widthTenpx!,
                         ),
                       ),
                       Container(
@@ -457,13 +460,13 @@ class _ServeState extends State<Serve> {
                           color: Color(0xFF0ADE7C),
                         ),
                         height: 4,
-                        width: 220,
+                        width: 22.0 * appState.widthTenpx!,
                       ),
                     ],
                   ),
                 ])),
           ]),
-          SizedBox(height: 10),
+          SizedBox(height: 1.0 * appState.heightTenpx!),
           serveButton("First Serve IN")!,
           serveButton("Second Serve IN")!,
           serveButton("Double Fault")!,

@@ -160,11 +160,6 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
             }
           }
         }
-        firstChartValues = List.from(firstChartValues.reversed);
-
-        secondChartValues = List.from(secondChartValues.reversed);
-        secondChartValuesOpponent =
-            List.from(secondChartValuesOpponent.reversed);
       } else {
         if (x == 0) {
           this.setState(() {
@@ -189,6 +184,12 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
         }
       }
     }
+    firstChartValues = List.from(firstChartValues.reversed);
+
+    firstChartValuesOpponent = List.from(firstChartValuesOpponent.reversed);
+
+    secondChartValues = List.from(secondChartValues.reversed);
+    secondChartValuesOpponent = List.from(secondChartValuesOpponent.reversed);
   }
 
   Future<List<dynamic>> tournamnetsAndMatchesDataPack() async {
@@ -219,6 +220,7 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
             //matches in tournamnet
             matchKeys.add(key);
             x = 0;
+            /*
             value.forEach((key, value) {
               print("value: " + value.toString());
 
@@ -236,6 +238,8 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
 
               x++;
             });
+            */
+            match.add(setMatch(x, value));
             matches.add(match);
             match = [];
           });
@@ -278,6 +282,7 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
       for (var i = 1; i < valuesDataSnapshot.length; i++) {
         valuesDataSnapshot[i].forEach((key, value) {
           x = 0;
+          /*
           value.forEach((key, value) {
             if (x == 14) {
               matches.add(setMatch(x, value));
@@ -287,6 +292,8 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
 
             x++;
           });
+          */
+          matches.add(setMatch(x, value));
         });
       }
     }
@@ -297,99 +304,78 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
   List<dynamic> setMatch(int x, dynamic value) {
     List<dynamic> match = [];
 
-    //print(value);
-    if (x == 11) {
-      firstsetStandings[0] = value[0];
-      firstsetStandings[1] = value[1];
-    }
-    if (x == 4) {
-      secondsetStandings[0] = value[0];
-      secondsetStandings[1] = value[1];
-    }
-    if (x == 2) {
-      thirdsetStandings[0] = value[0];
-      thirdsetStandings[1] = value[1];
-    }
-    if (x == 0) {
-      fourthsetStandings[0] = value[0];
-      fourthsetStandings[1] = value[1];
-    }
-    if (x == 8) {
-      fifthsetStandings[0] = value[0];
-      fifthsetStandings[1] = value[1];
-    }
-    if (x == 1) {
-      //Do nothing when it's 5 sets 4 min
+    print("value asdadsad: " + value.toString());
 
-    }
-    if (x == 3) {
-      //Surface ---------------
-    }
-    if (x == 6) {
-      //Do nothing
-    }
-    if (x == 9) {
-      opponentName = value;
-    }
-    if (x == 13) {
-      //double n = num.parse(numberToRound.toStringAsFixed(2));
-      opponentStats = [];
-      opponentStats.add(value[13].toDouble());
-      opponentStats.add(value[10].toDouble());
-      opponentStats.add(num.parse(value[2].toStringAsFixed(2)).toDouble());
-      opponentStats.add(num.parse(value[9].toStringAsFixed(2)).toDouble());
-      opponentStats.add(value[0].toDouble() - 1);
-      opponentStats.add(value[1].toDouble() - 1);
-      opponentStats.add(value[8].toDouble() - 1);
-      opponentStats.add(value[7].toDouble() - 1);
-      opponentStats.add(value[12].toDouble() - 1);
-      opponentStats.add(value[11].toDouble() - 1);
-      opponentStats.add(value[3].toDouble() - 1);
+    firstsetStandings[0] = value["1setStandings"][0];
+    firstsetStandings[1] = value["1setStandings"][1];
 
-      if (opponentStats[2] == 1) {
-        opponentStats[2] = 0;
+    secondsetStandings[0] = value["2setStandings"][0];
+    secondsetStandings[1] = value["2setStandings"][1];
+
+    thirdsetStandings[0] = value["3setStandings"][0];
+    thirdsetStandings[1] = value["3setStandings"][1];
+
+    fourthsetStandings[0] = value["4setStandings"][0];
+    fourthsetStandings[1] = value["4setStandings"][1];
+
+    fifthsetStandings[0] = value["5setStandings"][0];
+    fifthsetStandings[1] = value["5setStandings"][1];
+
+    opponentName = value["opponentName"];
+
+    //double n = num.parse(numberToRound.toStringAsFixed(2));
+    opponentStats = [];
+    opponentStats.add(value["opponentStats"][13].toDouble());
+    opponentStats.add(value["opponentStats"][10].toDouble());
+    opponentStats.add(
+        num.parse(value["opponentStats"][2].toStringAsFixed(2)).toDouble());
+    opponentStats.add(
+        num.parse(value["opponentStats"][9].toStringAsFixed(2)).toDouble());
+    opponentStats.add(value["opponentStats"][0].toDouble() - 1);
+    opponentStats.add(value["opponentStats"][1].toDouble() - 1);
+    opponentStats.add(value["opponentStats"][8].toDouble() - 1);
+    opponentStats.add(value["opponentStats"][7].toDouble() - 1);
+    opponentStats.add(value["opponentStats"][12].toDouble() - 1);
+    opponentStats.add(value["opponentStats"][11].toDouble() - 1);
+    opponentStats.add(value["opponentStats"][3].toDouble() - 1);
+
+    if (opponentStats[2] == 1) {
+      opponentStats[2] = 0;
+    }
+    if (opponentStats[3] == 1) {
+      opponentStats[3] = 0;
+    }
+
+    yourName = value["yourName"];
+
+    yourStats = [];
+    this.setState(() {
+      yourStats.add(value["yourStats"][13].toDouble());
+      yourStats.add(value["yourStats"][10].toDouble());
+      yourStats
+          .add(num.parse(value["yourStats"][2].toStringAsFixed(2)).toDouble());
+      yourStats
+          .add(num.parse(value["yourStats"][9].toStringAsFixed(2)).toDouble());
+      yourStats.add(value["yourStats"][0].toDouble() - 1);
+      yourStats.add(value["yourStats"][1].toDouble() - 1);
+      yourStats.add(value["yourStats"][8].toDouble() - 1);
+      yourStats.add(value["yourStats"][7].toDouble() - 1);
+      yourStats.add(value["yourStats"][12].toDouble() - 1);
+      yourStats.add(value["yourStats"][11].toDouble() - 1);
+      yourStats.add(value["yourStats"][3].toDouble() - 1);
+      yourStats.add(value["yourStats"][6].toDouble());
+      yourStats.add(value["yourStats"][5].toDouble());
+      opponentStats.add(
+          value["yourStats"][5].toDouble() - value["yourStats"][6].toDouble());
+      opponentStats.add(value["yourStats"][5].toDouble());
+
+      if (yourStats[2] == 1) {
+        yourStats[2] = 0;
       }
-      if (opponentStats[3] == 1) {
-        opponentStats[3] = 0;
+      if (yourStats[3] == 1) {
+        yourStats[3] = 0;
       }
-    }
-    if (x == 6) {
-      trackedStats = [];
-      for (var i = 0; i < 10; i++) {
-        trackedStats.add(value[i]);
-      }
-    }
-
-    if (x == 12) {
-      yourName = value;
-    }
-    if (x == 14) {
-      yourStats = [];
-      this.setState(() {
-        yourStats.add(value[13].toDouble());
-        yourStats.add(value[10].toDouble());
-        yourStats.add(num.parse(value[2].toStringAsFixed(2)).toDouble());
-        yourStats.add(num.parse(value[9].toStringAsFixed(2)).toDouble());
-        yourStats.add(value[0].toDouble() - 1);
-        yourStats.add(value[1].toDouble() - 1);
-        yourStats.add(value[8].toDouble() - 1);
-        yourStats.add(value[7].toDouble() - 1);
-        yourStats.add(value[12].toDouble() - 1);
-        yourStats.add(value[11].toDouble() - 1);
-        yourStats.add(value[3].toDouble() - 1);
-        yourStats.add(value[6].toDouble());
-        yourStats.add(value[5].toDouble());
-        opponentStats.add(value[5].toDouble() - value[6].toDouble());
-        opponentStats.add(value[5].toDouble());
-
-        if (yourStats[2] == 1) {
-          yourStats[2] = 0;
-        }
-        if (yourStats[3] == 1) {
-          yourStats[3] = 0;
-        }
-      });
-    }
+    });
 
     match = [
       firstsetStandings,
@@ -476,7 +462,9 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
       double x = 0;
 
       return Container(
-        height: numb == 3 ? 80 : 100,
+        height: numb == 3
+            ? 8.0 * appState.heightTenpx!
+            : 10.0 * appState.heightTenpx!,
         //width: 300,
         child: Stack(children: [
           Padding(
@@ -727,7 +715,7 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
                         ],
                       ),
                       SizedBox(
-                        height: 550,
+                        height: 55.0 * appState.heightTenpx!,
                         child: SingleChildScrollView(
                           child: Column(children: [
                             //______________________________
@@ -859,7 +847,9 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
                             ),
                           ),
                           SizedBox(
-                            height: !loadingTouranmnets ? 350 : 450,
+                            height: !loadingTouranmnets
+                                ? 35.0 * appState.heightTenpx!
+                                : 45.0 * appState.heightTenpx!,
                             child: SingleChildScrollView(
                               child: Column(children: cards),
                             ),

@@ -271,11 +271,9 @@ class _MatchPanelState extends State<MatchPanel> {
     DatabaseEvent dataSnapshot =
         await databaseReference.child(urlTennisPlayer).once();
 
-    DatabaseEvent tournamentNumberSnapchot = preferences.getBool("coach")!
-        ? await databaseReference.child(url + "playerTournaments/").once()
-        : await databaseReference
-            .child(urlTennisPlayer + "playerTournaments/")
-            .once();
+    DatabaseEvent tournamentNumberSnapchot = await databaseReference
+        .child(urlTennisPlayer + "playerTournaments/")
+        .once();
 
     if (yourtournament.servePointsPlayed != 0 ||
         yourtournament.recevingPointsPlayed != 0) {
@@ -355,8 +353,8 @@ class _MatchPanelState extends State<MatchPanel> {
         if (key == "lastTenGames") {
           x2 = true;
           value[0] = {"": []};
-
-          for (var i = 0; i < 10; i++) {
+          length = 0;
+          for (var i = 0; i <= 10; i++) {
             try {
               if (i != 0) {
                 length++;
@@ -365,7 +363,7 @@ class _MatchPanelState extends State<MatchPanel> {
                       url + "lastTenGames" + "/" + (i + 1).toString() + "/");
                   c.remove();
                   c.push();
-                  if (length != 9) {
+                  if (length != 8) {
                     if (preferences.getBool("coach")!) {
                       c.set(value[i]);
                     }
@@ -380,9 +378,10 @@ class _MatchPanelState extends State<MatchPanel> {
                 t.remove();
                 t.push();
 
-                if (length != 9) {
+                if (length != 8) {
                   t.set(value[i]);
                 }
+                print("lastTenGames" + "/" + (i + 1).toString() + "/");
               } else {
                 if (preferences.getBool("coach")!) {
                   databaseReference
@@ -1971,7 +1970,7 @@ class _MatchPanelState extends State<MatchPanel> {
     return Scaffold(
         backgroundColor: colors.backgroundColor,
         body: Column(children: [
-          SizedBox(height: 25),
+          SizedBox(height: 2.5 * appState.heightTenpx!),
           Stack(children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Card(
@@ -1986,14 +1985,15 @@ class _MatchPanelState extends State<MatchPanel> {
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                     color: colors.cardBlue, // Color(0xFF272626),
                   ),
-                  height: 49,
-                  width: 350,
+                  height: 4.9 * appState.heightTenpx!,
+                  width: 35.0 * appState.widthTenpx!,
                   child: Column(children: [
-                    SizedBox(height: 17),
+                    SizedBox(height: 1.4 * appState.heightTenpx!),
                     Row(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(right: 55),
+                          padding: EdgeInsets.only(
+                              right: 5.5 * appState.widthTenpx!),
                           child: Text(
                             "Score",
                             style: TextStyle(
@@ -2004,7 +2004,8 @@ class _MatchPanelState extends State<MatchPanel> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: 60),
+                          padding: EdgeInsets.only(
+                              right: 6.0 * appState.widthTenpx!),
                           child: Text(
                             "Serve",
                             style: TextStyle(
@@ -2034,7 +2035,7 @@ class _MatchPanelState extends State<MatchPanel> {
             ]),
             Padding(
                 padding: EdgeInsets.only(
-                  top: 44,
+                  top: 4.4 * appState.heightTenpx!,
                 ),
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -2051,7 +2052,7 @@ class _MatchPanelState extends State<MatchPanel> {
                               color: colors.cardBlue //Color(0xFF707070),
                               ),
                           height: 3,
-                          width: 321,
+                          width: 32.1 * appState.heightTenpx!,
                         ),
                       ),
                       Container(
@@ -2060,13 +2061,13 @@ class _MatchPanelState extends State<MatchPanel> {
                           color: Color(0xFF0ADE7C),
                         ),
                         height: 4,
-                        width: 112,
+                        width: 11.2 * appState.heightTenpx!,
                       ),
                     ],
                   ),
                 ])),
           ]),
-          SizedBox(height: 30),
+          SizedBox(height: 3.0 * appState.heightTenpx!),
           Stack(
             children: [
               Padding(
@@ -2082,13 +2083,16 @@ class _MatchPanelState extends State<MatchPanel> {
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         color: colors.cardBlue //Color(0xFF272626),
                         ),
-                    height: 270,
-                    width: 350,
+                    height: 27.0 * appState.heightTenpx!,
+                    width: 35.0 * appState.widthTenpx!,
                     child: Column(
                       children: [
                         // ScoreBoard
                         Padding(
-                          padding: EdgeInsets.only(left: 15, top: 65, right: 3),
+                          padding: EdgeInsets.only(
+                              left: 1.5 * appState.widthTenpx!,
+                              top: 6.5 * appState.heightTenpx!,
+                              right: 3),
                           child: Card(
                             elevation: 5,
                             shape: RoundedRectangleBorder(
@@ -2097,13 +2101,14 @@ class _MatchPanelState extends State<MatchPanel> {
                             color: colors.backgroundColor,
                             shadowColor: Colors.black,
                             child: Container(
-                                height: 55,
-                                width: 300,
+                                height: 5.5 * appState.heightTenpx!,
+                                width: 30.0 * appState.widthTenpx!,
                                 color:
                                     colors.backgroundColor, //Color(0xFF3E3B3B),
                                 child: Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 15, right: 45),
+                                    padding: EdgeInsets.only(
+                                        left: 1.5 * appState.heightTenpx!,
+                                        right: 4.5 * appState.heightTenpx!),
                                     child: Row(children: [
                                       Text(
                                         nameToLongFunc(widget.yourName, 18),
@@ -2118,7 +2123,10 @@ class _MatchPanelState extends State<MatchPanel> {
                         ),
 
                         Padding(
-                          padding: EdgeInsets.only(left: 15, top: 15, right: 3),
+                          padding: EdgeInsets.only(
+                              left: 1.5 * appState.widthTenpx!,
+                              top: 1.5 * appState.heightTenpx!,
+                              right: 3),
                           child: Card(
                             elevation: 5,
                             shape: RoundedRectangleBorder(
@@ -2127,13 +2135,14 @@ class _MatchPanelState extends State<MatchPanel> {
                             color: colors.backgroundColor,
                             shadowColor: Colors.black,
                             child: Container(
-                                height: 55,
-                                width: 300,
+                                height: 5.5 * appState.heightTenpx!,
+                                width: 30.0 * appState.widthTenpx!,
                                 color:
                                     colors.backgroundColor, //Color(0xFF3E3B3B),
                                 child: Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 15, right: 45),
+                                    padding: EdgeInsets.only(
+                                        left: 1.5 * appState.heightTenpx!,
+                                        right: 4.5 * appState.heightTenpx!),
                                     child: Row(children: [
                                       Text(
                                         nameToLongFunc(widget.opponentName, 18),
@@ -2161,8 +2170,8 @@ class _MatchPanelState extends State<MatchPanel> {
                                 color: colors.backgroundColor,
                                 shadowColor: Colors.black,
                                 child: Container(
-                                  height: 35,
-                                  width: 80,
+                                  height: 3.5 * appState.heightTenpx!,
+                                  width: 8.0 * appState.heightTenpx!,
                                   decoration: BoxDecoration(
                                     color: colors
                                         .backgroundColor, //Color(0xFF3E3B3B),
@@ -2237,13 +2246,13 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 77,
-                  left: 285,
+                  top: 7.7 * appState.heightTenpx!,
+                  left: 28.5 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
                     Container(
-                      height: 125,
+                      height: 12.5 * appState.heightTenpx!,
                       width: 2,
                       color: setDevidersLines[1],
                     )
@@ -2254,13 +2263,13 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 77,
-                  left: 315,
+                  top: 7.7 * appState.heightTenpx!,
+                  left: 31.5 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
                     Container(
-                      height: 125,
+                      height: 12.5 * appState.heightTenpx!,
                       width: 2,
                       color: colors.transparentWhite, // Color(0xFF707070),
                     )
@@ -2270,13 +2279,13 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 77,
-                  left: 255,
+                  top: 7.7 * appState.heightTenpx!,
+                  left: 25.5 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
                     Container(
-                      height: 125,
+                      height: 12.5 * appState.heightTenpx!,
                       width: 2,
                       color: setDevidersLines[2],
                     )
@@ -2287,13 +2296,13 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 77,
-                  left: 225,
+                  top: 7.7 * appState.heightTenpx!,
+                  left: 22.5 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
                     Container(
-                      height: 125,
+                      height: 12.5 * appState.heightTenpx!,
                       width: 2,
                       color: setDevidersLines[3],
                     )
@@ -2304,13 +2313,13 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 77,
-                  left: 195,
+                  top: 7.7 * appState.heightTenpx!,
+                  left: 19.5 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
                     Container(
-                      height: 125,
+                      height: 12.5 * appState.heightTenpx!,
                       width: 2,
                       color: setDevidersLines[4],
                     )
@@ -2324,8 +2333,8 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 90,
-                  left: 324,
+                  top: 9.0 * appState.heightTenpx!,
+                  left: 32.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -2342,8 +2351,8 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 167,
-                  left: 324,
+                  top: 16.7 * appState.heightTenpx!,
+                  left: 32.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -2360,8 +2369,8 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 90,
-                  left: 294,
+                  top: 9.0 * appState.heightTenpx!,
+                  left: 29.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -2396,8 +2405,8 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 90,
-                  left: 264,
+                  top: 9.0 * appState.heightTenpx!,
+                  left: 26.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -2414,8 +2423,8 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 167,
-                  left: 264,
+                  top: 16.7 * appState.heightTenpx!,
+                  left: 26.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -2432,8 +2441,8 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 90,
-                  left: 234,
+                  top: 9.0 * appState.heightTenpx!,
+                  left: 23.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -2450,8 +2459,8 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 167,
-                  left: 234,
+                  top: 16.7 * appState.heightTenpx!,
+                  left: 23.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -2468,8 +2477,8 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 90,
-                  left: 204,
+                  top: 9.0 * appState.heightTenpx!,
+                  left: 20.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -2486,8 +2495,8 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 167,
-                  left: 204,
+                  top: 16.7 * appState.heightTenpx!,
+                  left: 20.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -2702,7 +2711,7 @@ class _MatchPanelState extends State<MatchPanel> {
                             color: colors.backgroundColor,
                             shadowColor: Colors.black,
                             child: Container(
-                              height: 180,
+                              height: 18.0 * appState.heightTenpx!,
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20)),
@@ -2711,15 +2720,19 @@ class _MatchPanelState extends State<MatchPanel> {
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(20, 19, 0, 0),
+                                    padding: EdgeInsets.fromLTRB(
+                                        2.0 * appState.widthTenpx!,
+                                        1.9 * appState.heightTenpx!,
+                                        0,
+                                        0),
                                     child: Row(children: [
                                       Image.asset(
                                         "Style/Pictures/TennisBall.png",
-                                        height: 24,
+                                        height: 2.4 * appState.heightTenpx!,
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(
-                                          left: 10,
+                                          left: appState.widthTenpx!,
                                         ),
                                         child: Text("Point Won By",
                                             style: TextStyle(
@@ -2731,7 +2744,11 @@ class _MatchPanelState extends State<MatchPanel> {
                                     ]),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(22, 28, 10, 0),
+                                    padding: EdgeInsets.fromLTRB(
+                                        2.2 * appState.widthTenpx!,
+                                        2.8 * appState.heightTenpx!,
+                                        appState.widthTenpx!,
+                                        0),
                                     child: Text(
                                       nameToLongFunc(widget.yourName, 7) +
                                           " "
@@ -2743,26 +2760,14 @@ class _MatchPanelState extends State<MatchPanel> {
                                           color: Colors.white),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(22, 10, 10, 0),
-                                    child: Column(
-                                      children: [
-                                        Text("",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 11.5,
-                                                fontFamily: "Telugu Sangam MN",
-                                                fontWeight: FontWeight.w600)),
-                                      ],
-                                    ),
-                                  )
                                 ],
                               ),
                             ),
                           ),
                           padding: EdgeInsets.all(0),
                         ),
-                        padding: EdgeInsets.fromLTRB(16, 18, 4, 0),
+                        padding: EdgeInsets.fromLTRB(1.6 * appState.widthTenpx!,
+                            1.8 * appState.heightTenpx!, 4, 0),
                       ),
                     ),
                     Expanded(
@@ -2962,7 +2967,7 @@ class _MatchPanelState extends State<MatchPanel> {
                             color: colors.backgroundColor,
                             shadowColor: Colors.black,
                             child: Container(
-                              height: 180,
+                              height: 18.0 * appState.heightTenpx!,
                               decoration: BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20)),
@@ -2971,15 +2976,19 @@ class _MatchPanelState extends State<MatchPanel> {
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(20, 15, 0, 0),
+                                    padding: EdgeInsets.fromLTRB(
+                                        2.0 * appState.widthTenpx!,
+                                        1.5 * appState.heightTenpx!,
+                                        0,
+                                        0),
                                     child: Row(children: [
                                       Image.asset(
                                         "Style/Pictures/chartgreen.png",
-                                        height: 28,
+                                        height: 2.8 * appState.heightTenpx!,
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(
-                                          left: 10,
+                                          left: appState.widthTenpx!,
                                         ),
                                         child: Text("Point Won By",
                                             style: TextStyle(
@@ -2992,7 +3001,11 @@ class _MatchPanelState extends State<MatchPanel> {
                                     ]),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(20, 28, 25, 0),
+                                    padding: EdgeInsets.fromLTRB(
+                                        2.0 * appState.widthTenpx!,
+                                        2.8 * appState.heightTenpx!,
+                                        2.5 * appState.widthTenpx!,
+                                        0),
                                     child: Text(
                                       nameToLongFunc(widget.opponentName, 7) +
                                           " " +
@@ -3004,26 +3017,17 @@ class _MatchPanelState extends State<MatchPanel> {
                                           color: Colors.white),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(22, 25, 10, 0),
-                                    child: Column(
-                                      children: [
-                                        Text("",
-                                            style: TextStyle(
-                                                color: Color(0xFF9B9191),
-                                                fontSize: 11.5,
-                                                fontFamily: "Telugu Sangam MN",
-                                                fontWeight: FontWeight.w200)),
-                                      ],
-                                    ),
-                                  )
                                 ],
                               ),
                             ),
                           ),
                           padding: EdgeInsets.all(0),
                         ),
-                        padding: EdgeInsets.fromLTRB(4, 18, 16, 0),
+                        padding: EdgeInsets.fromLTRB(
+                            4,
+                            1.8 * appState.heightTenpx!,
+                            1.6 * appState.widthTenpx!,
+                            0),
                       ),
                     ),
                   ],
@@ -3034,7 +3038,7 @@ class _MatchPanelState extends State<MatchPanel> {
             ],
           ),
           SizedBox(
-            height: 79,
+            height: 4.9 * appState.heightTenpx!,
           ),
           Text(
             "Match ID: " + widget.matchID,
@@ -3043,7 +3047,7 @@ class _MatchPanelState extends State<MatchPanel> {
               fontSize: 17,
             ),
           ),
-          SizedBox(height: 14),
+          SizedBox(height: 1.4 * appState.heightTenpx!),
           Align(
             alignment: Alignment.bottomCenter,
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -3062,8 +3066,8 @@ class _MatchPanelState extends State<MatchPanel> {
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                           color: colors.cardBlue, //Color(0xFF272626),
                         ),
-                        height: 60,
-                        width: 348,
+                        height: 6.0 * appState.heightTenpx!,
+                        width: 34.8 * appState.widthTenpx!,
                       ),
                     ),
                   ]),
@@ -3089,8 +3093,8 @@ class _MatchPanelState extends State<MatchPanel> {
                             color: colors.backgroundColor,
                             shadowColor: Colors.black,
                             child: Container(
-                              height: 40,
-                              width: 90,
+                              height: 4.0 * appState.heightTenpx!,
+                              width: 9.0 * appState.widthTenpx!,
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20)),
@@ -3121,8 +3125,8 @@ class _MatchPanelState extends State<MatchPanel> {
                       ]),
                       padding: EdgeInsets.only(
                         left: 0,
-                        bottom: 28,
-                        top: 10,
+                        bottom: 2.8 * appState.heightTenpx!,
+                        top: 1.0 * appState.heightTenpx!,
                       )),
                   Padding(
                     child: Column(children: [
@@ -3144,7 +3148,7 @@ class _MatchPanelState extends State<MatchPanel> {
                                 ),
                                 padding: EdgeInsets.only(
                                   bottom: 1,
-                                  left: 13,
+                                  left: 1.3 * appState.widthTenpx!,
                                 ),
                               ),
                               Padding(
@@ -3154,15 +3158,16 @@ class _MatchPanelState extends State<MatchPanel> {
                                         color: Colors.white, fontSize: 12),
                                   ),
                                   padding: EdgeInsets.only(
-                                    top: 38,
-                                    left: 13,
+                                    top: 3.8 * appState.heightTenpx!,
+                                    left: 1.3 * appState.widthTenpx!,
                                   ))
                             ],
                           ),
                         ],
                       )
                     ]),
-                    padding: EdgeInsets.only(left: 123.5, bottom: 0),
+                    padding: EdgeInsets.only(
+                        left: 12.35 * appState.widthTenpx!, bottom: 0),
                   ),
                   Padding(
                       child: Column(children: [
@@ -3194,8 +3199,8 @@ class _MatchPanelState extends State<MatchPanel> {
                             color: colors.backgroundColor,
                             shadowColor: Colors.black,
                             child: Container(
-                              height: 40,
-                              width: 110,
+                              height: 4.0 * appState.heightTenpx!,
+                              width: 11.0 * appState.widthTenpx!,
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20)),
@@ -3216,7 +3221,9 @@ class _MatchPanelState extends State<MatchPanel> {
                                         ),
                                       ],
                                     ),
-                                    padding: EdgeInsets.only(top: 12, left: 4),
+                                    padding: EdgeInsets.only(
+                                        top: 1.2 * appState.heightTenpx!,
+                                        left: 4),
                                   )
                                 ],
                               ),
@@ -3225,9 +3232,9 @@ class _MatchPanelState extends State<MatchPanel> {
                         ),
                       ]),
                       padding: EdgeInsets.only(
-                        left: 205,
-                        bottom: 28,
-                        top: 10,
+                        left: 20.5 * appState.widthTenpx!,
+                        bottom: 2.8 * appState.heightTenpx!,
+                        top: appState.heightTenpx!,
                       )),
                 ],
               ),

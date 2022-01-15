@@ -130,7 +130,7 @@ class PieChartCardState extends State {
     }
 
     return Container(
-      height: 250,
+      height: 25.0 * appState.heightTenpx!,
       child: Stack(children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -202,7 +202,7 @@ class PieChartCardState extends State {
                                 child: Column(
                                   children: [
                                     SizedBox(
-                                        height: 80,
+                                        height: 8.0 * appState.heightTenpx!,
                                         child: Column(
                                           children: [
                                             PieChartViewSecond(
@@ -233,7 +233,7 @@ class PieChartCardState extends State {
                                 child: Column(
                                   children: [
                                     SizedBox(
-                                        height: 80,
+                                        height: 8.0 * appState.heightTenpx!,
                                         child: Column(
                                           children: [
                                             PieChartViewSecond(
@@ -268,7 +268,7 @@ class PieChartCardState extends State {
                                 child: Column(
                                   children: [
                                     SizedBox(
-                                        height: 90,
+                                        height: 9.0 * appState.heightTenpx!,
                                         child: Column(
                                           children: [
                                             PieChartViewSecond(
@@ -353,7 +353,7 @@ class PieChartCardState extends State {
         Column(
           children: [
             SizedBox(
-              height: 204,
+              height: 20.4 * appState.heightTenpx!,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
