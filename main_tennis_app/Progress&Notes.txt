@@ -1,0 +1,40 @@
+
+
+Next Step:
+
+AD as default;
+
+Change inlogging system - started at signup 
+
+
+
+
+
+List of pages dimension fixed: 
+- Navigation bar
+- Log in page
+- Home Page 
+- Sidebar
+
+
+
+Long Termo Changes:
+
+
+- Make an restriction on how long name on tournamnet and opponeant can be
+
+- Change design of the app
+
+- Shop page?
+
+- Check if liveResults work 
+
+- Payment matches
+
+- Enable profile photo 
+
+
+
+
+
+
