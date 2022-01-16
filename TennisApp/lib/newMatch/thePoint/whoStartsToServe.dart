@@ -1,6 +1,6 @@
-import 'package:app/Players.dart';
-import 'package:app/newMatch/matchPanel.dart';
-import 'package:app/newMatch/thePoint/RallyServeWon.dart';
+import 'package:main_tennis_app/Players.dart';
+import 'package:main_tennis_app/newMatch/matchPanel.dart';
+import 'package:main_tennis_app/newMatch/thePoint/RallyServeWon.dart';
 import 'package:flutter/material.dart';
 
 import '../../colors.dart';

@@ -1,4 +1,4 @@
-import 'package:app/SideBarStuff/bloc.animation_bloc/navigation.bloc.dart';
+import 'package:main_tennis_app/SideBarStuff/bloc.animation_bloc/navigation.bloc.dart';
 
 import 'package:flutter/material.dart';
 

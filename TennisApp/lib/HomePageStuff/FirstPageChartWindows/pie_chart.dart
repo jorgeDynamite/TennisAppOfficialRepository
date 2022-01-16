@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'dart:ui' as ui;
 
-import 'package:app/HomePageStuff/FirstPageChartWindows/UnforcedErrors.dart';
-import 'package:app/colors.dart';
+import 'package:main_tennis_app/HomePageStuff/FirstPageChartWindows/UnforcedErrors.dart';
+import 'package:main_tennis_app/colors.dart';
 import 'package:flutter/material.dart';
 
 class PieChart extends CustomPainter {

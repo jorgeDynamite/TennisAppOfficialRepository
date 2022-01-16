@@ -1,4 +1,4 @@
-import 'package:app/Analys/pieChart/neumorphic_expenses/pie_data.dart';
+import 'package:main_tennis_app/Analys/pieChart/neumorphic_expenses/pie_data.dart';
 import 'package:flutter/material.dart';
 
 class IndicatorsWidget extends StatelessWidget {

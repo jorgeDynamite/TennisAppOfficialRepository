@@ -1,10 +1,10 @@
-import 'package:app/Analys/matchLog/matchLogView.dart';
-import 'package:app/Analys/pieChart/neumorphic_expenses/pie_chart_view.dart';
-import 'package:app/Analys/pieChart/neumorphic_expenses/pie_chart_card.dart';
-import 'package:app/Players.dart';
-import 'package:app/RandomWidgets/loadingScreen.dart';
-import 'package:app/bloc/app_state.dart';
-import 'package:app/colors.dart';
+import 'package:main_tennis_app/Analys/matchLog/matchLogView.dart';
+import 'package:main_tennis_app/Analys/pieChart/neumorphic_expenses/pie_chart_view.dart';
+import 'package:main_tennis_app/Analys/pieChart/neumorphic_expenses/pie_chart_card.dart';
+import 'package:main_tennis_app/Players.dart';
+import 'package:main_tennis_app/RandomWidgets/loadingScreen.dart';
+import 'package:main_tennis_app/bloc/app_state.dart';
+import 'package:main_tennis_app/colors.dart';
 import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 

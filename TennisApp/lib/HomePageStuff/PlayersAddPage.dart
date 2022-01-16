@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:app/HomePageStuff/PopUpPlayers.dart';
-import 'package:app/LoginPage.dart';
-import 'package:app/UnusedStuff/ParentCoachMainPage.dart';
-import 'package:app/bloc/app_state.dart';
-import 'package:app/colors.dart';
-import 'package:app/emailVerificationPage.dart';
+import 'package:main_tennis_app/HomePageStuff/PopUpPlayers.dart';
+import 'package:main_tennis_app/LoginPage.dart';
+import 'package:main_tennis_app/UnusedStuff/ParentCoachMainPage.dart';
+import 'package:main_tennis_app/bloc/app_state.dart';
+import 'package:main_tennis_app/colors.dart';
+import 'package:main_tennis_app/emailVerificationPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';

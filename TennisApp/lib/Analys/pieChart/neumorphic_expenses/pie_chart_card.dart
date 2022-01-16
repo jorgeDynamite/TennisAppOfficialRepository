@@ -1,8 +1,8 @@
-import 'package:app/Analys/pieChart/neumorphic_expenses/pie_chart_view.dart';
-import 'package:app/Analys/pieChart/neumorphic_expenses/pie_chart_sections.dart';
-import 'package:app/Analys/pieChart/neumorphic_expenses/pie_indecators.dart';
-import 'package:app/HomePageStuff/FirstPageChartWindows/pieChartViwe.dart';
-import 'package:app/bloc/app_state.dart';
+import 'package:main_tennis_app/Analys/pieChart/neumorphic_expenses/pie_chart_view.dart';
+import 'package:main_tennis_app/Analys/pieChart/neumorphic_expenses/pie_chart_sections.dart';
+import 'package:main_tennis_app/Analys/pieChart/neumorphic_expenses/pie_indecators.dart';
+import 'package:main_tennis_app/HomePageStuff/FirstPageChartWindows/pieChartViwe.dart';
+import 'package:main_tennis_app/bloc/app_state.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 import 'package:flutter/material.dart';

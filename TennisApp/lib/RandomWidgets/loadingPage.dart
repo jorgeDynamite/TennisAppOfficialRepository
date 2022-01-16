@@ -1,5 +1,5 @@
-import 'package:app/RandomWidgets/loadingScreen.dart';
-import 'package:app/colors.dart';
+import 'package:main_tennis_app/RandomWidgets/loadingScreen.dart';
+import 'package:main_tennis_app/colors.dart';
 import 'package:flutter/material.dart';
 
 class LoadingPage extends StatefulWidget {

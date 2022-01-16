@@ -1,5 +1,5 @@
-import 'package:app/Analys/pieChart/neumorphic_expenses/categories_row.dart';
-import 'package:app/HomePageStuff/FirstPageChartWindows/pieChartViwe.dart';
+import 'package:main_tennis_app/Analys/pieChart/neumorphic_expenses/categories_row.dart';
+import 'package:main_tennis_app/HomePageStuff/FirstPageChartWindows/pieChartViwe.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

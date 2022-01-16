@@ -1,13 +1,13 @@
-import 'package:app/HomePageStuff/View.dart';
-import 'package:app/Shop/soon.dart';
-import 'package:app/bloc/app_state.dart';
-import 'package:app/newMatch/newMatchFirstPage.dart';
+import 'package:main_tennis_app/HomePageStuff/View.dart';
+import 'package:main_tennis_app/Shop/soon.dart';
+import 'package:main_tennis_app/bloc/app_state.dart';
+import 'package:main_tennis_app/newMatch/newMatchFirstPage.dart';
 import 'package:flutter/material.dart';
 
 import '../colors.dart';
 
-class NavigationBar extends StatelessWidget {
-  const NavigationBar(
+class TNavigationBar extends StatelessWidget {
+  const TNavigationBar(
       this.NavigationColor1, this.NavigationColor2, this.NavigationColor3);
   final Color? NavigationColor1;
   final Color? NavigationColor2;

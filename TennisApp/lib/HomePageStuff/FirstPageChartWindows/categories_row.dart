@@ -1,5 +1,5 @@
-import 'package:app/HomePageStuff/FirstPageChartWindows/UnforcedErrors.dart';
-import 'package:app/HomePageStuff/FirstPageChartWindows/pie_chart.dart';
+import 'package:main_tennis_app/HomePageStuff/FirstPageChartWindows/UnforcedErrors.dart';
+import 'package:main_tennis_app/HomePageStuff/FirstPageChartWindows/pie_chart.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesRow extends StatelessWidget {

@@ -1,9 +1,9 @@
-import 'package:app/HomePageStuff/View.dart';
-import 'package:app/Players.dart';
-import 'package:app/bloc/app_state.dart';
-import 'package:app/newMatch/matchPanel.dart';
-import 'package:app/newMatch/newMatchFirstPage.dart';
-import 'package:app/newMatch/thePoint/whoStartsToServe.dart';
+import 'package:main_tennis_app/HomePageStuff/View.dart';
+import 'package:main_tennis_app/Players.dart';
+import 'package:main_tennis_app/bloc/app_state.dart';
+import 'package:main_tennis_app/newMatch/matchPanel.dart';
+import 'package:main_tennis_app/newMatch/newMatchFirstPage.dart';
+import 'package:main_tennis_app/newMatch/thePoint/whoStartsToServe.dart';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';

@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:app/HomePageStuff/PlayersAddPage.dart';
-import 'package:app/HomePageStuff/PopUpPlayers.dart';
-import 'package:app/HomePageStuff/View.dart';
-import 'package:app/LoginPage.dart';
-import 'package:app/SideBarStuff/bloc.animation_bloc/navigation.bloc.dart';
-import 'package:app/bloc/app_bloc.dart';
-import 'package:app/bloc/app_state.dart';
-import 'package:app/colors.dart';
+import 'package:main_tennis_app/HomePageStuff/PlayersAddPage.dart';
+import 'package:main_tennis_app/HomePageStuff/PopUpPlayers.dart';
+import 'package:main_tennis_app/HomePageStuff/View.dart';
+import 'package:main_tennis_app/LoginPage.dart';
+import 'package:main_tennis_app/SideBarStuff/bloc.animation_bloc/navigation.bloc.dart';
+import 'package:main_tennis_app/bloc/app_bloc.dart';
+import 'package:main_tennis_app/bloc/app_state.dart';
+import 'package:main_tennis_app/colors.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import 'package:flutter/material.dart';

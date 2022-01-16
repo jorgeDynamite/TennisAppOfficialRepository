@@ -1,11 +1,11 @@
 import 'dart:math';
 
-import 'package:app/HomePageStuff/View.dart';
-import 'package:app/Players.dart';
-import 'package:app/RandomWidgets/navigation_bar.dart';
-import 'package:app/bloc/app_state.dart';
-import 'package:app/colors.dart';
-import 'package:app/newMatch/newMatchSecondPage.dart';
+import 'package:main_tennis_app/HomePageStuff/View.dart';
+import 'package:main_tennis_app/Players.dart';
+import 'package:main_tennis_app/RandomWidgets/navigation_bar.dart';
+import 'package:main_tennis_app/bloc/app_state.dart';
+import 'package:main_tennis_app/colors.dart';
+import 'package:main_tennis_app/newMatch/newMatchSecondPage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -356,7 +356,7 @@ class _NewMatchFirstPageState extends State<NewMatchFirstPage> {
           SizedBox(height: errorMessagePadding),
           errorMessageState(errorMessageArg),
           SizedBox(height: 21.0 * appState.heightTenpx!),
-          NavigationBar(appColors().transparentWhite, appColors().mainGreen,
+          TNavigationBar(appColors().transparentWhite, appColors().mainGreen,
               appColors().transparentWhite)
         ]));
   }

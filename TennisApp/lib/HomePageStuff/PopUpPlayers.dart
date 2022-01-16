@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:app/PlayersAddExistingAccounts.dart';
-import 'package:app/bloc/app_state.dart';
-import 'package:app/colors.dart';
+import 'package:main_tennis_app/PlayersAddExistingAccounts.dart';
+import 'package:main_tennis_app/bloc/app_state.dart';
+import 'package:main_tennis_app/colors.dart';
 import 'package:crypto/crypto.dart';
-import 'package:app/HomePageStuff/PlayersAddPage.dart';
+import 'package:main_tennis_app/HomePageStuff/PlayersAddPage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

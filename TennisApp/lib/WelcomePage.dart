@@ -1,5 +1,5 @@
-import 'package:app/SignUp.dart';
-import 'package:app/colors.dart';
+import 'package:main_tennis_app/SignUp.dart';
+import 'package:main_tennis_app/colors.dart';
 import 'package:flutter/material.dart';
 import 'UnusedStuff/Colors.dart';
 

@@ -1,6 +1,6 @@
-import 'package:app/HomePageStuff/View.dart';
-import 'package:app/SideBarStuff/sideBar/sideBar.dart';
-import 'package:app/bloc/app_state.dart';
+import 'package:main_tennis_app/HomePageStuff/View.dart';
+import 'package:main_tennis_app/SideBarStuff/sideBar/sideBar.dart';
+import 'package:main_tennis_app/bloc/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';

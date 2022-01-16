@@ -1,4 +1,4 @@
-import 'package:app/bloc/app_state.dart';
+import 'package:main_tennis_app/bloc/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

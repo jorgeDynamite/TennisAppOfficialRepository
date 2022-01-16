@@ -1,4 +1,4 @@
-import 'package:app/colors.dart';
+import 'package:main_tennis_app/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../Players.dart';

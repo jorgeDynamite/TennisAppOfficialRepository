@@ -1,17 +1,17 @@
 import 'dart:async';
 
-import 'package:app/Analys/ChartsMain.dart';
-import 'package:app/Analys/no_analys_data.dart';
-import 'package:app/HomePageStuff/FirstPageChartWindows/pieChartViwe.dart';
-import 'package:app/LiveResultsScreens/CheckMatchID.dart';
-import 'package:app/Players.dart';
-import 'package:app/RandomWidgets/navigation_bar.dart';
-import 'package:app/Shop/soon.dart';
-import 'package:app/SideBarStuff/sideBar/sideBar.dart';
-import 'package:app/LiveResultsScreens/liveResults.dart';
-import 'package:app/bloc/app_state.dart';
-import 'package:app/colors.dart';
-import 'package:app/newMatch/newMatchFirstPage.dart';
+import 'package:main_tennis_app/Analys/ChartsMain.dart';
+import 'package:main_tennis_app/Analys/no_analys_data.dart';
+import 'package:main_tennis_app/HomePageStuff/FirstPageChartWindows/pieChartViwe.dart';
+import 'package:main_tennis_app/LiveResultsScreens/CheckMatchID.dart';
+import 'package:main_tennis_app/Players.dart';
+import 'package:main_tennis_app/RandomWidgets/navigation_bar.dart';
+import 'package:main_tennis_app/Shop/soon.dart';
+import 'package:main_tennis_app/SideBarStuff/sideBar/sideBar.dart';
+import 'package:main_tennis_app/LiveResultsScreens/liveResults.dart';
+import 'package:main_tennis_app/bloc/app_state.dart';
+import 'package:main_tennis_app/colors.dart';
+import 'package:main_tennis_app/newMatch/newMatchFirstPage.dart';
 
 import 'package:firebase_database/firebase_database.dart';
 
@@ -727,7 +727,7 @@ class _HomePageViewState extends State<HomePageView> {
                 SizedBox(
                   height: appState.heightTenpx!,
                 ),
-                NavigationBar(Color(0xFF0ADE7C), appColors().cardBlue,
+                TNavigationBar(Color(0xFF0ADE7C), appColors().cardBlue,
                     appColors().transparentWhite),
               ],
             ),

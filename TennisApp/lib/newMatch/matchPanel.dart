@@ -1,19 +1,19 @@
 import 'dart:async';
 
-import 'package:app/RandomWidgets/loadingPage.dart';
-import 'package:app/bloc/app_state.dart';
-import 'package:app/newMatch/after_match.dart';
-import 'package:app/newMatch/newMatchLastPage.dart';
-import 'package:app/newMatch/thePoint/Rally.dart';
-import 'package:app/newMatch/thePoint/RallyServeWon.dart';
-import 'package:app/newMatch/thePoint/Serve.dart';
+import 'package:main_tennis_app/RandomWidgets/loadingPage.dart';
+import 'package:main_tennis_app/bloc/app_state.dart';
+import 'package:main_tennis_app/newMatch/after_match.dart';
+import 'package:main_tennis_app/newMatch/newMatchLastPage.dart';
+import 'package:main_tennis_app/newMatch/thePoint/Rally.dart';
+import 'package:main_tennis_app/newMatch/thePoint/RallyServeWon.dart';
+import 'package:main_tennis_app/newMatch/thePoint/Serve.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:app/HomePageStuff/View.dart';
-import 'package:app/Players.dart';
-import 'package:app/newMatch/newMatchFirstPage.dart';
+import 'package:main_tennis_app/HomePageStuff/View.dart';
+import 'package:main_tennis_app/Players.dart';
+import 'package:main_tennis_app/newMatch/newMatchFirstPage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
