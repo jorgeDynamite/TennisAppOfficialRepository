@@ -121,6 +121,8 @@ class _SideBarState extends State<SideBar>
     }
   }
 
+  
+
   Future _getIfUserDetails(context) async {
     List<dynamic> initAtributes = await app.init();
     String playerKey = "";
@@ -144,7 +146,7 @@ class _SideBarState extends State<SideBar>
       }
       String selected = "";
 
-      final databaseReference = FirebaseDatabase.instance.reference();
+      final databaseReference = FirebaseDatabase.instance.ref();
 
       //DataSnapshot dataSnapshot =
       //   await databaseReference.child(initAtributes[5]["URLtoCoach"]).once();
@@ -191,11 +193,18 @@ class _SideBarState extends State<SideBar>
                     tournaments: [],
                     key: playerKey,
                   ),
+                  
                 );
+                if(!appState.firstLoad){
+                  app.setMatchesLeftVatiable(firstNamePlayer + "-" + lastNamePlayer + "-" + uid);
+                 
+                  }
               }
             });
           }
           playerdataDetected = true;
+           appState.firstLoad = true;
+           print(appState.matchesLeft);
         });
       } else {
         print("no player data was detected");
@@ -276,6 +285,7 @@ class _SideBarState extends State<SideBar>
       print("object");
     } else {
       widget.selectedPlayerFunction;
+      
     }
   }
 
@@ -457,6 +467,7 @@ class _SideBarState extends State<SideBar>
                       ),
                       MenuItem(
                         onTap: () {
+                          appState.matchesLeft = {};
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (context) => LoginScreen()),

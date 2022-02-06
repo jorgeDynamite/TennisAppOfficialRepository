@@ -9,6 +9,9 @@ import 'package:main_tennis_app/RandomWidgets/navigation_bar.dart';
 import 'package:main_tennis_app/Shop/soon.dart';
 import 'package:main_tennis_app/SideBarStuff/sideBar/sideBar.dart';
 import 'package:main_tennis_app/LiveResultsScreens/liveResults.dart';
+import 'package:main_tennis_app/Subscription/subscription_main.dart';
+import 'package:main_tennis_app/Subscription/subscriptions_manage.dart';
+import 'package:main_tennis_app/bloc/app_bloc.dart';
 import 'package:main_tennis_app/bloc/app_state.dart';
 import 'package:main_tennis_app/colors.dart';
 import 'package:main_tennis_app/newMatch/newMatchFirstPage.dart';
@@ -52,10 +55,12 @@ class _HomePageViewState extends State<HomePageView> {
   late String coachuid;
   late String playerFirstName;
   late String playerLastName;
-
+  String matchesLeftString = "Manage";
   List<int> matchRecord = [0, 0];
   double recordLineWidth = 115 / 2 + 5;
   String lastGameString = "Exampel";
+  String subscriptionplanstext = "All subscription plans";
+  String subscriptionplansfirsttext = "Subscriptions";
 
   final databaseReference = FirebaseDatabase.instance.reference();
 
@@ -116,6 +121,22 @@ class _HomePageViewState extends State<HomePageView> {
 
     print("asdasdad" + appState.urlsFromTennisAccounts["URLtoPlayer"]!);
     playerReference = (appState.urlsFromTennisAccounts["URLtoPlayer"]!);
+    
+                  await app.setMatchesLeftVatiable(playerReference.split("/")[3]);
+                  appState.firstLoad = true;
+                  if(!appState.hasSubscription![playerReference.split("/")[3]]!){ 
+                  matchesLeftString = appState.matchesLeft![playerReference.split("/")[3]].toString() + " left";
+                  setState(() {
+                    
+               
+                  subscriptionplanstext = "Sign a subscription";
+                  subscriptionplansfirsttext = "Matches Left";
+                     });
+                  } else {
+                     subscriptionplanstext = "View your subscription";
+                  matchesLeftString = "Manage";
+                  
+                  }
     lastMatchData();
   }
 
@@ -169,9 +190,7 @@ class _HomePageViewState extends State<HomePageView> {
         setState(() {
           recordLineWidth =
               ((matchRecord[0] / (matchRecord[0] + matchRecord[1])) * 11.5 *
-                  appState.widthTenpx! + 5) /
-                  10 *
-                  appState.heightTenpx!;
+                  appState.widthTenpx! + 5) ;
         });
       }
     });
@@ -190,14 +209,17 @@ class _HomePageViewState extends State<HomePageView> {
     // TODO: implement initState
     super.initState();
     print(appState.widthTenpx);
+    print("hablasd" + appState.hasSubscription.toString());
     selectedPlayerShow();
     getActivePlayerData();
     if (!appState.coach!) {
       setPlayerReference();
     }
+  
 
     appState.chartData = lastGameString == "Last Match";
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -547,7 +569,22 @@ class _HomePageViewState extends State<HomePageView> {
                           child: MaterialButton(
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
-                            onPressed: () {},
+                            onPressed: () { 
+                             
+                           if(!appState.hasSubscription![playerReference.split("/")[3]]!){ 
+                 
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => SubscriptionHome(false)));
+                           } else {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => SubscriptionManage(false)));
+                       
+                           }
+                           },
                             child: Container(
                               height: 14.5 * appState.heightTenpx!,
                               decoration: BoxDecoration(
@@ -575,7 +612,7 @@ class _HomePageViewState extends State<HomePageView> {
                                           ),
                                           child: Column(
                                             children: [
-                                              Text("Match Packages",
+                                              Text(subscriptionplansfirsttext,
                                                   style: TextStyle(
                                                       color: Colors
                                                           .white, //Color(0xFF9B9191),
@@ -595,7 +632,7 @@ class _HomePageViewState extends State<HomePageView> {
                                         5,
                                         1.7 * appState.heightTenpx!),
                                     child: Text(
-                                      "5 left",
+                                      matchesLeftString,
                                       style: TextStyle(
                                           fontFamily: "Helvetica",
                                           fontWeight: FontWeight.bold,
@@ -606,12 +643,12 @@ class _HomePageViewState extends State<HomePageView> {
                                   SizedBox(
                                     height: 0,
                                   ),
-                                  Text("Click to buy more.",
+                                  Text(subscriptionplanstext,
                                       style: TextStyle(
-                                          color: Colors.white,
+                                          color: appcolors.transparentWhite,
                                           fontSize: 12.5,
                                           fontFamily: "Telugu Sangam MN",
-                                          fontWeight: FontWeight.w800)),
+                                          fontWeight: FontWeight.w500)),
                                 ],
                               ),
                             ),
@@ -634,7 +671,17 @@ class _HomePageViewState extends State<HomePageView> {
                           child: MaterialButton(
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
-                            onPressed: () {},
+                            onPressed: () {
+                               appState.chartData =
+                                  lastGameString == "Last Match";
+                              appState.playerFirstName = playerFirstName;
+                             
+                               Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => AnalysChartsScreen()));
+                          
+                            },
                             child: Container(
                               height: 14.5 * appState.heightTenpx!,
                               decoration: BoxDecoration(

@@ -109,6 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     //updateAccount(path);
+    appState.firstLoad = false;
   }
 
   Widget _build = Row(
@@ -263,9 +264,11 @@ _buildTextField(TextEditingController controller, IconData icon,
     String labelText, bool obscure, Color borderColor) {
   return Container(
     padding: EdgeInsets.symmetric(
+      
         horizontal: appState.widthTenpx!,
-        vertical: 0.5 * appState.heightTenpx!),
+        vertical: 0.4 * appState.heightTenpx!),
     decoration: BoxDecoration(
+       borderRadius: BorderRadius.circular(12.0),
         color: appColors().cardBlue,
         border: Border.all(
             color: borderColor, width: borderColor == Colors.red ? 2 : 0.7)),

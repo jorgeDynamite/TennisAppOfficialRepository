@@ -1,3 +1,4 @@
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:main_tennis_app/UnusedStuff/HomePage.dart';
 import 'package:main_tennis_app/HomePageStuff/PopUpPlayers.dart';
@@ -23,7 +24,19 @@ import 'colors.dart';
 */
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+    WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = "pk_test_51KONw6LdhGCEXYhwu3UQlsWINxydgRldWAgg8dHjLeXQkMWr7qxWliKg7aXIx2tDzUSHGenAWeTmBKwq25J2YfZL00fkeRiiNy";
+
+  Stripe.merchantIdentifier = 'Pay';
+ 
+  Stripe.stripeAccountId = null;
+  Stripe.threeDSecureParams = null;
+
+
+  Stripe.merchantIdentifier = 'Pay';
+ 
+  
+ 
   await Firebase.initializeApp();
   runApp(MaterialApp(
     home: TennisAppHomePage(),
@@ -44,9 +57,13 @@ class _TennisAppHomePageState extends State<TennisAppHomePage> {
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      await Stripe.instance.applySettings();
+  
+      appState.firstLoad = false;
       appState.heightTenpx = app.getDimensions(context)[0] / 81.2;
       appState.widthTenpx = app.getDimensions(context)[1] / 37.5;
       await Future.delayed(Duration(milliseconds: 700));
+     
       await  _getIfUserLogedIn(context).whenComplete(() async {
       appState.newActivePlayer = true;
        await Future.delayed(Duration(milliseconds: 1000));
@@ -92,7 +109,7 @@ await Future.delayed(Duration(milliseconds: 650));
         SizedBox(height: 10 * 20,),
         Image.asset("Style/Pictures/Trans_butterfly.png"),
    
-        Text(text, style:GoogleFonts.openSans(color: appcolors.lightblue, fontSize: 25, fontWeight: FontWeight.w600),)
+       // Text(text, style:GoogleFonts.openSans(color: appcolors.lightblue, fontSize: 25, fontWeight: FontWeight.w600),)
       ],
     ),);
   }

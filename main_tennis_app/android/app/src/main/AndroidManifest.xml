@@ -1,21 +1,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tgame.tennisapp">
-   <application
-        android:label="main_tennis_app"
-        android:name="${applicationName}"
+    <uses-permission android:name="android.permisson.INTERNET"/>
+    <application
+        
+        android:label="TGAME"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
-            android:theme="@style/LaunchTheme"
+            android:theme="@style/Theme.AppCompat"
+            
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
-            <!-- Specifies an Android theme to apply to this Activity as soon as
+            <!--  Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
-                 while the Flutter UI initializes. After that, this theme continues
-                 to determine the Window background behind the Flutter UI. -->
+                 while the Flutter UI initializes. After that, this theme continues android:theme="@style/LaunchTheme"
+                 to determine the Window background behind the Flutter UI. android:name="${applicationName}"   -->
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"

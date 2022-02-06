@@ -28,6 +28,7 @@ final TextEditingController lastNameController = TextEditingController();
 final TextEditingController firstNameController = TextEditingController();
 final TextEditingController nameController = TextEditingController();
 final TextEditingController passwordController = TextEditingController();
+final TextEditingController passwordagainController = TextEditingController();
 
 class SignUpPC extends StatefulWidget {
   // ignore: non_constant_identifier_names
@@ -65,7 +66,7 @@ class _SignUpPCState extends State<SignUpPC> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: 60,
+                  height: 0,
                 ),
                 Text(
                   'Sign Up',
@@ -104,14 +105,22 @@ class _SignUpPCState extends State<SignUpPC> {
                 SizedBox(height: 20),
                 _buildTextFieldPassword(
                     passwordController, Icons.lock, 'Password'),
+                     SizedBox(height: 20),
+                _buildTextFieldPassword(
+                    passwordagainController, Icons.lock, 'Verify password'),
+               
                 SizedBox(height: 30),
                 MaterialButton(
                   elevation: 0,
                   minWidth: double.maxFinite,
                   height: 60,
                   onPressed: () {
+                    if(passwordController.text == passwordagainController.text){
                     appState.AddedPlayerToCP = false;
                     addAccount(widget.CP, context);
+                    } else {
+                      appState.popUpError(context, "You typed two different passwords", "Ok");
+                    }
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0)),
@@ -139,11 +148,16 @@ class _SignUpPCState extends State<SignUpPC> {
   _buildTextField(
       TextEditingController controller, IconData icon, String labelText) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+    
+                      
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
+       borderRadius: BorderRadius.circular(12.0),
+              
           color: appColors().cardBlue,
-          border: Border.all(color: Colors.white, width: 0.8)),
+          border: Border.all(color: Colors.white, width: 0.8 )),
       child: TextField(
+        
         controller: controller,
         style: TextStyle(color: Colors.white),
         decoration: InputDecoration(
@@ -164,8 +178,11 @@ class _SignUpPCState extends State<SignUpPC> {
 _buildTextFieldPassword(
     TextEditingController controller, IconData icon, String labelText) {
   return Container(
-    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
     decoration: BoxDecoration(
+       borderRadius: BorderRadius.circular(12.0),
+              
+       
         color: appColors().cardBlue,
         border: Border.all(color: Colors.white, width: 0.8)),
     child: TextField(
@@ -189,8 +206,11 @@ _buildTextFieldPassword(
 _buildTextFieldName(
     TextEditingController controller, IconData icon, String labelText) {
   return Container(
-    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
     decoration: BoxDecoration(
+       borderRadius: BorderRadius.circular(12.0),
+              
+       
         color: appColors().cardBlue,
         border: Border.all(color: Colors.white, width: 0.8)),
     child: TextField(
@@ -331,8 +351,7 @@ Future<dynamic> setAccount(
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   app.initSet(mainController, uid.toString(), email, lastNameController.text,
       firstNameController.text);
-
-  SharedPreferences preferences = await SharedPreferences.getInstance();
+    SharedPreferences preferences = await SharedPreferences.getInstance();
 
   var id = databaseReference.child(url).push();
 

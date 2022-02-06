@@ -1,5 +1,6 @@
 import 'package:main_tennis_app/HomePageStuff/View.dart';
 import 'package:main_tennis_app/Shop/soon.dart';
+import 'package:main_tennis_app/Subscription/subscription_main.dart';
 import 'package:main_tennis_app/bloc/app_state.dart';
 import 'package:main_tennis_app/newMatch/newMatchFirstPage.dart';
 import 'package:flutter/material.dart';
@@ -45,8 +46,23 @@ class TNavigationBar extends StatelessWidget {
       Column(children: [
         IconButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (_) => NewMatchFirstPage()));
+
+           if(!appState.hasSubscription![appState.urlsFromTennisAccounts["URLtoPlayer"]!.split("/")[3]]!){
+
+          
+             if(appState.matchesLeft![appState.urlsFromTennisAccounts["URLtoPlayer"]!.split("/")[3]] != 0){
+                 
+                 Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => NewMatchFirstPage()));
+          
+                 } else {
+                 Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => SubscriptionHome(true)));
+                 }
+                  } else {
+                  Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => NewMatchFirstPage()));
+                  }
           },
           icon: CircleAvatar(
               maxRadius: 1.7 * appState.widthTenpx!,

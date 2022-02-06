@@ -280,7 +280,8 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
 
       print(valuesDataSnapshot);
       for (var i = 1; i < valuesDataSnapshot.length; i++) {
-        valuesDataSnapshot[i].forEach((key, value) {
+        try {
+      valuesDataSnapshot[i].forEach((key, value) {
           x = 0;
           /*
           value.forEach((key, value) {
@@ -295,6 +296,8 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
           */
           matches.add(setMatch(x, value));
         });
+    } on Exception catch (_) {print("Error !!!!!!!!!!!!!!!");}
+       
       }
     }
     //print(matches);
@@ -792,7 +795,7 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "Finished",
+                                      "Home",
                                       style: TextStyle(
                                         color: backgroundColor,
                                         fontSize: 13,
@@ -883,7 +886,7 @@ class _AnalysChartsScreenState extends State<AnalysChartsScreen> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "Finished",
+                                          "Home",
                                           style: TextStyle(
                                             color: backgroundColor,
                                             fontSize: 13,

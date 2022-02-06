@@ -218,6 +218,7 @@ _buildTextField(TextEditingController controller, IconData icon,
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
     decoration: BoxDecoration(
+       borderRadius: BorderRadius.circular(12.0),
         color: appColors().cardBlue,
         border: Border.all(color: borderColor, width: 0.7)),
     child: TextField(
@@ -275,12 +276,13 @@ Future<List> newAccountChecker(
 
   bool x = true;
   try {
-    user = (await _auth.signInWithEmailAndPassword(
-        email: email.trim(), password: email));
+    user = await _auth.signInWithEmailAndPassword(
+        email: email, password: passwords);
   } on Exception catch (_) {
     try {
-      user = (await _auth.signInWithEmailAndPassword(
-          email: email.trim() + "@gmail.com", password: passwords));
+      print(email);
+      user = await _auth.signInWithEmailAndPassword(
+          email: email + "@gmail.com", password: passwords);
       print(1);
     } on Exception catch (_) {
       x = false;

@@ -6,6 +6,7 @@ import 'package:main_tennis_app/HomePageStuff/PopUpPlayers.dart';
 import 'package:main_tennis_app/LoginPage.dart';
 import 'package:main_tennis_app/RandomWidgets/logo.dart';
 import 'package:main_tennis_app/UnusedStuff/ParentCoachMainPage.dart';
+import 'package:main_tennis_app/bloc/app_bloc.dart';
 import 'package:main_tennis_app/bloc/app_state.dart';
 import 'package:main_tennis_app/colors.dart';
 import 'package:main_tennis_app/emailVerificationPage.dart';
@@ -25,7 +26,7 @@ final TextEditingController lastNameController = TextEditingController();
 final TextEditingController firstNameController = TextEditingController();
 final TextEditingController nameController = TextEditingController();
 final TextEditingController passwordController = TextEditingController();
-
+final TextEditingController passwordagainController = TextEditingController();
 class playersAddPlayers extends StatefulWidget {
   // ignore: non_constant_identifier_names
   final bool CP;
@@ -75,7 +76,7 @@ class _playersAddPlayersState extends State<playersAddPlayers> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: 30,
+                  height: 00,
                 ),
                 Text(
                   'Add Tennis Player',
@@ -114,12 +115,16 @@ class _playersAddPlayersState extends State<playersAddPlayers> {
                 SizedBox(height: 20),
                 _buildTextFieldPassword(
                     passwordController, Icons.lock, 'Password'),
+                SizedBox(height: 20),
+                _buildTextFieldPassword(
+                    passwordagainController, Icons.lock, 'Verify password'),
                 SizedBox(height: 30),
                 MaterialButton(
                   elevation: 0,
                   minWidth: double.maxFinite,
                   height: 60,
                   onPressed: () {
+                    if(passwordController.text == passwordagainController.text){
                     addAccount(widget.CP, context, callback, () {
                       this.setState(() {
                         _build = Row(
@@ -144,7 +149,9 @@ class _playersAddPlayersState extends State<playersAddPlayers> {
                           });
                         });
                       });
-                    });
+                    });} else {
+                      appState.popUpError(context, "You typed two different passwords", "Ok");
+                    }
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0)),
@@ -154,8 +161,8 @@ class _playersAddPlayersState extends State<playersAddPlayers> {
                   textColor: Colors.white,
                 ),
                 _build,
-                SizedBox(height: 20),
-                SizedBox(height: 100),
+                SizedBox(height: 40),
+                
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: _buildFooterLogo(),
@@ -177,6 +184,7 @@ class _playersAddPlayersState extends State<playersAddPlayers> {
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
           color: colors.cardBlue,
+           borderRadius: BorderRadius.circular(12.0),
           border: Border.all(color: Colors.white, width: 0.7)),
       child: TextField(
         controller: controller,
@@ -203,6 +211,7 @@ _buildTextFieldPassword(
     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
     decoration: BoxDecoration(
         color: colors.cardBlue,
+         borderRadius: BorderRadius.circular(12.0),
         border: Border.all(color: Colors.white, width: 0.7)),
     child: TextField(
       controller: controller,
@@ -226,9 +235,10 @@ _buildTextFieldName(
     TextEditingController controller, IconData icon, String labelText) {
   appColors colors = appColors();
   return Container(
-    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
     decoration: BoxDecoration(
         color: colors.cardBlue,
+         borderRadius: BorderRadius.circular(12.0),
         border: Border.all(color: Colors.white, width: 0.7)),
     child: TextField(
       controller: controller,
@@ -256,7 +266,7 @@ addAccount(bool Cp, context, Function setState, Function error) {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  Future<dynamic> getUser(String email, String password,
+  Future<dynamic> getUser(String email, String password, String passwordEncrypted,
       {Function? setState}) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     bool verified = false;
@@ -311,11 +321,12 @@ addAccount(bool Cp, context, Function setState, Function error) {
       }
     }
     if (!emailAlreadyUsed) {
+      app.setSubscriotionAccount(firstNameController.text + "-" + lastNameController.text + "-" + playerNewUid.toString());
       Map<String, dynamic> accountdata = {
         "firstName": firstNameController.text,
         "lastName": lastNameController.text,
         "email": nameController.text,
-        "password": password,
+        "password": passwordEncrypted,
         "mainController": false,
         "urlUid": playerNewUid,
       };
@@ -348,5 +359,5 @@ addAccount(bool Cp, context, Function setState, Function error) {
     return emailAlreadyUsed;
   }
 
-  getUser(nameController.text, password).then((value) => null);
+  getUser(nameController.text, passwordController.text, password).then((value) => null);
 }

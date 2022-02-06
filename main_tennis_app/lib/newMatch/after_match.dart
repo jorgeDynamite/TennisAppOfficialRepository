@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:main_tennis_app/Subscription/subscription_main.dart';
+import 'package:main_tennis_app/bloc/app_state.dart';
 
 import 'dart:async';
 import 'dart:math';
@@ -55,7 +57,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
   String surfaceTypeButtonText = "Surface";
   Color surfaceButtoniconColor = Colors.white;
   Color matchTypeButtoniconColor = Colors.white;
-  double paddingMenuBar = 216;
+  double paddingMenuBar = 21.6 * appState.heightTenpx!;
   late Widget nextButtonWidgetStateDependent;
   late Widget surfaceTypesVariable;
   bool surfacenotClickOnTwoButtonsTwice = false;
@@ -176,14 +178,113 @@ class _afterMatchPageState extends State<afterMatchPage> {
     "Points Played"
   ];
 
+
+  Future<void> deleteFreeMatch(String namecode) async {
+    final DatabaseReference reference = FirebaseDatabase.instance.ref();
+    DatabaseEvent event = await reference.child("Matches&Subscriptions/" + namecode + "/freeMatches/").once();
+    DatabaseReference subscriptionreference = reference.child("Matches&Subscriptions/" + namecode + "/freeMatches/");
+    dynamic dynamicEvent = event.snapshot.value;
+    subscriptionreference.set({"matchesLeft": dynamicEvent["matchesLeft"] - 1,});
+    appState.matchesLeft![namecode] = dynamicEvent["matchesLeft"] - 1;
+  }
   void getMatchData() async {
     int x = 0;
 
     DatabaseEvent dataSnapshot =
         await databaseReference.child(widget.urlTA).once();
     if (dataSnapshot.snapshot.value != null) {
-      dynamic valuesDataSnapshot = dataSnapshot.snapshot.value!;
-      print(valuesDataSnapshot);
+      dynamic value = dataSnapshot.snapshot.value!;
+      print(value);
+this.setState(() {
+       firstsetStandings[0] = value["1setStandings"][0];
+    firstsetStandings[1] = value["1setStandings"][1];
+
+    secondsetStandings[0] = value["2setStandings"][0];
+    secondsetStandings[1] = value["2setStandings"][1];
+
+    thirdsetStandings[0] = value["3setStandings"][0];
+    thirdsetStandings[1] = value["3setStandings"][1];
+
+    fourthsetStandings[0] = value["4setStandings"][0];
+    fourthsetStandings[1] = value["4setStandings"][1];
+
+    fifthsetStandings[0] = value["5setStandings"][0];
+    fifthsetStandings[1] = value["5setStandings"][1];
+
+    opponentName = value["opponentName"];
+
+    //double n = num.parse(numberToRound.toStringAsFixed(2));
+    opponentStats = [];
+    opponentStats.add(value["opponentStats"][13].toDouble());
+    opponentStats.add(value["opponentStats"][10].toDouble());
+    opponentStats.add(
+        num.parse(value["opponentStats"][2].toStringAsFixed(2)).toDouble());
+    opponentStats.add(
+        num.parse(value["opponentStats"][9].toStringAsFixed(2)).toDouble());
+    opponentStats.add(value["opponentStats"][0].toDouble() - 1);
+    opponentStats.add(value["opponentStats"][1].toDouble() - 1);
+    opponentStats.add(value["opponentStats"][8].toDouble() - 1);
+    opponentStats.add(value["opponentStats"][7].toDouble() - 1);
+    opponentStats.add(value["opponentStats"][12].toDouble() - 1);
+    opponentStats.add(value["opponentStats"][11].toDouble() - 1);
+    opponentStats.add(value["opponentStats"][3].toDouble() - 1);
+
+    if (opponentStats[2] == 1) {
+      opponentStats[2] = 0;
+    }
+    if (opponentStats[3] == 1) {
+      opponentStats[3] = 0;
+    }
+
+    yourName = value["yourName"];
+
+    yourStats = [];
+    this.setState(() {
+      yourStats.add(value["yourStats"][13].toDouble());
+      yourStats.add(value["yourStats"][10].toDouble());
+      yourStats
+          .add(num.parse(value["yourStats"][2].toStringAsFixed(2)).toDouble());
+      yourStats
+          .add(num.parse(value["yourStats"][9].toStringAsFixed(2)).toDouble());
+      yourStats.add(value["yourStats"][0].toDouble() - 1);
+      yourStats.add(value["yourStats"][1].toDouble() - 1);
+      yourStats.add(value["yourStats"][8].toDouble() - 1);
+      yourStats.add(value["yourStats"][7].toDouble() - 1);
+      yourStats.add(value["yourStats"][12].toDouble() - 1);
+      yourStats.add(value["yourStats"][11].toDouble() - 1);
+      yourStats.add(value["yourStats"][3].toDouble() - 1);
+      yourStats.add(value["yourStats"][6].toDouble());
+      yourStats.add(value["yourStats"][5].toDouble());
+      opponentStats.add(
+          value["yourStats"][5].toDouble() - value["yourStats"][6].toDouble());
+      opponentStats.add(value["yourStats"][5].toDouble());
+
+      if (yourStats[2] == 1) {
+        yourStats[2] = 0;
+      }
+      if (yourStats[3] == 1) {
+        yourStats[3] = 0;
+      }
+       if (secondsetStandings[0] != 0 || secondsetStandings[1] != 0) {
+              setsColor[1] = setsColor[0];
+              setDevidersLines[1] = setDevidersLines[0];
+            }
+
+          if (thirdsetStandings[0] != 0 || thirdsetStandings[1] != 0) {
+              setsColor[2] = setsColor[0];
+              setDevidersLines[2] = setDevidersLines[0];
+            }
+          if (fourthsetStandings[0] != 0 || fourthsetStandings[1] != 0) {
+              setsColor[3] = setsColor[0];
+              setDevidersLines[3] = setDevidersLines[0];
+            }
+            if (fifthsetStandings[0] != 0 || fifthsetStandings[1] != 0) {
+              setsColor[4] = setsColor[0];
+              setDevidersLines[4] = setDevidersLines[0];
+            }
+    });
+     });
+    /*
       valuesDataSnapshot.forEach((key, value) {
         print(key);
         this.setState(() {
@@ -292,25 +393,28 @@ class _afterMatchPageState extends State<afterMatchPage> {
               if (yourStats[3] == 1) {
                 yourStats[3] = 0;
               }
+           
             });
+            
           }
-
           print(value);
           x++;
         });
+
       });
+
+   */
     } else {
       print("no live Data Detected");
     }
-    for (var i = 0; i < statsTrackedBools.length; i++) {}
   }
 
   Widget statDivider() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+      padding:  EdgeInsets.fromLTRB(0, 1.5 * appState.heightTenpx!, 0, 0),
       child: Container(
         height: 2,
-        width: 300,
+        width: 30.0 * appState.heightTenpx!,
         color: colors.transparentWhite,
       ),
     );
@@ -330,18 +434,19 @@ class _afterMatchPageState extends State<afterMatchPage> {
       colors.add(Colors.white);
       colors.add(Colors.white);
     }
+    
     if (statIndex == 2 || statIndex == 3) {
       //Workaround so that serve % can be a double
-      return Column(
+      return  Column(
         children: [
           SizedBox(
-            height: 15,
+            height: 1.5 * appState.heightTenpx!,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 40, 0),
+                padding:  EdgeInsets.fromLTRB(0, 0, 4.0 * appState.widthTenpx!, 0),
                 child: Text(
                   yourStats[statIndex].toString(),
                   style: TextStyle(
@@ -360,7 +465,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+                padding:  EdgeInsets.fromLTRB(4.0 * appState.widthTenpx!, 0, 0, 0),
                 child: Text(
                   opponentStats[statIndex].toString(),
                   style: TextStyle(
@@ -373,27 +478,28 @@ class _afterMatchPageState extends State<afterMatchPage> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+            padding:  EdgeInsets.fromLTRB(0, 1.5 * appState.heightTenpx!, 0, 0),
             child: Container(
               height: 2,
-              width: 300,
+              width: 30.0 * appState.widthTenpx!,
               color: appColors().transparentWhite,
             ),
           ),
         ],
       );
+
     } else {
       //Workaround so that serve % can be a double
-      return Column(
+      return yourStats[statIndex] > 0 ? Column(
         children: [
           SizedBox(
-            height: 15,
+            height: 1.5 * appState.heightTenpx!,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 40, 0),
+                padding:  EdgeInsets.fromLTRB(0, 0, 4.0 * appState.widthTenpx!, 0),
                 child: Text(
                   yourStats[statIndex].toInt().toString(),
                   style: TextStyle(
@@ -412,7 +518,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+                padding:  EdgeInsets.fromLTRB(4.0 * appState.widthTenpx!, 0, 0, 0),
                 child: Text(
                   opponentStats[statIndex].toInt().toString(),
                   style: TextStyle(
@@ -425,15 +531,15 @@ class _afterMatchPageState extends State<afterMatchPage> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+            padding:  EdgeInsets.fromLTRB(0, 1.5 * appState.heightTenpx!, 0, 0),
             child: Container(
               height: 2,
-              width: 300,
+              width: 30.0 * appState.widthTenpx!,
               color: appColors().transparentWhite,
             ),
           ),
         ],
-      );
+      ) : Container();
     }
   }
 
@@ -531,19 +637,19 @@ class _afterMatchPageState extends State<afterMatchPage> {
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                     color: colors.cardBlue,
                   ),
-                  height: 270,
-                  width: 350,
+                  height: 27.0 * appState.heightTenpx!,
+                  width: 35.0 * appState.widthTenpx!,
                   child: Column(
                     children: [
                       // ScoreBoard
                       Padding(
                         padding: EdgeInsets.only(left: 15, top: 65, right: 3),
                         child: Container(
-                            height: 55,
-                            width: 300,
+                            height: 5.5 * appState.heightTenpx!,
+                            width: 30.0 * appState.widthTenpx!,
                             color: colors.backgroundColor,
                             child: Padding(
-                                padding: EdgeInsets.only(left: 15, right: 45),
+                                padding: EdgeInsets.only(left: 1.5 * appState.widthTenpx!, right: 4.5 * appState.widthTenpx!),
                                 child: Row(children: [
                                   Text(
                                     nameToLongFunc(yourName, 18),
@@ -558,11 +664,11 @@ class _afterMatchPageState extends State<afterMatchPage> {
                       Padding(
                         padding: EdgeInsets.only(left: 15, top: 15, right: 3),
                         child: Container(
-                            height: 55,
-                            width: 300,
+                            height: 5.5 * appState.heightTenpx!,
+                            width: 30.0 * appState.widthTenpx!,
                             color: colors.backgroundColor,
                             child: Padding(
-                                padding: EdgeInsets.only(left: 15, right: 45),
+                                padding: EdgeInsets.only(left: 1.5 * appState.widthTenpx!, right: 4.5 * appState.widthTenpx!),
                                 child: Row(children: [
                                   Text(
                                     nameToLongFunc(opponentName, 18),
@@ -575,14 +681,14 @@ class _afterMatchPageState extends State<afterMatchPage> {
                       ),
                       // Game Stats
                       SizedBox(
-                        height: 20,
+                        height: 2.0 * appState.heightTenpx!,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            height: 35,
-                            width: 80,
+                            height: 3.5 * appState.heightTenpx!,
+                            width: 8.0 * appState.widthTenpx!,
                             decoration: BoxDecoration(
                               color: colors.backgroundColor,
                               borderRadius:
@@ -621,16 +727,16 @@ class _afterMatchPageState extends State<afterMatchPage> {
                   ),
                 ),
                 padding: EdgeInsets.only(
-                  left: 13.5,
-                  right: 13.5,
+                  left: 1.35 * appState.widthTenpx!,
+                  right: 1.35* appState.widthTenpx!,
                 ),
               ),
 
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 20,
-                  left: 50,
+                  top: 2.0 * appState.heightTenpx!,
+                  left: 5.0 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -644,7 +750,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
                     Padding(
                       padding: EdgeInsets.only(
                         right: 0,
-                        left: 140,
+                        left: 14.0 * appState.heightTenpx!,
                       ),
                       child: Text(
                         widget.time,
@@ -661,13 +767,13 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 65,
-                  left: 285,
+                  top: 6.5 * appState.heightTenpx!,
+                  left: 28.5 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
                     Container(
-                      height: 125,
+                      height: 12.5 * appState.heightTenpx!,
                       width: 2,
                       color: setDevidersLines[1],
                     )
@@ -678,13 +784,13 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 65,
-                  left: 315,
+                  top: 6.5 * appState.heightTenpx!,
+                  left: 31.5 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
                     Container(
-                      height: 125,
+                      height: 12.5 * appState.heightTenpx!,
                       width: 2,
                       color: colors.transparentWhite,
                     )
@@ -694,13 +800,13 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 65,
-                  left: 255,
+                  top: 6.5 * appState.heightTenpx!,
+                  left: 25.5 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
                     Container(
-                      height: 125,
+                      height: 12.5 * appState.heightTenpx!,
                       width: 2,
                       color: setDevidersLines[2],
                     )
@@ -711,13 +817,13 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 65,
-                  left: 225,
+                  top: 6.5 * appState.heightTenpx!,
+                  left: 22.5 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
                     Container(
-                      height: 125,
+                      height: 12.5 * appState.heightTenpx!,
                       width: 2,
                       color: setDevidersLines[3],
                     )
@@ -728,13 +834,13 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 65,
-                  left: 195,
+                  top: 6.5 * appState.heightTenpx!,
+                  left: 19.5 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
                     Container(
-                      height: 125,
+                      height: 12.5 * appState.heightTenpx!,
                       width: 2,
                       color: setDevidersLines[4],
                     )
@@ -748,8 +854,8 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 82,
-                  left: 324,
+                  top: 8.2 * appState.heightTenpx!,
+                  left: 32.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -766,8 +872,8 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 152,
-                  left: 324,
+                  top: 15.2 * appState.heightTenpx!,
+                  left: 32.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -784,8 +890,8 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 82,
-                  left: 294,
+                  top: 8.2 * appState.heightTenpx!,
+                  left: 29.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -802,8 +908,8 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 152,
-                  left: 294,
+                  top: 15.2 * appState.heightTenpx!,
+                  left: 29.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -820,8 +926,8 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 82,
-                  left: 264,
+                  top: 8.2 * appState.heightTenpx!,
+                  left: 26.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -838,8 +944,8 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 152,
-                  left: 264,
+                  top: 15.2 * appState.heightTenpx!,
+                  left: 26.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -856,8 +962,8 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 82,
-                  left: 234,
+                  top: 8.2 * appState.heightTenpx!,
+                  left: 23.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -874,8 +980,8 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 152,
-                  left: 234,
+                  top: 15.2 * appState.heightTenpx!,
+                  left: 23.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -892,8 +998,8 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 82,
-                  left: 204,
+                  top: 8.2 * appState.heightTenpx!,
+                  left: 20.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -910,8 +1016,8 @@ class _afterMatchPageState extends State<afterMatchPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 152,
-                  left: 204,
+                  top: 15.2 * appState.heightTenpx!,
+                  left: 20.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -934,18 +1040,18 @@ class _afterMatchPageState extends State<afterMatchPage> {
               borderRadius: BorderRadius.all(Radius.circular(20)),
               color: colors.cardBlue,
             ),
-            height: 360,
-            width: 350,
+            height: 36.0 * appState.heightTenpx!,
+            width: 35.0 * appState.widthTenpx!,
             child: SingleChildScrollView(
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 15, 0, 10),
+                    padding:  EdgeInsets.fromLTRB(0, 1.5 * appState.widthTenpx!, 0,  appState.heightTenpx!),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 40, 0),
+                          padding:  EdgeInsets.fromLTRB(0, 0, 4.0 * appState.widthTenpx!, 0),
                           child: Text(
                             nameToLongFunc(yourName, 8),
                             style: TextStyle(
@@ -956,12 +1062,12 @@ class _afterMatchPageState extends State<afterMatchPage> {
                           ),
                         ),
                         Container(
-                          height: 20,
+                          height: 2.0 * appState.heightTenpx!,
                           width: 3,
                           color: colors.mainGreen,
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(52, 0, 0, 0),
+                          padding:  EdgeInsets.fromLTRB(5.2 * appState.widthTenpx!, 0, 0, 0),
                           child: Text(
                             nameToLongFunc(opponentName, 8),
                             style: TextStyle(
@@ -996,9 +1102,9 @@ class _afterMatchPageState extends State<afterMatchPage> {
             ),
           ),
           SizedBox(
-            height: 20,
+            height: 0.0 * appState.heightTenpx!,
           ),
-          SizedBox(height: 14),
+          SizedBox(height: 1.4 * appState.heightTenpx!),
           Align(
             alignment: Alignment.bottomCenter,
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -1026,20 +1132,36 @@ class _afterMatchPageState extends State<afterMatchPage> {
                   Padding(
                       child: Column(children: [
                         MaterialButton(
-                          onPressed: () {
+                          onPressed: () async {
                             print("finish button is pressed");
                             databaseReference
                                 .child("LiveResults/" + widget.matchID + "/")
                                 .remove();
+                                
+                           if(appState.matchesLeft![appState.urlsFromTennisAccounts["URLtoPlayer"]!.split("/")[3]] != 0){
+                            await deleteFreeMatch(appState.urlsFromTennisAccounts["URLtoPlayer"]!.split("/")[3]);
+                            } 
+                            print(appState.hasSubscription![appState.urlsFromTennisAccounts["URLtoPlayer"]!.split("/")[3]]!);
+                            print(appState.matchesLeft![appState.urlsFromTennisAccounts["URLtoPlayer"]!.split("/")[3]]!);
+                            
+                            if(appState.hasSubscription![appState.urlsFromTennisAccounts["URLtoPlayer"]!.split("/")[3]]! == false && appState.matchesLeft![appState.urlsFromTennisAccounts["URLtoPlayer"]!.split("/")[3]] == 0){
                             Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        SubscriptionHome(true, fromAfterMatchPage: true,)),
+                                (Route<dynamic> route) => false);
+                                } else {
+
+ Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                     builder: (context) =>
                                         HomePageView([28, 21, 49], true)),
                                 (Route<dynamic> route) => false);
+                                }
                           },
                           child: Container(
-                            height: 40,
-                            width: 90,
+                            height: 4.0 * appState.heightTenpx!,
+                            width: 9.0 * appState.widthTenpx!,
                             decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
@@ -1060,7 +1182,7 @@ class _afterMatchPageState extends State<afterMatchPage> {
                                       ),
                                     ],
                                   ),
-                                  padding: EdgeInsets.only(top: 12, left: 4),
+                                  padding: EdgeInsets.only(top: 1.2 * appState.heightTenpx!, left: 4),
                                 )
                               ],
                             ),
@@ -1068,8 +1190,8 @@ class _afterMatchPageState extends State<afterMatchPage> {
                         ),
                       ]),
                       padding: EdgeInsets.only(
-                        left: 233.5,
-                        bottom: 28,
+                        left: 23.35 * appState.widthTenpx!,
+                        bottom: 2.8 * appState.heightTenpx!,
                         top: 5,
                       )),
                 ],

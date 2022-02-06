@@ -39,7 +39,7 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
       "2 sets + ST",
       "5 sets to 4 games",
       "1 set",
-      "60 min",
+      "Time match",
       "30 min",
       "60 min 4 games",
     ];
@@ -117,7 +117,7 @@ class _NewMatchSecondPageState extends State<NewMatchSecondPage> {
       "2 sets + ST",
       "5 sets to 4 games",
       "1 set",
-      "60 min",
+      "Time match",
       "30 min",
       "60 min 4 games",
     ];

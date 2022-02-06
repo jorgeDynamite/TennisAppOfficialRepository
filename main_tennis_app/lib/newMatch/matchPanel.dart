@@ -114,14 +114,12 @@ class _MatchPanelState extends State<MatchPanel> {
     double x = 0;
     if (dataSnapshot.snapshot.value != null) {
       dynamic values = dataSnapshot.snapshot.value!;
-      dynamic values1 = values[1];
+      
       values[0] = 0;
-      print(values1.toString() + "new");
-      // 1 turnering läggs till pågrund av ovan valuees[0]
-      values1.forEach((key, value) {
-        x++;
-      });
-      return x + 1;
+     
+      // Lägg inte till ett därför det finns redan en extra i början
+      
+      return values.length.toDouble();
     } else {
       return 1;
     }
@@ -326,10 +324,8 @@ class _MatchPanelState extends State<MatchPanel> {
         if (key == "matchRecord") {
           x = true;
 
-          value.forEach((key, value) {
-            matchRecord[y] = value;
-            y--;
-          });
+          matchRecord[0] = value["matchesWon"];
+          matchRecord[1] = value["matchesLost"];
           Map<String, dynamic> recordData = {
             "matchesWon":
                 mainPlayerWonTheMatch ? matchRecord[0] + 1 : matchRecord[0],
@@ -1347,15 +1343,15 @@ class _MatchPanelState extends State<MatchPanel> {
           if (scoreUrl.gamesPerSet! > thirdsetStandings[0] &&
               scoreUrl.gamesPerSet! > thirdsetStandings[1]) {
             if (scoreUrl.numberSets! >= 3) {
-              if (secondsetStandings[0] > secondsetStandings[1] &&
+              /*if (secondsetStandings[0] > secondsetStandings[1] &&
                       firstsetStandings[0] < firstsetStandings[1] ||
                   secondsetStandings[0] < secondsetStandings[1] &&
-                      firstsetStandings[0] > firstsetStandings[1]) {
+                      firstsetStandings[0] > firstsetStandings[1]) {*/
                 thirdsetStandings = secondsetStandings;
                 secondsetStandings = firstsetStandings;
                 setsColor[2] = setsColor[0];
                 firstsetStandings = [0, 0];
-              }
+            //  }
             } else {
               if (scoreUrl.decidingSuperTiebreak != null) {
                 if (secondsetStandings[0] > secondsetStandings[1] &&
@@ -1886,6 +1882,20 @@ class _MatchPanelState extends State<MatchPanel> {
     thirdsetStandings = widget.gameScorePackage[3];
     fourthsetStandings = widget.gameScorePackage[4];
     fifthsetStandings = widget.gameScorePackage[5];
+print(secondsetStandings);
+    if(secondsetStandings[0] != 0 && secondsetStandings[1] != 0){
+      setsColor[1] = setsColor[0];
+      if(thirdsetStandings[0] != 0 && thirdsetStandings[1] != 0){
+      setsColor[2] = setsColor[0];
+      if(thirdsetStandings[0] != 0 && thirdsetStandings[1] != 0){
+      setsColor[3] = setsColor[0];
+      if(thirdsetStandings[0] != 0 && thirdsetStandings[1] != 0){
+      setsColor[4] = setsColor[0];
+    }
+    }
+    } 
+
+    }
 
     if (widget.tournamentDataPack.matches[0].pointsPlayed != 0) {
       timeString = appState.minuts! >= 10
@@ -2387,8 +2397,8 @@ class _MatchPanelState extends State<MatchPanel> {
               Padding(
                 padding: EdgeInsets.only(
                   right: 0,
-                  top: 167,
-                  left: 294,
+                  top: 16.7 * appState.heightTenpx!,
+                  left: 29.4 * appState.widthTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -2513,7 +2523,7 @@ class _MatchPanelState extends State<MatchPanel> {
 //Gemmarkörer slut
               Padding(
                 padding: EdgeInsets.only(
-                  top: 280,
+                  top: 28.0 * appState.heightTenpx!,
                 ),
                 child: Row(
                   children: [
@@ -3045,7 +3055,7 @@ class _MatchPanelState extends State<MatchPanel> {
             ],
           ),
           SizedBox(
-            height: 4.9 * appState.heightTenpx!,
+            height: 7.9 * appState.heightTenpx!,
           ),
           Text(
             "Match ID: " + widget.matchID,

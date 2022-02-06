@@ -216,6 +216,10 @@ class _CheckForMatchIDPageState extends State<CheckForMatchIDPage> {
                 if (!y) {
                   popUpChangeStat(context);
                 }
+              } else {
+            
+                  popUpChangeStat(context);
+                
               }
               print(controller.text);
             },
@@ -273,7 +277,7 @@ popUpChangeStat(
       builder: (context) {
         return AlertDialog(
           elevation: 5,
-          backgroundColor: Colors.white70,
+          backgroundColor: Colors.white,
           content: Text("Sorry we couldn't find a match with that Match ID",
               style: TextStyle(
                   color: Colors.black,
